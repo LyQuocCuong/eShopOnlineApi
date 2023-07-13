@@ -1,7 +1,7 @@
 ---
 name: "[Investigation]"
 about: Describe briefly what you want to investigate
-title: "[Sxx-yy][Investigate]"
+title: "[SOA-xxx]"
 labels: "[Type] Investigation"
 assignees: LyQuocCuong
 

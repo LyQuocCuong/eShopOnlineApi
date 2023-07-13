@@ -1,7 +1,7 @@
 ---
 name: "[Enhancement]"
 about: Suggest an idea for enhancement
-title: "[Sxx-yy][Enhancement]"
+title: "[SOA-xxx]"
 labels: "[Type] Enhancement"
 assignees: LyQuocCuong
 

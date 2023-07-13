@@ -1,7 +1,7 @@
 ---
 name: "[FixBug]"
 about: Describe the bug
-title: "[Sxx-yy][Fixbug]"
+title: "[SOA-xxx]"
 labels: "[Type] Fixbug"
 assignees: LyQuocCuong
 

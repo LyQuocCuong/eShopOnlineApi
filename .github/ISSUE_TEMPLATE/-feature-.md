@@ -1,7 +1,7 @@
 ---
 name: "[Feature]"
 about: Suggest an idea for this project
-title: "[Sxx-yy][Feature]"
+title: "[SOA-xxx]"
 labels: "[Type] Feature"
 assignees: LyQuocCuong
 
