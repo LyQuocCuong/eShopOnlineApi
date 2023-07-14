@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace eShopOnlineEFCore.Configurations.Entities
+﻿namespace eShopOnlineEFCore.Configurations.Entities
 {
     internal sealed class CompanyConfig : IEntityTypeConfiguration<Company>
     {
@@ -8,6 +6,7 @@ namespace eShopOnlineEFCore.Configurations.Entities
         {
             ConfigBaseAttributes(builder);
             ConfigColumnOrder(builder);
+            ConfigSeedingData(builder);
             // Relationships
             ConfigManyStoresRelationship(builder);  // 1 Company -> N Stores
             // ---
@@ -30,6 +29,11 @@ namespace eShopOnlineEFCore.Configurations.Entities
             builder.Property(props => props.IsRemoved).HasColumnOrder(++index);
             builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
             builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
+        }
+
+        private void ConfigSeedingData(EntityTypeBuilder<Company> builder)
+        {
+            builder.HasData(SeedingEntities.DEFAULT_COMPANY);
         }
 
         private void ConfigManyStoresRelationship(EntityTypeBuilder<Company> builder)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eShopOnlineEFCore.Context;
 
@@ -11,9 +12,10 @@ using eShopOnlineEFCore.Context;
 namespace eShopOnlineEFCore.Migrations
 {
     [DbContext(typeof(ShopOnlineContext))]
-    partial class ShopOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20230714111849_SeedingDefaultDataForCompanyAndEmployee")]
+    partial class SeedingDefaultDataForCompanyAndEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
