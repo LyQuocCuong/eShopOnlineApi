@@ -19,5 +19,7 @@
         public Company Company { get; set; }
 
         public Employee? Manager { get; set; }
+
+        public IEnumerable<Employee>? EmployeesList { get; set; }
     }
 }
