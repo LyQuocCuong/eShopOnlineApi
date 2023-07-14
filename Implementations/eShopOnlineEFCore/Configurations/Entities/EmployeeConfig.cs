@@ -8,6 +8,7 @@ namespace eShopOnlineEFCore.Configurations.Entities
         {
             ConfigBaseAttributes(builder);
             ConfigColumnOrder(builder);
+            ConfigSeedingData(builder);
             // Relationships
             // ---
 
@@ -33,6 +34,11 @@ namespace eShopOnlineEFCore.Configurations.Entities
             builder.Property(props => props.IsRemoved).HasColumnOrder(++index);
             builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
             builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
+        }
+
+        private void ConfigSeedingData(EntityTypeBuilder<Employee> builder)
+        {
+            builder.HasData(SeedingEntities.ROOT_ADMIN);
         }
 
     }
