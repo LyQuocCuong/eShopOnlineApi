@@ -2,8 +2,8 @@
 name: Testing
 about: Decribe briefly
 title: "[SOA-xxx]"
-labels: ''
-assignees: ''
+labels: "[Type] Testing"
+assignees: LyQuocCuong
 
 ---
 
