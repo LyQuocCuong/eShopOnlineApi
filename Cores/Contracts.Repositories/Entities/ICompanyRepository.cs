@@ -2,8 +2,6 @@
 {
     public interface ICompanyRepository
     {
-        Company GetById(Guid id);
-
-        void Update(Company company);
+        Company? GetById(bool isTrackChanges, Guid id);
     }
 }

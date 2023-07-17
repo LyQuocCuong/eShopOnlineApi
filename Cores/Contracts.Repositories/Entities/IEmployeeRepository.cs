@@ -2,14 +2,14 @@
 {
     public interface IEmployeeRepository
     {
-        Employee GetById(Guid id);
+        Employee? GetById(bool isTrackChanges, Guid id);
 
-        IEnumerable<Employee> GetAll();
+        IEnumerable<Employee> GetAll(bool isTrackChanges);
 
         void Create(Employee employee);
 
-        void Update(Employee employee);
+        void SoftDelete(Employee employee);
 
-        void Delete(Guid id);
+        void HardDelete(Employee employee);
     }
 }

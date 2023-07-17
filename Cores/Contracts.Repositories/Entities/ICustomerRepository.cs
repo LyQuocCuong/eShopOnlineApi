@@ -2,14 +2,14 @@
 {
     public interface ICustomerRepository
     {
-        Customer GetById(Guid id);
+        Customer? GetById(bool isTrackChanges, Guid id);
 
-        IEnumerable<Customer> GetAll();
+        IEnumerable<Customer> GetAll(bool isTrackChanges);
 
         void Create(Customer customer);
 
-        void Update(Customer customer);
+        void SoftDelete(Customer customer);
 
-        void Delete(Guid id);
+        void HardDelete(Customer customer);
     }
 }

@@ -2,14 +2,14 @@
 {
     public interface IProductRepository
     {
-        Product GetById(Guid id);
+        Product? GetById(bool isTrackChanges, Guid id);
 
-        IEnumerable<Product> GetAll();
+        IEnumerable<Product> GetAll(bool isTrackChanges);
 
         void Create(Product product);
 
-        void Update(Product product);
+        void SoftDelete(Product product);
 
-        void Delete(Guid id);
+        void HardDelete(Product product);
     }
 }

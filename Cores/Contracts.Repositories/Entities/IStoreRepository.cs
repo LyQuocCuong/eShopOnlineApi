@@ -2,14 +2,14 @@
 {
     public interface IStoreRepository
     {
-        Store GetById(Guid id);
+        Store? GetById(bool isTrackChanges, Guid id);
 
-        IEnumerable<Store> GetAll();
+        IEnumerable<Store> GetAll(bool isTrackChanges);
 
         void Create(Store store);
 
-        void Update(Store store);
+        void SoftDelete(Store store);
 
-        void Delete(Guid id);
+        void HardDelete(Store store);
     }
 }
