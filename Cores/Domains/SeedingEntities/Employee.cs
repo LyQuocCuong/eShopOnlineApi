@@ -13,7 +13,7 @@ namespace Domains.SeedingEntities
             LastName = "Admin",
             Address = "",
             Phone = "",
-            IsRemoved = DefaultIsRemoved,
+            IsDeleted = DefaultIsDeleted,
             CreatedDate = DefaultCreatedDate,
             UpdatedDate = DefaultUpdateDate
         };
