@@ -1,6 +1,6 @@
 ﻿namespace Domains.Entities
 {
-    public sealed class Employee : BaseEntity
+    public sealed class Employee : AbstractEntity
     {
         public Guid Id { get; set; }
 

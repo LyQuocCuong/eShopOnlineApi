@@ -1,10 +1,10 @@
 ﻿using Contracts.Repositories.Abstracts;
-using Domains.Base;
+using Domains.Abstracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace eShopOnlineRepositories.Abstracts
 {
-    internal abstract class AbstractRepository<TEntity> : IAbstractRepository<TEntity> where TEntity : BaseEntity
+    internal abstract class AbstractRepository<TEntity> : IAbstractRepository<TEntity> where TEntity : AbstractEntity
     {
         private readonly DbSet<TEntity> _dbSet;
 
