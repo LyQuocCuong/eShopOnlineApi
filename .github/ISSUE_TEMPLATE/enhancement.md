@@ -7,14 +7,20 @@ assignees: LyQuocCuong
 
 ---
 
-=====BEFORE=====
-**Describe the situation**
+#### =====BEFORE=====
+**1) Describe the situations**
 
-**Why do I have to enhance?**
+**2) Why do I have to enhance?**
 
-=====AFTER=====
-**Are there any NEW (technical, code,...) ?**
+**3) Is this enhancement mandatory? What if I don't enhance?**
 
-**Are there any challenges?**
+#### =====AFTER=====
+**1) Describe the solutions**
 
-**Any notes?**
+**2) Which and Why do I choose this solution?**
+
+**3) Are there any NEW (technical, code,...) ?**
+
+**4) Are there any challenges/difficulties?**
+
+**5) Any other notes?**
