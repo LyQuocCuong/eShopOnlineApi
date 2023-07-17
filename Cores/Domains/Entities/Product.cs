@@ -1,6 +1,6 @@
 ﻿namespace Domains.Entities
 {
-    public sealed class Product : BaseEntity
+    public sealed class Product : AbstractEntity
     {
         public Guid Id { get; set; }
 

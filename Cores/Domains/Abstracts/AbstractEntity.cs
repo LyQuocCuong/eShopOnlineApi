@@ -1,6 +1,6 @@
-﻿namespace Domains.Base
+﻿namespace Domains.Abstracts
 {
-    public abstract class BaseEntity
+    public abstract class AbstractEntity
     {
         public bool IsDeleted { get; set; }
 

@@ -1,9 +1,9 @@
-﻿using Domains.Base;
+﻿using Domains.Abstracts;
 using System.Linq.Expressions;
 
 namespace Contracts.Repositories.Abstracts
 {
-    public interface IAbstractRepository<TEntity> where TEntity : BaseEntity
+    public interface IAbstractRepository<TEntity> where TEntity : AbstractEntity
     {
         IQueryable<TEntity> FindAll(bool isTrackChanges);
 
