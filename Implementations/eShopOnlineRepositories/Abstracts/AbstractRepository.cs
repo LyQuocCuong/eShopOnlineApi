@@ -49,7 +49,7 @@ namespace eShopOnlineRepositories.Abstracts
         {
             // Due to "where TEntity : BaseEntity"
             // I can use properties of BaseEntity
-            entity.IsRemoved = true;
+            entity.IsDeleted = true;
         }
 
         public void HardDeleteEntity(TEntity entity)

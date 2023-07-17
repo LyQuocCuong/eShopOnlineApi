@@ -26,7 +26,7 @@
             builder.Property(props => props.Name).HasColumnOrder(++index);
             builder.Property(props => props.Address).HasColumnOrder(++index);
             builder.Property(props => props.Phone).HasColumnOrder(++index);
-            builder.Property(props => props.IsRemoved).HasColumnOrder(++index);
+            builder.Property(props => props.IsDeleted).HasColumnOrder(++index);
             builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
             builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
         }
