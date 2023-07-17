@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mains", "Mains", "{1EDFFD7D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementations", "Implementations", "{D510F032-6744-44B6-9209-41EB96626B53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopOnlineEFCore", "..\Implementations\eShopOnlineEFCore\eShopOnlineEFCore.csproj", "{D304F089-5E7E-4AF4-A05D-519258B45A67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopOnlineEFCore", "..\Implementations\eShopOnlineEFCore\eShopOnlineEFCore.csproj", "{D304F089-5E7E-4AF4-A05D-519258B45A67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Repositories", "..\Cores\Contracts.Repositories\Contracts.Repositories.csproj", "{3AA6CE6B-B177-4BD4-992B-2140F7EE6CC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D304F089-5E7E-4AF4-A05D-519258B45A67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D304F089-5E7E-4AF4-A05D-519258B45A67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D304F089-5E7E-4AF4-A05D-519258B45A67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AA6CE6B-B177-4BD4-992B-2140F7EE6CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AA6CE6B-B177-4BD4-992B-2140F7EE6CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AA6CE6B-B177-4BD4-992B-2140F7EE6CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AA6CE6B-B177-4BD4-992B-2140F7EE6CC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{4819D578-C3CB-4FE3-BDE5-20BF512E6C93} = {1EDFFD7D-28CD-4095-9C7F-D3437498ED4E}
 		{04551E44-14C1-40ED-9D7F-FE30CA70E28C} = {1E781C52-0C3E-42B2-ABBC-1D2B18453F0D}
 		{D304F089-5E7E-4AF4-A05D-519258B45A67} = {D510F032-6744-44B6-9209-41EB96626B53}
+		{3AA6CE6B-B177-4BD4-992B-2140F7EE6CC4} = {1E781C52-0C3E-42B2-ABBC-1D2B18453F0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D826026-5075-4DF3-8BAA-CD2C38819842}
