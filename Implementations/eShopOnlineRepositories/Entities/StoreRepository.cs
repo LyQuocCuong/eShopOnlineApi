@@ -2,7 +2,7 @@
 {
     internal sealed class StoreRepository : AbstractRepository<Store>, IStoreRepository
     {
-        public StoreRepository(ShopOnlineContext context) : base(context)
+        public StoreRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
         }
 

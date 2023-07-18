@@ -1,5 +1,6 @@
 ﻿using Contracts.Repositories.Abstracts;
 using Domains.Abstracts;
+using eShopOnlineRepositories.Parameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace eShopOnlineRepositories.Abstracts
@@ -8,9 +9,9 @@ namespace eShopOnlineRepositories.Abstracts
     {
         private readonly DbSet<TEntity> _dbSet;
 
-        protected AbstractRepository(ShopOnlineContext context)
+        protected AbstractRepository(RepositoryParams repositoryParams)
         {
-            _dbSet = context.Set<TEntity>();
+            _dbSet = repositoryParams.Context.Set<TEntity>();
         }
 
         public IQueryable<TEntity> FindAll(bool isTrackChanges)

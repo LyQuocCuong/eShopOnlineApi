@@ -2,7 +2,7 @@
 {
     internal sealed class EmployeeRepository : AbstractRepository<Employee>, IEmployeeRepository
     {
-        public EmployeeRepository(ShopOnlineContext context) : base(context)
+        public EmployeeRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
         }
 

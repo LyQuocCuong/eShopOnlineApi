@@ -11,13 +11,13 @@ namespace eShopOnlineRepositories.Managers
         private readonly Lazy<IProductRepository> _product;
         private readonly Lazy<IStoreRepository> _store;
 
-        public RepositoryManager(ShopOnlineContext context) 
+        public RepositoryManager(RepositoryParams repositoryParams) 
         {
-            _company = new Lazy<ICompanyRepository>(() => new CompanyRepository(context));
-            _customer = new Lazy<ICustomerRepository>(() => new CustomerRepository(context));
-            _employee = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(context));
-            _product = new Lazy<IProductRepository>(() => new ProductRepository(context));
-            _store = new Lazy<IStoreRepository>(() => new StoreRepository(context));
+            _company = new Lazy<ICompanyRepository>(() => new CompanyRepository(repositoryParams));
+            _customer = new Lazy<ICustomerRepository>(() => new CustomerRepository(repositoryParams));
+            _employee = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(repositoryParams));
+            _product = new Lazy<IProductRepository>(() => new ProductRepository(repositoryParams));
+            _store = new Lazy<IStoreRepository>(() => new StoreRepository(repositoryParams));
         }
 
         public ICompanyRepository Company => _company.Value;
