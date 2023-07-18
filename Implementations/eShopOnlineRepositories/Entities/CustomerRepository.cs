@@ -2,7 +2,7 @@
 {
     internal sealed class CustomerRepository : AbstractRepository<Customer>, ICustomerRepository
     {
-        public CustomerRepository(ShopOnlineContext context) : base(context)
+        public CustomerRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
         }
 

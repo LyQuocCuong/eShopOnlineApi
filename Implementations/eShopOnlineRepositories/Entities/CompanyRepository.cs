@@ -2,7 +2,7 @@
 {
     internal sealed class CompanyRepository : AbstractRepository<Company>, ICompanyRepository
     {
-        internal CompanyRepository(ShopOnlineContext context) : base(context)
+        internal CompanyRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
         }
 
