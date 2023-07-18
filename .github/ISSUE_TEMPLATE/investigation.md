@@ -1,20 +1,18 @@
 ---
 name: Investigation
 about: Describe briefly
-title: "[SOA-xxx]"
+title: "[SOA-xxx][Investigation]"
 labels: "[Type] Investigation"
 assignees: LyQuocCuong
 
 ---
 
 =====BEFORE=====
-**Describe the things you will investigate/**
+**1) Describe the causes why you need to investigate.**
 
-**Why do I have to enhance?**
+**2) What are the big questions?**
 
 =====AFTER=====
-**Are there any NEW (technical, code,...) ?**
+**1) Describe the result**
 
-**What did you get?**
-
-**Any notes?**
+**2) Any notes?**

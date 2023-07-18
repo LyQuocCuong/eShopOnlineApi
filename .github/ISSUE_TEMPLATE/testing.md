@@ -1,7 +1,7 @@
 ---
 name: Testing
 about: Decribe briefly
-title: "[SOA-xxx]"
+title: "[SOA-xxx][Testing]"
 labels: "[Type] Testing"
 assignees: LyQuocCuong
 
