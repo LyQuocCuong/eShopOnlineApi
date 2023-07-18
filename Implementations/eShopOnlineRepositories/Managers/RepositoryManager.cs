@@ -5,21 +5,29 @@ namespace eShopOnlineRepositories.Managers
 {
     public sealed class RepositoryManager : IRepositoryManager
     {
-        private readonly ShopOnlineContext _context;
+        private readonly Lazy<ICompanyRepository> _company;
+        private readonly Lazy<ICustomerRepository> _customer;
+        private readonly Lazy<IEmployeeRepository> _employee;
+        private readonly Lazy<IProductRepository> _product;
+        private readonly Lazy<IStoreRepository> _store;
 
         public RepositoryManager(ShopOnlineContext context) 
         {
-            _context = context;
+            _company = new Lazy<ICompanyRepository>(() => new CompanyRepository(context));
+            _customer = new Lazy<ICustomerRepository>(() => new CustomerRepository(context));
+            _employee = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(context));
+            _product = new Lazy<IProductRepository>(() => new ProductRepository(context));
+            _store = new Lazy<IStoreRepository>(() => new StoreRepository(context));
         }
 
-        public ICompanyRepository Company => new CompanyRepository(_context);
+        public ICompanyRepository Company => _company.Value;
 
-        public ICustomerRepository Customer => new CustomerRepository(_context);
+        public ICustomerRepository Customer => _customer.Value;
 
-        public IEmployeeRepository Employee => new EmployeeRepository(_context);
+        public IEmployeeRepository Employee => _employee.Value;
 
-        public IProductRepository Product => new ProductRepository(_context);
+        public IProductRepository Product => _product.Value;
 
-        public IStoreRepository Store => new StoreRepository(_context);
+        public IStoreRepository Store => _store.Value;
     }
 }
