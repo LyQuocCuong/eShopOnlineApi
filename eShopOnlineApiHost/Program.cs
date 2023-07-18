@@ -1,4 +1,6 @@
+using Contracts.Utilities.Mapper;
 using eShopOnlineEFCore.Context;
+using eShopOnlineUtilities.AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace eShopOnlineApiHost
@@ -15,6 +17,7 @@ namespace eShopOnlineApiHost
             );
 
             builder.Services.AddControllers();
+            builder.Services.AddScoped<IMapperService, AutoMapperService>();
             
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
