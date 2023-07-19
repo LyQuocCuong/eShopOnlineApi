@@ -6,14 +6,20 @@
         {
         }
 
-        public IEnumerable<EmployeeDto> GetAll(bool isTrackChanges)
+        public IEnumerable<EmployeeDto> GetAll()
         {
-            throw new NotImplementedException();
+            IEnumerable<Employee> employees = _repository.Employee.GetAll(isTrackChanges: false);
+            return _mapperService.Execute<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
         }
 
-        public EmployeeDto? GetById(bool isTrackChanges, Guid id)
+        public EmployeeDto? GetById(Guid id)
         {
-            throw new NotImplementedException();
+            Employee? employee = _repository.Employee.GetById(isTrackChanges: false, id);
+            if (employee == null)
+            {
+                return null;
+            }
+            return _mapperService.Execute<Employee, EmployeeDto>(employee);
         }
 
         public void Create(EmployeeForCreationDto creationDto)

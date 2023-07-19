@@ -6,9 +6,15 @@
         {
         }
 
-        public CompanyDto? GetById(bool isTrackChanges, Guid id)
+        public IEnumerable<CompanyDto> GetAll()
         {
-            Company? company = _repository.Company.GetById(isTrackChanges, id);
+            IEnumerable<Company> companies = _repository.Company.GetAll(isTrackChanges: false);
+            return _mapperService.Execute<IEnumerable<Company>, IEnumerable<CompanyDto>>(companies);
+        }
+
+        public CompanyDto? GetById(Guid id)
+        {
+            Company? company = _repository.Company.GetById(isTrackChanges: false, id);
             if (company == null)
             {
                 return null;

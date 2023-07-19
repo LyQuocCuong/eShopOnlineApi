@@ -1,6 +1,4 @@
-﻿using Shared.DTOs.Outputs.EntityDtos;
-
-namespace eShopOnlineApiRestful.Controllers
+﻿namespace eShopOnlineApiRestful.Controllers
 {
     public sealed class CustomerController : AbstractApiController
     {
@@ -12,7 +10,7 @@ namespace eShopOnlineApiRestful.Controllers
         [Route("customers")]
         public IActionResult GetAll()
         {
-            IEnumerable<EmployeeDto> employeeDto = _services.Employee.GetAll(isTrackChanges: false);
+            IEnumerable<CustomerDto> employeeDto = _services.Customer.GetAll();
             return Ok(employeeDto);
         }
 
@@ -20,7 +18,11 @@ namespace eShopOnlineApiRestful.Controllers
         [Route("customers/{id:guid}")]
         public IActionResult GetById(Guid id)
         {
-            EmployeeDto? employeeDto = _services.Employee.GetById(isTrackChanges: false, id);
+            CustomerDto? employeeDto = _services.Customer.GetById(id);
+            if (employeeDto == null)
+            {
+                return NotFound();
+            }
             return Ok(employeeDto);
         }
 

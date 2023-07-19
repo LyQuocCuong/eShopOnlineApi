@@ -6,15 +6,15 @@
         {
         }
 
-        public IEnumerable<CustomerDto> GetAll(bool isTrackChanges)
+        public IEnumerable<CustomerDto> GetAll()
         {
-            IEnumerable<Customer> customers = _repository.Customer.GetAll(isTrackChanges);
+            IEnumerable<Customer> customers = _repository.Customer.GetAll(isTrackChanges: false);
             return _mapperService.Execute<IEnumerable<Customer>, IEnumerable<CustomerDto>>(customers);
         }
 
-        public CustomerDto? GetById(bool isTrackChanges, Guid id)
+        public CustomerDto? GetById(Guid id)
         {
-            Customer? customer = _repository.Customer.GetById(isTrackChanges, id);
+            Customer? customer = _repository.Customer.GetById(isTrackChanges: false, id);
             if (customer == null)
             {
                 return null;

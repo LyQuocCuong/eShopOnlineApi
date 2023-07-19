@@ -6,14 +6,20 @@
         {
         }
 
-        public IEnumerable<StoreDto> GetAll(bool isTrackChanges)
+        public IEnumerable<StoreDto> GetAll()
         {
-            throw new NotImplementedException();
+            IEnumerable<Store> stores = _repository.Store.GetAll(isTrackChanges: false);
+            return _mapperService.Execute<IEnumerable<Store>, IEnumerable<StoreDto>>(stores);
         }
 
-        public StoreDto? GetById(bool isTrackChanges, Guid id)
+        public StoreDto? GetById(Guid id)
         {
-            throw new NotImplementedException();
+            Store? store = _repository.Store.GetById(isTrackChanges: false, id);
+            if (store == null)
+            {
+                return null;
+            }
+            return _mapperService.Execute<Store, StoreDto>(store);
         }
 
         public void Create(StoreForCreationDto creationDto)
