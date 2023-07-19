@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Implementations\eShopOnlineApiRestful\eShopOnlineApiRestful.csproj" />
     <ProjectReference Include="..\Implementations\eShopOnlineBusiness\eShopOnlineBusiness.csproj" />
     <ProjectReference Include="..\Implementations\eShopOnlineRepositories\eShopOnlineRepositories.csproj" />
     <ProjectReference Include="..\Implementations\eShopOnlineUtilities\eShopOnlineUtilities.csproj" />
