@@ -8,7 +8,7 @@
 
         public CompanyDto? GetById(bool isTrackChanges, Guid id)
         {
-            Company? company = _repositoryManager.Company.GetById(isTrackChanges, id);
+            Company? company = _repository.Company.GetById(isTrackChanges, id);
             if (company == null)
             {
                 return null;
