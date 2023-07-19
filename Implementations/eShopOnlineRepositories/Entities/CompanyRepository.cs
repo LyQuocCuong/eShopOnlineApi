@@ -6,6 +6,11 @@
         {
         }
 
+        public IEnumerable<Company> GetAll(bool isTrackChanges)
+        {
+            return base.FindAll(isTrackChanges);
+        }
+
         public Company? GetById(bool isTrackChanges, Guid id)
         {
             return base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefault();

@@ -2,9 +2,9 @@
 {
     public interface IStoreService
     {
-        StoreDto? GetById(bool isTrackChanges, Guid id);
+        StoreDto? GetById(Guid id);
 
-        IEnumerable<StoreDto> GetAll(bool isTrackChanges);
+        IEnumerable<StoreDto> GetAll();
 
         void Create(StoreForCreationDto creationDto);
 

@@ -2,6 +2,7 @@ using Contracts.Business.Managers;
 using Contracts.Repositories.Managers;
 using Contracts.Utilities.Mapper;
 using eShopOnlineApiHost.Extensions;
+using eShopOnlineApiRestful.Parameters;
 using eShopOnlineBusiness.Managers;
 using eShopOnlineEFCore.Context;
 using eShopOnlineRepositories.Managers;
@@ -18,6 +19,7 @@ namespace eShopOnlineApiHost
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<ControllerParams>();
             builder.Services.AddControllers()
                 .AddApplicationPart(typeof(eShopOnlineApiRestful.AssemblyReference).Assembly);
 

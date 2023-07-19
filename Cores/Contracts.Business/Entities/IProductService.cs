@@ -2,9 +2,9 @@
 {
     public interface IProductService
     {
-        ProductDto? GetById(bool isTrackChanges, Guid id);
+        ProductDto? GetById(Guid id);
 
-        IEnumerable<ProductDto> GetAll(bool isTrackChanges);
+        IEnumerable<ProductDto> GetAll();
 
         void Create(ProductForCreationDto creationDto);
 

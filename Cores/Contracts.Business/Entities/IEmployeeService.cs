@@ -2,9 +2,9 @@
 {
     public interface IEmployeeService
     {
-        EmployeeDto? GetById(bool isTrackChanges, Guid id);
+        EmployeeDto? GetById(Guid id);
 
-        IEnumerable<EmployeeDto> GetAll(bool isTrackChanges);
+        IEnumerable<EmployeeDto> GetAll();
 
         void Create(EmployeeForCreationDto creationDto);
 

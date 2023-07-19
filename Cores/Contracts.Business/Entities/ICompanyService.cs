@@ -2,6 +2,8 @@
 {
     public interface ICompanyService
     {
-        CompanyDto? GetById(bool isTrackChanges, Guid id);
+        CompanyDto? GetById(Guid id);
+
+        IEnumerable<CompanyDto> GetAll();
     }
 }

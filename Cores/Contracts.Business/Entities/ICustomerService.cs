@@ -2,9 +2,9 @@
 {
     public interface ICustomerService
     {
-        CustomerDto? GetById(bool isTrackChanges, Guid id);
+        CustomerDto? GetById(Guid id);
 
-        IEnumerable<CustomerDto> GetAll(bool isTrackChanges);
+        IEnumerable<CustomerDto> GetAll();
 
         void Create(CustomerForCreationDto creationDto);
 
