@@ -1,7 +1,10 @@
 using Contracts.Business.Managers;
+using Contracts.Repositories.Managers;
 using Contracts.Utilities.Mapper;
+using eShopOnlineApiHost.Extensions;
 using eShopOnlineBusiness.Managers;
 using eShopOnlineEFCore.Context;
+using eShopOnlineRepositories.Managers;
 using eShopOnlineUtilities.AutoMapper;
 using eShopOnlineUtilities.AutoMapper.Profiles;
 using Microsoft.EntityFrameworkCore;
@@ -15,15 +18,15 @@ namespace eShopOnlineApiHost
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddDbContext<ShopOnlineContext>(
-                options => options.UseSqlServer(builder.Configuration.GetConnectionString("eShopOnlineConnection"))
-            );
+            builder.Services.AddControllers()
+                .AddApplicationPart(typeof(eShopOnlineApiRestful.AssemblyReference).Assembly);
 
-            builder.Services.AddControllers();
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
-            builder.Services.AddScoped<IMapperService, AutoMapperService>();
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
-            
+            // My DIRegister
+            builder.Services.DIRegister_ShopOnlineContext(builder.Configuration);
+            builder.Services.DIRegister_Repositories();
+            builder.Services.DIRegister_Business();
+            builder.Services.DIRegister_AutoMapper();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
