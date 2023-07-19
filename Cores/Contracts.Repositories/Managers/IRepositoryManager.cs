@@ -4,6 +4,8 @@ namespace Contracts.Repositories.Managers
 {
     public interface IRepositoryManager
     {
+        void SaveChanges();
+
         ICompanyRepository Company { get; }
 
         ICustomerRepository Customer { get; }

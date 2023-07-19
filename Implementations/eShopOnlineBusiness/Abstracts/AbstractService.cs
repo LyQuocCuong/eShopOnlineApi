@@ -6,12 +6,12 @@ namespace eShopOnlineBusiness.Abstracts
 {
     public abstract class AbstractService : IAbstractService
     {
-        protected readonly IRepositoryManager _repositoryManager;
+        protected readonly IRepositoryManager _repository;
         protected readonly IMapperService _mapperService;
 
         protected AbstractService(ServiceParams serviceParams)
         {
-            _repositoryManager = serviceParams.RepositoryManager;
+            _repository = serviceParams.RepositoryManager;
             _mapperService = serviceParams.MapperService;
         }
 

@@ -8,13 +8,13 @@
 
         public IEnumerable<CustomerDto> GetAll(bool isTrackChanges)
         {
-            IEnumerable<Customer> customers = _repositoryManager.Customer.GetAll(isTrackChanges);
+            IEnumerable<Customer> customers = _repository.Customer.GetAll(isTrackChanges);
             return _mapperService.Execute<IEnumerable<Customer>, IEnumerable<CustomerDto>>(customers);
         }
 
         public CustomerDto? GetById(bool isTrackChanges, Guid id)
         {
-            Customer? customer = _repositoryManager.Customer.GetById(isTrackChanges, id);
+            Customer? customer = _repository.Customer.GetById(isTrackChanges, id);
             if (customer == null)
             {
                 return null;
@@ -25,7 +25,8 @@
         public void Create(CustomerForCreationDto creationDto)
         {
             Customer newCustomer = _mapperService.Execute<CustomerForCreationDto, Customer>(creationDto);
-            _repositoryManager.Customer.Create(newCustomer);
+            _repository.Customer.Create(newCustomer);
+            _repository.SaveChanges();
         }
 
         public void SoftDelete(Guid id)
