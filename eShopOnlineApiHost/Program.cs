@@ -3,6 +3,7 @@ using Contracts.Utilities.Mapper;
 using eShopOnlineBusiness.Managers;
 using eShopOnlineEFCore.Context;
 using eShopOnlineUtilities.AutoMapper;
+using eShopOnlineUtilities.AutoMapper.Profiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace eShopOnlineApiHost
@@ -19,6 +20,7 @@ namespace eShopOnlineApiHost
             );
 
             builder.Services.AddControllers();
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
             builder.Services.AddScoped<IMapperService, AutoMapperService>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             
