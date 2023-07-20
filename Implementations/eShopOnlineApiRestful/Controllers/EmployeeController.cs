@@ -10,8 +10,8 @@ namespace eShopOnlineApiRestful.Controllers
         }
 
         [HttpGet]
-        [Route("employees")]
-        public IActionResult GetAll()
+        [Route("employees", Name = "GetAllEmployees")]
+        public IActionResult GetAllEmployees()
         {
             IEnumerable<EmployeeDto> employeeDtos = _services.Employee.GetAll();
             return Ok(employeeDtos);
@@ -19,7 +19,7 @@ namespace eShopOnlineApiRestful.Controllers
 
         [HttpGet]
         [Route("employees/{id:guid}", Name = "GetEmployeeById")]
-        public IActionResult GetEmployeeById(Guid id)
+        public IActionResult GetEmployeeById([FromRoute]Guid id)
         {
             EmployeeDto? employeeDto = _services.Employee.GetById(id);
             if (employeeDto == null)

@@ -7,16 +7,16 @@
         }
 
         [HttpGet]
-        [Route("companies")]
-        public IActionResult GetAll()
+        [Route("companies", Name = "GetAllCompanies")]
+        public IActionResult GetAllCompanies()
         {
             IEnumerable<CompanyDto> companyDtos = _services.Company.GetAll();
             return Ok(companyDtos);
         }
 
         [HttpGet]
-        [Route("companies/{id:guid}")]
-        public IActionResult GetById(Guid id)
+        [Route("companies/{id:guid}", Name = "GetCompanyById")]
+        public IActionResult GetCompanyById([FromRoute]Guid id)
         {
             CompanyDto? companyDto = _services.Company.GetById(id);
             if (companyDto == null)
