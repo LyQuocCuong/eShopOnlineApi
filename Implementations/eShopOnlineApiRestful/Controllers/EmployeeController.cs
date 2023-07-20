@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Shared.DTOs.Inputs.FromBody.CreationDtos;
-
-namespace eShopOnlineApiRestful.Controllers
+﻿namespace eShopOnlineApiRestful.Controllers
 {
     public sealed class EmployeeController : AbstractApiController
     {
@@ -35,6 +32,18 @@ namespace eShopOnlineApiRestful.Controllers
         {
             EmployeeDto employeeDto = _services.Employee.Create(creationDto);
             return CreatedAtRoute("GetEmployeeById", new { id = employeeDto.Id }, employeeDto);
+        }
+
+        [HttpPut]
+        [Route("employees/{id:guid}", Name = "UpdateEmployeeFully")]
+        public IActionResult UpdateEmployeeFully([FromRoute]Guid id, [FromBody]EmployeeForUpdateDto updateDto)
+        {
+            if (_services.Employee.IsValidId(id) == false)
+            {
+                return NotFound();
+            }
+            bool result = _services.Employee.UpdateFully(id, updateDto);
+            return NoContent();
         }
 
     }

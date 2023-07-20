@@ -6,6 +6,8 @@
 
         IEnumerable<Customer> GetAll(bool isTrackChanges);
 
+        bool IsValidId(Guid id);
+
         void Create(Customer customer);
 
         void SoftDelete(Customer customer);

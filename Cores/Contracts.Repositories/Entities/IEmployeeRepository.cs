@@ -6,6 +6,8 @@
 
         IEnumerable<Employee> GetAll(bool isTrackChanges);
 
+        bool IsValidId(Guid id);
+
         void Create(Employee employee);
 
         void SoftDelete(Employee employee);

@@ -16,6 +16,11 @@
             return base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefault();
         }
 
+        public bool IsValidId(Guid id)
+        {
+            return base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
+        }
+
         public void Create(Customer customer)
         {
             base.CreateEntity(customer);
@@ -29,6 +34,6 @@
         public void HardDelete(Customer customer)
         {
             base.HardDeleteEntity(customer);
-        }        
+        }
     }
 }

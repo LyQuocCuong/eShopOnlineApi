@@ -12,6 +12,11 @@
             return _mapperService.Execute<IEnumerable<Customer>, IEnumerable<CustomerDto>>(customers);
         }
 
+        public bool IsValidId(Guid id)
+        {
+            return _repository.Customer.IsValidId(id);
+        }
+
         public CustomerDto? GetById(Guid id)
         {
             Customer? customer = _repository.Customer.GetById(isTrackChanges: false, id);
@@ -31,6 +36,18 @@
             return _mapperService.Execute<Customer, CustomerDto>(newCustomer);
         }
 
+        public bool UpdateFully(Guid id, CustomerForUpdateDto updateDto)
+        {
+            Customer? customer = _repository.Customer.GetById(isTrackChanges: true, id);
+            if (customer == null)
+            {
+                throw new Exception();
+            }
+            _mapperService.Execute<CustomerForUpdateDto, Customer>(updateDto, customer);
+            _repository.SaveChanges();
+            return true;
+        }
+
         public void SoftDelete(Guid id)
         {
             throw new NotImplementedException();
@@ -40,5 +57,6 @@
         {
             throw new NotImplementedException();
         }
+
     }
 }

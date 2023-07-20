@@ -22,6 +22,11 @@
             return _mapperService.Execute<Product, ProductDto>(product);
         }
 
+        public bool IsValidId(Guid id)
+        {
+            return _repository.Product.IsValidId(id);
+        }
+
         public ProductDto Create(ProductForCreationDto creationDto)
         {
             Product newProduct = _mapperService.Execute<ProductForCreationDto, Product>(creationDto);
@@ -29,6 +34,18 @@
             _repository.SaveChanges();
 
             return _mapperService.Execute<Product, ProductDto>(newProduct);
+        }
+
+        public bool UpdateFully(Guid id, ProductForUpdateDto updateDto)
+        {
+            Product? product = _repository.Product.GetById(isTrackChanges: true, id);
+            if (product == null)
+            {
+                throw new Exception();
+            }
+            _mapperService.Execute<ProductForUpdateDto, Product>(updateDto, product);
+            _repository.SaveChanges();
+            return true;
         }
 
         public void SoftDelete(Guid id)
@@ -40,5 +57,6 @@
         {
             throw new NotImplementedException();
         }
+
     }
 }

@@ -21,5 +21,23 @@
             }
             return _mapperService.Execute<Company, CompanyDto>(company);
         }
+
+        public bool IsValidId(Guid id)
+        {
+            return _repository.Company.IsValidId(id);
+        }
+
+        public bool UpdateFully(Guid id, CompanyForUpdateDto updateDto)
+        {
+            Company? company = _repository.Company.GetById(isTrackChanges: true, id);
+            if (company == null)
+            {
+                throw new Exception();
+            }
+            _mapperService.Execute<CompanyForUpdateDto, Company>(updateDto, company);
+            _repository.SaveChanges();
+            return true;
+        }
+
     }
 }

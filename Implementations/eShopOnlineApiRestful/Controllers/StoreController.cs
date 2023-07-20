@@ -1,6 +1,4 @@
-﻿using Shared.DTOs.Inputs.FromBody.CreationDtos;
-
-namespace eShopOnlineApiRestful.Controllers
+﻿namespace eShopOnlineApiRestful.Controllers
 {
     public sealed class StoreController : AbstractApiController
     {
@@ -34,6 +32,18 @@ namespace eShopOnlineApiRestful.Controllers
         {
             StoreDto storeDto = _services.Store.Create(creationDto);
             return CreatedAtRoute("GetStoreById", new { id = storeDto.Id }, storeDto);
+        }
+
+        [HttpPut]
+        [Route("stores/{id:guid}", Name = "UpdateStoreFully")]
+        public IActionResult UpdateStoreFully([FromRoute]Guid id, [FromBody]StoreForUpdateDto updateDto)
+        {
+            if (_services.Store.IsValidId(id) == false)
+            {
+                return NotFound();
+            }
+            bool result = _services.Store.UpdateFully(id, updateDto);
+            return NoContent();
         }
 
     }
