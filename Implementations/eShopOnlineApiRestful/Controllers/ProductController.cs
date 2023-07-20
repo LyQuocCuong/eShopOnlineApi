@@ -9,8 +9,8 @@ namespace eShopOnlineApiRestful.Controllers
         }
 
         [HttpGet]
-        [Route("products")]
-        public IActionResult GetAll()
+        [Route("products", Name = "GetAllProducts")]
+        public IActionResult GetAllProducts()
         {
             IEnumerable<ProductDto> productDtos = _services.Product.GetAll();
             return Ok(productDtos);
@@ -18,7 +18,7 @@ namespace eShopOnlineApiRestful.Controllers
 
         [HttpGet]
         [Route("products/{id:guid}", Name = "GetProductById")]
-        public IActionResult GetProductById(Guid id)
+        public IActionResult GetProductById([FromRoute]Guid id)
         {
             ProductDto? productDto = _services.Product.GetById(id);
             if (productDto == null)
