@@ -6,6 +6,8 @@
 
         IEnumerable<Product> GetAll(bool isTrackChanges);
 
+        bool IsValidId(Guid id);
+
         void Create(Product product);
 
         void SoftDelete(Product product);

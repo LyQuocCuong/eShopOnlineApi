@@ -26,5 +26,17 @@
             return Ok(companyDto);
         }
 
+        [HttpPut]
+        [Route("companies/{id:guid}", Name = "UpdateCompanyFully")]
+        public IActionResult UpdateCompanyFully([FromRoute]Guid id, [FromBody]CompanyForUpdateDto updateDto)
+        {
+            if (_services.Company.IsValidId(id) == false)
+            {
+                return NotFound();
+            }
+            bool result = _services.Company.UpdateFully(id, updateDto);
+            return NoContent();
+        }
+
     }
 }

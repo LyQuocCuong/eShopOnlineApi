@@ -16,6 +16,11 @@
             return base.FindByCondition(e => e.Id == id, isTrackChanges).FirstOrDefault();
         }
 
+        public bool IsValidId(Guid id)
+        {
+            return base.FindByCondition(e => e.Id == id, isTrackChanges: false).Any();
+        }
+
         public void Create(Employee employee)
         {
             base.CreateEntity(employee);

@@ -22,6 +22,11 @@
             return _mapperService.Execute<Employee, EmployeeDto>(employee);
         }
 
+        public bool IsValidId(Guid id)
+        {
+            return _repository.Employee.IsValidId(id);
+        }
+
         public EmployeeDto Create(EmployeeForCreationDto creationDto)
         {
             Employee newEmployee = _mapperService.Execute<EmployeeForCreationDto, Employee>(creationDto);
@@ -29,6 +34,18 @@
             _repository.SaveChanges();
 
             return _mapperService.Execute<Employee, EmployeeDto>(newEmployee);
+        }
+
+        public bool UpdateFully(Guid id, EmployeeForUpdateDto updateDto)
+        {
+            Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
+            if (employee == null)
+            {
+                throw new Exception();
+            }
+            _mapperService.Execute<EmployeeForUpdateDto, Employee>(updateDto, employee);
+            _repository.SaveChanges();
+            return true;
         }
 
         public void SoftDelete(Guid id)
@@ -40,5 +57,6 @@
         {
             throw new NotImplementedException();
         }
+
     }
 }

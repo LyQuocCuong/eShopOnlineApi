@@ -5,5 +5,7 @@
         Company? GetById(bool isTrackChanges, Guid id);
 
         IEnumerable<Company> GetAll(bool isTrackChanges);
+
+        bool IsValidId(Guid id);
     }
 }

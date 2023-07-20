@@ -6,7 +6,11 @@
 
         IEnumerable<CustomerDto> GetAll();
 
+        bool IsValidId(Guid id);
+
         CustomerDto Create(CustomerForCreationDto creationDto);
+
+        bool UpdateFully(Guid id, CustomerForUpdateDto updateDto);
 
         void SoftDelete(Guid id);
 

@@ -15,5 +15,10 @@
         {
             return base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefault();
         }
+
+        public bool IsValidId(Guid id)
+        {
+            return base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
+        }
     }
 }
