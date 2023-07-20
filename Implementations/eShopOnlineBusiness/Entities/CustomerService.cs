@@ -22,11 +22,13 @@
             return _mapperService.Execute<Customer, CustomerDto>(customer);
         }
 
-        public void Create(CustomerForCreationDto creationDto)
+        public CustomerDto Create(CustomerForCreationDto creationDto)
         {
             Customer newCustomer = _mapperService.Execute<CustomerForCreationDto, Customer>(creationDto);
             _repository.Customer.Create(newCustomer);
             _repository.SaveChanges();
+
+            return _mapperService.Execute<Customer, CustomerDto>(newCustomer);
         }
 
         public void SoftDelete(Guid id)

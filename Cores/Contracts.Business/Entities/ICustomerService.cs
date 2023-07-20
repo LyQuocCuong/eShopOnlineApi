@@ -6,7 +6,7 @@
 
         IEnumerable<CustomerDto> GetAll();
 
-        void Create(CustomerForCreationDto creationDto);
+        CustomerDto Create(CustomerForCreationDto creationDto);
 
         void SoftDelete(Guid id);
 

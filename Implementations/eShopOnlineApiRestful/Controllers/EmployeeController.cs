@@ -1,4 +1,7 @@
-﻿namespace eShopOnlineApiRestful.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs.Inputs.FromBody.CreationDtos;
+
+namespace eShopOnlineApiRestful.Controllers
 {
     public sealed class EmployeeController : AbstractApiController
     {
@@ -15,8 +18,8 @@
         }
 
         [HttpGet]
-        [Route("employees/{id:guid}")]
-        public IActionResult GetById(Guid id)
+        [Route("employees/{id:guid}", Name = "GetEmployeeById")]
+        public IActionResult GetEmployeeById(Guid id)
         {
             EmployeeDto? employeeDto = _services.Employee.GetById(id);
             if (employeeDto == null)
@@ -24,6 +27,14 @@
                 return NotFound();
             }
             return Ok(employeeDto);
+        }
+
+        [HttpPost]
+        [Route("employees", Name = "CreateEmployee")]
+        public IActionResult CreateEmployee([FromBody]EmployeeForCreationDto creationDto)
+        {
+            EmployeeDto employeeDto = _services.Employee.Create(creationDto);
+            return CreatedAtRoute("GetEmployeeById", new { id = employeeDto.Id }, employeeDto);
         }
 
     }

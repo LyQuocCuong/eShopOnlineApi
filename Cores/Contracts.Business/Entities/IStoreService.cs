@@ -6,7 +6,7 @@
 
         IEnumerable<StoreDto> GetAll();
 
-        void Create(StoreForCreationDto creationDto);
+        StoreDto Create(StoreForCreationDto creationDto);
 
         void SoftDelete(Guid id);
 

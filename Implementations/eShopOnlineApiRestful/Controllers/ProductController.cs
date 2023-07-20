@@ -1,4 +1,6 @@
-﻿namespace eShopOnlineApiRestful.Controllers
+﻿using Shared.DTOs.Inputs.FromBody.CreationDtos;
+
+namespace eShopOnlineApiRestful.Controllers
 {
     public sealed class ProductController : AbstractApiController
     {
@@ -15,8 +17,8 @@
         }
 
         [HttpGet]
-        [Route("products/{id:guid}")]
-        public IActionResult GetById(Guid id)
+        [Route("products/{id:guid}", Name = "GetProductById")]
+        public IActionResult GetProductById(Guid id)
         {
             ProductDto? productDto = _services.Product.GetById(id);
             if (productDto == null)
@@ -24,6 +26,14 @@
                 return NotFound();
             }
             return Ok(productDto);
+        }
+
+        [HttpPost]
+        [Route("products", Name = "CreateProduct")]
+        public IActionResult CreateProduct([FromBody]ProductForCreationDto creationDto)
+        {
+            ProductDto productDto = _services.Product.Create(creationDto);
+            return CreatedAtRoute("GetProductById", new { id = productDto.Id }, productDto);
         }
 
     }

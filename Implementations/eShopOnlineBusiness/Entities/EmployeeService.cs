@@ -22,9 +22,13 @@
             return _mapperService.Execute<Employee, EmployeeDto>(employee);
         }
 
-        public void Create(EmployeeForCreationDto creationDto)
+        public EmployeeDto Create(EmployeeForCreationDto creationDto)
         {
-            throw new NotImplementedException();
+            Employee newEmployee = _mapperService.Execute<EmployeeForCreationDto, Employee>(creationDto);
+            _repository.Employee.Create(newEmployee);
+            _repository.SaveChanges();
+
+            return _mapperService.Execute<Employee, EmployeeDto>(newEmployee);
         }
 
         public void SoftDelete(Guid id)
