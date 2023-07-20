@@ -22,9 +22,13 @@
             return _mapperService.Execute<Store, StoreDto>(store);
         }
 
-        public void Create(StoreForCreationDto creationDto)
+        public StoreDto Create(StoreForCreationDto creationDto)
         {
-            throw new NotImplementedException();
+            Store newStore = _mapperService.Execute<StoreForCreationDto, Store>(creationDto);
+            _repository.Store.Create(newStore);
+            _repository.SaveChanges();
+
+            return _mapperService.Execute<Store, StoreDto>(newStore);
         }
 
         public void SoftDelete(Guid id)

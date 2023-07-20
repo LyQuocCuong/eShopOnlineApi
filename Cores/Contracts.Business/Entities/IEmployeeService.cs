@@ -6,7 +6,7 @@
 
         IEnumerable<EmployeeDto> GetAll();
 
-        void Create(EmployeeForCreationDto creationDto);
+        EmployeeDto Create(EmployeeForCreationDto creationDto);
 
         void SoftDelete(Guid id);
 

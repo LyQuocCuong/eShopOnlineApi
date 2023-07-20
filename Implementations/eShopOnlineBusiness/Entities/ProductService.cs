@@ -22,9 +22,13 @@
             return _mapperService.Execute<Product, ProductDto>(product);
         }
 
-        public void Create(ProductForCreationDto creationDto)
+        public ProductDto Create(ProductForCreationDto creationDto)
         {
-            throw new NotImplementedException();
+            Product newProduct = _mapperService.Execute<ProductForCreationDto, Product>(creationDto);
+            _repository.Product.Create(newProduct);
+            _repository.SaveChanges();
+
+            return _mapperService.Execute<Product, ProductDto>(newProduct);
         }
 
         public void SoftDelete(Guid id)
