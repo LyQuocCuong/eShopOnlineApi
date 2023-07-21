@@ -12,8 +12,8 @@
 
         bool UpdateFully(Guid id, CustomerForUpdateDto updateDto);
 
-        void SoftDelete(Guid id);
+        bool DeleteSoftly(Guid id);
 
-        void HardDelete(Guid id);
+        bool DeleteHard(Guid id);
     }
 }

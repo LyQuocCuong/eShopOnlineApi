@@ -16,12 +16,12 @@ namespace Contracts.Repositories.Abstracts
 
         void UpdateEntity(TEntity entity);
 
-        // Why don't use "RemoveEntity" name instead of "SoftDeleteEntity"
+        // Why don't use "RemoveEntity" name instead of "DeleteEntitySoftly"
         //// void RemoveEntity(T entity);
         /// Due to duplication with "Context.Remove()" - EFCore (actually remove - HardDelete).
         /// Our intention just use this method to execute the Soft-Delete (Entity.IsDeleted = true).
-        void SoftDeleteEntity(TEntity entity);
+        void DeleteEntitySoftly(TEntity entity);
 
-        void HardDeleteEntity(TEntity entity);
+        void DeleteEntityHard(TEntity entity);
     }
 }

@@ -48,14 +48,38 @@
             return true;
         }
 
-        public void SoftDelete(Guid id)
+        public bool DeleteSoftly(Guid id)
         {
-            throw new NotImplementedException();
+            var result = _repository.Customer.CheckRequiredConditionsForDeletion(id);
+            if (result.Any(condition => condition.Value == false))
+            {
+                return false;
+            }
+            Customer? customer = _repository.Customer.GetById(isTrackChanges: true, id);
+            if (customer != null)
+            {
+                _repository.Customer.DeleteSoftly(customer);
+                _repository.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public void HardDelete(Guid id)
+        public bool DeleteHard(Guid id)
         {
-            throw new NotImplementedException();
+            var result = _repository.Customer.CheckRequiredConditionsForDeletion(id);
+            if (result.Any(condition => condition.Value == false))
+            {
+                return false;
+            }
+            Customer? customer = _repository.Customer.GetById(isTrackChanges: true, id);
+            if (customer != null)
+            {
+                _repository.Customer.DeleteHard(customer);
+                _repository.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
     }
