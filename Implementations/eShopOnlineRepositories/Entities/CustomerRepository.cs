@@ -21,19 +21,49 @@
             return base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
         }
 
+        public Dictionary<ConditionsForDeletingCustomer, bool> CheckRequiredConditionsForDeletion(Guid id)
+        {
+            return CheckRequiredConditionsForDeletion(id, CommonVariables.DefaultCheckListOfCustomerDeletion);
+        }
+
+        public Dictionary<ConditionsForDeletingCustomer, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingCustomer> checkList)
+        {
+            Customer? customer = base.FindByCondition(c => c.Id == id, isTrackChanges: false).FirstOrDefault();
+            var result = new Dictionary<ConditionsForDeletingCustomer, bool>();
+            foreach (var condition in checkList)
+            {
+                result.Add(condition, false);
+                if (customer != null)
+                {
+                    switch (condition)
+                    {
+                        case ConditionsForDeletingCustomer.IsNotDeletedSoftly:
+                            if (customer.IsDeleted == false)
+                            {
+                                result[condition] = true;
+                            }
+                            break;
+                    }
+
+                }
+            }
+            return result;
+        }
+
         public void Create(Customer customer)
         {
             base.CreateEntity(customer);
         }
 
-        public void SoftDelete(Customer customer)
+        public void DeleteSoftly(Customer customer)
         {
-            base.SoftDeleteEntity(customer);
+            base.DeleteEntitySoftly(customer);
         }
 
-        public void HardDelete(Customer customer)
+        public void DeleteHard(Customer customer)
         {
-            base.HardDeleteEntity(customer);
+            base.DeleteEntityHard(customer);
         }
+
     }
 }

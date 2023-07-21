@@ -46,14 +46,14 @@ namespace eShopOnlineRepositories.Abstracts
             // Because I can update Entity by using Tracking feature.
         }
 
-        public void SoftDeleteEntity(TEntity entity)
+        public void DeleteEntitySoftly(TEntity entity)
         {
             // Due to "where TEntity : BaseEntity"
             // I can use properties of BaseEntity
             entity.IsDeleted = true;
         }
 
-        public void HardDeleteEntity(TEntity entity)
+        public void DeleteEntityHard(TEntity entity)
         {
             _dbSet.Remove(entity);
         }

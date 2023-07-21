@@ -8,10 +8,14 @@
 
         bool IsValidId(Guid id);
 
+        Dictionary<ConditionsForDeletingProduct, bool> CheckRequiredConditionsForDeletion(Guid id);
+
+        Dictionary<ConditionsForDeletingProduct, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingProduct> checkList);
+
         void Create(Product product);
 
-        void SoftDelete(Product product);
+        void DeleteSoftly(Product product);
 
-        void HardDelete(Product product);
+        void DeleteHard(Product product);
     }
 }

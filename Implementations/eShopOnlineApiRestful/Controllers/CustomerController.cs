@@ -46,5 +46,29 @@
             return NoContent();
         }
 
+        [HttpDelete]
+        [Route("customers/{id:guid}", Name = "DeleteCustomerSoftly")]
+        public IActionResult DeleteCustomerSoftly([FromRoute]Guid id)
+        {
+            bool result = _services.Customer.DeleteSoftly(id);
+            if (result == false)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("admin/customers/{id:guid}", Name = "DeleteCustomerHard")]
+        public IActionResult DeleteCustomerHard([FromRoute]Guid id)
+        {
+            bool result = _services.Customer.DeleteHard(id);
+            if (result == false)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
     }
 }

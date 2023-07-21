@@ -8,10 +8,14 @@
 
         bool IsValidId(Guid id);
 
+        Dictionary<ConditionsForDeletingEmployee, bool> CheckRequiredConditionsForDeletion(Guid id);
+
+        Dictionary<ConditionsForDeletingEmployee, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingEmployee> checkList);
+
         void Create(Employee employee);
 
-        void SoftDelete(Employee employee);
+        void DeleteSoftly(Employee employee);
 
-        void HardDelete(Employee employee);
+        void DeleteHard(Employee employee);
     }
 }

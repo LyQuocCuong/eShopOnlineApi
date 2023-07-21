@@ -8,10 +8,14 @@
 
         bool IsValidId(Guid id);
 
+        Dictionary<ConditionsForDeletingStore, bool> CheckRequiredConditionsForDeletion(Guid id);
+
+        Dictionary<ConditionsForDeletingStore, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingStore> checkList);
+
         void Create(Store store);
 
-        void SoftDelete(Store store);
+        void DeleteSoftly(Store store);
 
-        void HardDelete(Store store);
+        void DeleteHard(Store store);
     }
 }
