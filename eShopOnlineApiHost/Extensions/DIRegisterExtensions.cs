@@ -1,6 +1,8 @@
 ﻿using Contracts.Business.Managers;
 using Contracts.Repositories.Managers;
+using Contracts.Utilities.Logger;
 using Contracts.Utilities.Mapper;
+using eShopOnlineApiHost.Constants;
 using eShopOnlineBusiness.Managers;
 using eShopOnlineBusiness.Parameters;
 using eShopOnlineEFCore.Context;
@@ -8,7 +10,9 @@ using eShopOnlineRepositories.Managers;
 using eShopOnlineRepositories.Parameters;
 using eShopOnlineUtilities.AutoMapper;
 using eShopOnlineUtilities.AutoMapper.Profiles;
+using eShopOnlineUtilities.NLog;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 namespace eShopOnlineApiHost.Extensions
 {
@@ -16,7 +20,7 @@ namespace eShopOnlineApiHost.Extensions
     {
         public static void DIRegister_ShopOnlineContext(this IServiceCollection services, IConfiguration configuration)
         {
-            string? connectionStrings = configuration.GetConnectionString("eShopOnlineConnection");
+            string? connectionStrings = configuration.GetConnectionString(SystemVariables.EShopConnectionString);
             if (connectionStrings != null)
             {
                 services.AddDbContext<ShopOnlineContext>(
@@ -39,6 +43,12 @@ namespace eShopOnlineApiHost.Extensions
         {
             services.AddScoped<ServiceParams>();
             services.AddScoped<IServiceManager, ServiceManager>();
+        }
+
+        public static void DIRegister_NLog(this IServiceCollection services)
+        {
+            LogManager.Setup().LoadConfigurationFromFile(SystemVariables.PathNLogConfigFile);
+            services.AddSingleton<ILogService, NLogService>();
         }
 
         public static void DIRegister_AutoMapper(this IServiceCollection services)
