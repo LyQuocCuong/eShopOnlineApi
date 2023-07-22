@@ -1,4 +1,5 @@
 ﻿global using Contracts.Repositories.Entities;
+global using Contracts.Utilities.Logger;
 global using Domains.Entities;
 global using Domains.SeedingEntities;
 global using eShopOnlineEFCore.Context;

@@ -6,6 +6,7 @@ namespace eShopOnlineRepositories.Managers
     public sealed class RepositoryManager : IRepositoryManager
     {
         private readonly ShopOnlineContext _context;
+        private readonly ILogService _logService;
 
         private readonly Lazy<ICompanyRepository> _company;
         private readonly Lazy<ICustomerRepository> _customer;
@@ -16,6 +17,7 @@ namespace eShopOnlineRepositories.Managers
         public RepositoryManager(RepositoryParams repositoryParams) 
         {
             _context = repositoryParams.Context;
+            _logService = repositoryParams.LogService;
 
             _company = new Lazy<ICompanyRepository>(() => new CompanyRepository(repositoryParams));
             _customer = new Lazy<ICustomerRepository>(() => new CustomerRepository(repositoryParams));
@@ -26,7 +28,9 @@ namespace eShopOnlineRepositories.Managers
 
         public void SaveChanges()
         {
+            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[SAVE] START saving to Database."));
             _context.SaveChanges();
+            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[SAVE] FINISH saving to Database."));
         }
 
         public ICompanyRepository Company => _company.Value;
