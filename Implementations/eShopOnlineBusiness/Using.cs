@@ -1,4 +1,5 @@
 ﻿global using Contracts.Business.Entities;
+global using Contracts.Utilities.Logger;
 global using Domains.Entities;
 global using eShopOnlineBusiness.Abstracts;
 global using eShopOnlineBusiness.Parameters;
