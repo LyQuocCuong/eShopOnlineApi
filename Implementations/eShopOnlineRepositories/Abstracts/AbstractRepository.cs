@@ -69,24 +69,29 @@ namespace eShopOnlineRepositories.Abstracts
             _logService.LogInfo(LogMessages.FormatMessageForEFCore("[HARD-DELETE] Change EntityState"));
         }
 
+        private string GenerateMessages(string methodName, string message)
+        {
+            return LogMessages.FormatMessageForRepository(ChildClassName, methodName, message);
+        }
+
         public void LogDebug(string methodName, string message)
         {
-            _logService.LogDebug(LogMessages.FormatMessageForRepository(ChildClassName, methodName, message));
+            _logService.LogDebug(GenerateMessages(methodName, message));
         }
 
         public void LogError(string methodName, string message)
         {
-            _logService.LogError(LogMessages.FormatMessageForRepository(ChildClassName, methodName, message));
+            _logService.LogError(GenerateMessages(methodName, message));
         }
 
         public void LogInfo(string methodName, string message)
         {
-            _logService.LogInfo(LogMessages.FormatMessageForRepository(ChildClassName, methodName, message));
+            _logService.LogInfo(GenerateMessages(methodName, message));
         }
 
         public void LogWarning(string methodName, string message)
         {
-            _logService.LogWarning(LogMessages.FormatMessageForRepository(ChildClassName, methodName, message));
+            _logService.LogWarning(GenerateMessages(methodName, message));
         }
     }
 }

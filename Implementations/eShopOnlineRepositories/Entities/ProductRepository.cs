@@ -38,8 +38,8 @@
             Product? product = base.FindByCondition(p => p.Id == id, isTrackChanges: false).FirstOrDefault();
             if (product == null)
             {
-                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
-                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
             }
             var result = new Dictionary<ConditionsForDeletingProduct, bool>();
             foreach (var condition in checkList)

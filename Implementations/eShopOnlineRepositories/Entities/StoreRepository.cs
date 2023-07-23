@@ -38,8 +38,8 @@
             Store? store = base.FindByCondition(s => s.Id == id, isTrackChanges: false).FirstOrDefault();
             if (store == null)
             {
-                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
-                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
             }
             var result = new Dictionary<ConditionsForDeletingStore, bool>();
             foreach(var condition in checkList)

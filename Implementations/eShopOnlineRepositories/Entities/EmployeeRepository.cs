@@ -38,8 +38,8 @@
             Employee? employee = base.FindByCondition(e => e.Id == id, isTrackChanges : false).FirstOrDefault();
             if (employee == null)
             {
-                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
-                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
             }
             var result = new Dictionary<ConditionsForDeletingEmployee, bool>();
             foreach (var condition in checkList)
