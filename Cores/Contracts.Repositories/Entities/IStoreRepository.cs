@@ -8,9 +8,9 @@
 
         bool IsValidId(Guid id);
 
-        Dictionary<ConditionsForDeletingStore, bool> CheckRequiredConditionsForDeletion(Guid id);
+        Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletion(Guid id);
 
-        Dictionary<ConditionsForDeletingStore, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingStore> checkList);
+        Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteStoreCondition> checkList);
 
         void Create(Store store);
 

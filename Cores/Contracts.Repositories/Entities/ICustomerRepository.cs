@@ -8,9 +8,9 @@
 
         bool IsValidId(Guid id);
 
-        Dictionary<ConditionsForDeletingCustomer, bool> CheckRequiredConditionsForDeletion(Guid id);
+        Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletion(Guid id);
 
-        Dictionary<ConditionsForDeletingCustomer, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingCustomer> checkList);
+        Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteCustomerCondition> checkList);
 
         void Create(Customer customer);
 

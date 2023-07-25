@@ -26,47 +26,67 @@
             return base.FindByCondition(s => s.Id == id, isTrackChanges: false).Any();
         }
 
-        public Dictionary<ConditionsForDeletingStore, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
         {
             LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, CommonVariables.DefaultCheckListOfStoreDeletion);
+            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
         }
 
-        public Dictionary<ConditionsForDeletingStore, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingStore> checkList)
+        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteStoreCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForStartingMethodExecution);
+            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+
+            var result = new Dictionary<DeleteStoreCondition, bool>();
+            
             Store? store = base.FindByCondition(s => s.Id == id, isTrackChanges: false).FirstOrDefault();
-            if (store == null)
+            DeleteStoreCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingStore.IsExistingInDatabase);
+
+            if (isExistingInDatabaseCondition != null)
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
-            }
-            var result = new Dictionary<ConditionsForDeletingStore, bool>();
-            foreach(var condition in checkList)
-            {
-                result.Add(condition, false);
+                result.Add(isExistingInDatabaseCondition, false);
+                checkList.Remove(isExistingInDatabaseCondition);
                 if (store != null)
                 {
-                    switch (condition)
+                    result[isExistingInDatabaseCondition] = true;
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+
+                    // checking Other Conditions
+                    foreach (var item in checkList)
                     {
-                        case ConditionsForDeletingStore.IsNotDeletedSoftly:
-                            if (store.IsDeleted == false)
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - PASSED. The Store has not been deleted softly yet.");
-                                result[condition] = true;
-                            }
-                            else
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. Because the Store has been deleted softly (IsDeleted = TRUE).");
-                            }
-                            break;
-                        default:
-                            LogWarning(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. The checking condition has NOT been implemented yet.");
-                            break;
+                        result.Add(item, false);
+                        switch (item.Condition)
+                        {
+                            case ConditionsForDeletingStore.IsNotDeletedSoftly:
+                                if (store.IsDeleted == false)
+                                {
+                                    result[item] = true;
+                                }
+                                break;
+                            default:
+                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                break;
+                        }
+                        if (result[item])
+                        {
+                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                        }
+                        else
+                        {
+                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            break;  // stop checking
+                        }
                     }
                 }
+                else
+                {
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(isExistingInDatabaseCondition.ToString()));
+                }
             }
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForFinishingMethodExecution);
+            else
+            {
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase Condition."));
+            }
             return result;
         }
 
