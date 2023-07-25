@@ -12,7 +12,7 @@
         {
             LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
             IEnumerable<Product> products = _repository.Product.GetAll(isTrackChanges: false);
-            return _mapperService.Execute<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
+            return _mapService.Execute<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
         }
 
         public ProductDto? GetById(Guid id)
@@ -24,7 +24,7 @@
                 LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
                 return null;
             }
-            return _mapperService.Execute<Product, ProductDto>(product);
+            return _mapService.Execute<Product, ProductDto>(product);
         }
 
         public bool IsValidId(Guid id)
@@ -37,11 +37,11 @@
         {
             LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
 
-            Product newProduct = _mapperService.Execute<ProductForCreationDto, Product>(creationDto);
+            Product newProduct = _mapService.Execute<ProductForCreationDto, Product>(creationDto);
             _repository.Product.Create(newProduct);
             _repository.SaveChanges();
 
-            return _mapperService.Execute<Product, ProductDto>(newProduct);
+            return _mapService.Execute<Product, ProductDto>(newProduct);
         }
 
         public bool UpdateFully(Guid id, ProductForUpdateDto updateDto)
@@ -51,7 +51,7 @@
             Product? product = _repository.Product.GetById(isTrackChanges: true, id);
             if (product != null)
             {
-                _mapperService.Execute<ProductForUpdateDto, Product>(updateDto, product);
+                _mapService.Execute<ProductForUpdateDto, Product>(updateDto, product);
                 _repository.SaveChanges();
             }
             else

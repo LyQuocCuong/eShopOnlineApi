@@ -8,14 +8,14 @@ namespace eShopOnlineBusiness.Abstracts
     {
         private readonly ILogService _logService;
         protected readonly IRepositoryManager _repository;
-        protected readonly IMapperService _mapperService;
+        protected readonly IMapService _mapService;
         protected abstract string ChildClassName { get; }
 
         protected AbstractService(ServiceParams serviceParams)
         {
             _logService = serviceParams.LogService;
             _repository = serviceParams.RepositoryManager;
-            _mapperService = serviceParams.MapperService;
+            _mapService = serviceParams.MapService;
         }
 
         private string GenerateMessages(string methodName, string message)

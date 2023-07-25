@@ -3,7 +3,7 @@ using Contracts.Utilities.Mapper;
 
 namespace eShopOnlineUtilities.AutoMapper
 {
-    public sealed class AutoMapperService : IMapperService
+    public sealed class AutoMapperService : IMapService
     {
         private readonly IMapper _autoMapper;
         private readonly ILogService _logService;

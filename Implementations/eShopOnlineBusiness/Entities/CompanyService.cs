@@ -12,7 +12,7 @@
         {
             LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
             IEnumerable<Company> companies = _repository.Company.GetAll(isTrackChanges: false);
-            return _mapperService.Execute<IEnumerable<Company>, IEnumerable<CompanyDto>>(companies);
+            return _mapService.Execute<IEnumerable<Company>, IEnumerable<CompanyDto>>(companies);
         }
 
         public CompanyDto? GetById(Guid id)
@@ -24,7 +24,7 @@
                 LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Company), id.ToString()));
                 return null;
             }
-            return _mapperService.Execute<Company, CompanyDto>(company);
+            return _mapService.Execute<Company, CompanyDto>(company);
         }
 
         public bool IsValidId(Guid id)
@@ -40,7 +40,7 @@
             Company? company = _repository.Company.GetById(isTrackChanges: true, id);
             if (company != null)
             {
-                _mapperService.Execute<CompanyForUpdateDto, Company>(updateDto, company);
+                _mapService.Execute<CompanyForUpdateDto, Company>(updateDto, company);
                 _repository.SaveChanges();
             }
             else

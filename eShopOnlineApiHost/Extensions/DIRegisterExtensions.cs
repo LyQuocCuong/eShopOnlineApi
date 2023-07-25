@@ -54,7 +54,7 @@ namespace eShopOnlineApiHost.Extensions
         public static void DIRegister_AutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfiles));
-            services.AddScoped<IMapperService, AutoMapperService>();
+            services.AddScoped<IMapService, AutoMapperService>();
         }
     }
 }
