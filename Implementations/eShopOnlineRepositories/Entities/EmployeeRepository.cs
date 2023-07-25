@@ -26,69 +26,78 @@
             return base.FindByCondition(e => e.Id == id, isTrackChanges: false).Any();
         }
 
-        public Dictionary<ConditionsForDeletingEmployee, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
         {
             LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, CommonVariables.DefaultCheckListOfEmployeeDeletion);
+            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingAnEmployee);
         }
 
-        public Dictionary<ConditionsForDeletingEmployee, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingEmployee> checkList)
+        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteEmployeeCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForStartingMethodExecution);
+            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+
+            var result = new Dictionary<DeleteEmployeeCondition, bool>();
+
             Employee? employee = base.FindByCondition(e => e.Id == id, isTrackChanges : false).FirstOrDefault();
-            if (employee == null)
+            DeleteEmployeeCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingEmployee.IsExistingInDatabase);
+            if (isExistingInDatabaseCondition != null)
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
-            }
-            var result = new Dictionary<ConditionsForDeletingEmployee, bool>();
-            foreach (var condition in checkList)
-            {
-                result.Add(condition, false);
+                result.Add(isExistingInDatabaseCondition, false);
+                checkList.Remove(isExistingInDatabaseCondition);
                 if (employee != null)
                 {
-                    switch (condition)
+                    result[isExistingInDatabaseCondition] = true;
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+
+                    // checking Other Conditions
+                    foreach (var item in checkList)
                     {
-                        case ConditionsForDeletingEmployee.IsNotDeletedSoftly:
-                            if (employee.IsDeleted == false)
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - PASSED.");
-                                result[condition] = true;
-                            }
-                            else
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. Because the Employee has been deleted softly (IsDeleted = TRUE).");
-                            }
-                            break;
-                        case ConditionsForDeletingEmployee.IsNotAdminRoot:
-                            if (employee.Id != SeedingEntities.ROOT_ADMIN.Id)
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - PASSED.");
-                                result[condition] = true;
-                            }
-                            else
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. Because the Employee is the AdminRoot.");
-                            }
-                            break;
-                        case ConditionsForDeletingEmployee.IsNotManagerOfStore:
-                            if (employee.ManagingStore == null)
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - PASSED.");
-                                result[condition] = true;
-                            }
-                            else
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. Because the Employee is Manager of the Store.");
-                            }
-                            break;
-                        default:
-                            LogWarning(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. Because the checking condition has NOT been implemented yet.");
-                            break;
+                        result.Add(item, false);
+                        switch (item.Condition)
+                        {
+                            case ConditionsForDeletingEmployee.IsNotDeletedSoftly:
+                                if (employee.IsDeleted == false)
+                                {
+                                    result[item] = true;
+                                }
+                                break;
+                            case ConditionsForDeletingEmployee.IsNotAdminRoot:
+                                if (employee.Id != SeedingEntities.ROOT_ADMIN.Id)
+                                {
+                                    result[item] = true;
+                                }
+                                break;
+                            case ConditionsForDeletingEmployee.IsNotManagerOfStore:
+                                if (employee.ManagingStore == null)
+                                {
+                                    result[item] = true;
+                                }
+                                break;
+                            default:
+                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                break;
+                        }
+                        if (result[item])
+                        {
+                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                        }
+                        else
+                        {
+                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            break;  // stop checking
+                        }
                     }
                 }
+                else
+                {
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+                }
             }
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForFinishingMethodExecution);
+            else
+            {
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase."));
+            }
             return result;
         }
 

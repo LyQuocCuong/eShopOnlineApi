@@ -26,48 +26,68 @@
             return base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
         }
 
-        public Dictionary<ConditionsForDeletingCustomer, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
         {
             LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, CommonVariables.DefaultCheckListOfCustomerDeletion);
+            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingACustomer);
         }
 
-        public Dictionary<ConditionsForDeletingCustomer, bool> CheckRequiredConditionsForDeletion(Guid id, List<ConditionsForDeletingCustomer> checkList)
+        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteCustomerCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForStartingMethodExecution);
+            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+
+            var result = new Dictionary<DeleteCustomerCondition, bool>();
+            
             Customer? customer = base.FindByCondition(c => c.Id == id, isTrackChanges: false).FirstOrDefault();
-            if (customer == null)
+            DeleteCustomerCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingCustomer.IsExistingInDatabase);
+            
+            if (isExistingInDatabaseCondition != null)
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForSettingAllConditionsInCheckListToFalse);
-            }
-            var result = new Dictionary<ConditionsForDeletingCustomer, bool>();
-            foreach (var condition in checkList)
-            {
-                result.Add(condition, false);
+                result.Add(isExistingInDatabaseCondition, false);
+                checkList.Remove(isExistingInDatabaseCondition);
+
                 if (customer != null)
                 {
-                    switch (condition)
+                    result[isExistingInDatabaseCondition] = true;
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+                    
+                    // checking Other Conditions
+                    foreach (var item in checkList)
                     {
-                        case ConditionsForDeletingCustomer.IsNotDeletedSoftly:
-                            if (customer.IsDeleted == false)
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - PASSED. The Customer has not been deleted softly yet.");
-                                result[condition] = true;
-                            }
-                            else
-                            {
-                                LogInfo(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. Because the Customer has been deleted softly (IsDeleted = TRUE).");
-                            }
-                            break;
-                        default:
-                            LogWarning(nameof(CheckRequiredConditionsForDeletion), $"{condition.ToString()} - FAILED. The checking condition has NOT been implemented yet.");
-                            break;
+                        result.Add(item, false);
+                        switch (item.Condition)
+                        {
+                            case ConditionsForDeletingCustomer.IsNotDeletedSoftly:
+                                if (customer!.IsDeleted == false)
+                                {
+                                    result[item] = true;
+                                }
+                                break;
+                            default:
+                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                break;
+                        }
+                        if (result[item])
+                        {
+                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                        }
+                        else
+                        {
+                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            break;  // stop checking
+                        }
                     }
-
+                }
+                else
+                {
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
+                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(isExistingInDatabaseCondition.ToString()));
                 }
             }
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForFinishingMethodExecution);
+            else
+            {
+                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase Condition."));
+            }
             return result;
         }
 

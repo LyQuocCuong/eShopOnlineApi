@@ -6,18 +6,17 @@
         public static readonly string MessageForExecutingMethod = "EXECUTE the method.";
         public static readonly string MessageForFinishingMethodExecution = "FINISH executing the method.";
 
+        public static readonly string MessageForNotImplementedCondition = "The condition has NOT been implemented yet.";
         public static readonly string MessageForExecutingWithDefaultCheckList = "Executing with the DEFAULT checklist.";
-        public static readonly string MessageForSettingAllConditionsInCheckListToFalse = "All of the Conditions in CheckList will be set to FALSE.";
-
-        
-        public static string FormatMessageForValidatingItemPassed(string item)
+                
+        public static string FormatMessageForObjectPassed(string message)
         {
-            return $"{item} - PASSED";
+            return $"(PASSED) - {message}";
         }
 
-        public static string FormatMessageForValidatingItemFailed(string item)
+        public static string FormatMessageForObjectFailed(string message)
         {
-            return $"{item} - FAILED";
+            return $"(FAILED) - {message}";
         }                        
 
         public static string FormatMessageForObjectWithIdNotExistingInDatabase(string objectName, string id)
