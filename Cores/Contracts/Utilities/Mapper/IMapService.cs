@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Utilities.Mapper
 {
-    public interface IMapperService
+    public interface IMapService
     {
         /// <summary>
         /// Execute a mapping from the Source object to a [NEW] Destination object.

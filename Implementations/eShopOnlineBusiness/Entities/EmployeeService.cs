@@ -12,7 +12,7 @@
         {
             LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
             IEnumerable<Employee> employees = _repository.Employee.GetAll(isTrackChanges: false);
-            return _mapperService.Execute<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
+            return _mapService.Execute<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
         }
 
         public EmployeeDto? GetById(Guid id)
@@ -24,7 +24,7 @@
                 LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
                 return null;
             }
-            return _mapperService.Execute<Employee, EmployeeDto>(employee);
+            return _mapService.Execute<Employee, EmployeeDto>(employee);
         }
 
         public bool IsValidId(Guid id)
@@ -37,11 +37,11 @@
         {
             LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
 
-            Employee newEmployee = _mapperService.Execute<EmployeeForCreationDto, Employee>(creationDto);
+            Employee newEmployee = _mapService.Execute<EmployeeForCreationDto, Employee>(creationDto);
             _repository.Employee.Create(newEmployee);
             _repository.SaveChanges();
 
-            return _mapperService.Execute<Employee, EmployeeDto>(newEmployee);
+            return _mapService.Execute<Employee, EmployeeDto>(newEmployee);
         }
 
         public bool UpdateFully(Guid id, EmployeeForUpdateDto updateDto)
@@ -51,7 +51,7 @@
             Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
             if (employee != null)
             {
-                _mapperService.Execute<EmployeeForUpdateDto, Employee>(updateDto, employee);
+                _mapService.Execute<EmployeeForUpdateDto, Employee>(updateDto, employee);
                 _repository.SaveChanges();
             }
             else

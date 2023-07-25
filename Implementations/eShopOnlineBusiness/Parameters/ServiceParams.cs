@@ -1,5 +1,4 @@
 ﻿using Contracts.Repositories.Managers;
-using Contracts.Utilities.Logger;
 using Contracts.Utilities.Mapper;
 
 namespace eShopOnlineBusiness.Parameters
@@ -7,15 +6,15 @@ namespace eShopOnlineBusiness.Parameters
     public sealed class ServiceParams
     {
         public readonly IRepositoryManager RepositoryManager;
-        public readonly IMapperService MapperService;
+        public readonly IMapService MapService;
         public readonly ILogService LogService;
 
         public ServiceParams(IRepositoryManager repositoryManager, 
-                             IMapperService mapperService,
+                             IMapService mapService,
                              ILogService logService)
         {
             RepositoryManager = repositoryManager;
-            MapperService = mapperService;
+            MapService = mapService;
             LogService = logService;
         }
     }

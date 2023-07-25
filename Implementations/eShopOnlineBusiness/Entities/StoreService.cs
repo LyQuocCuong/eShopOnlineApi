@@ -12,7 +12,7 @@
         {
             LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
             IEnumerable<Store> stores = _repository.Store.GetAll(isTrackChanges: false);
-            return _mapperService.Execute<IEnumerable<Store>, IEnumerable<StoreDto>>(stores);
+            return _mapService.Execute<IEnumerable<Store>, IEnumerable<StoreDto>>(stores);
         }
 
         public StoreDto? GetById(Guid id)
@@ -24,7 +24,7 @@
                 LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
                 return null;
             }
-            return _mapperService.Execute<Store, StoreDto>(store);
+            return _mapService.Execute<Store, StoreDto>(store);
         }
 
         public bool IsValidId(Guid id)
@@ -37,11 +37,11 @@
         {
             LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
 
-            Store newStore = _mapperService.Execute<StoreForCreationDto, Store>(creationDto);
+            Store newStore = _mapService.Execute<StoreForCreationDto, Store>(creationDto);
             _repository.Store.Create(newStore);
             _repository.SaveChanges();
 
-            return _mapperService.Execute<Store, StoreDto>(newStore);
+            return _mapService.Execute<Store, StoreDto>(newStore);
         }
 
         public bool UpdateFully(Guid id, StoreForUpdateDto updateDto)
@@ -51,7 +51,7 @@
             Store? store = _repository.Store.GetById(isTrackChanges: true, id);
             if (store != null)
             {
-                _mapperService.Execute<StoreForUpdateDto, Store>(updateDto, store);
+                _mapService.Execute<StoreForUpdateDto, Store>(updateDto, store);
                 _repository.SaveChanges();
             }
             else
