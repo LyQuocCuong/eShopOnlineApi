@@ -2,7 +2,7 @@
 {
     public sealed class ProductController : AbstractApiController
     {
-        protected override string ChildClassName => nameof(ProductController);
+        protected override string ClassName => nameof(ProductController);
 
         public ProductController(ControllerParams controllerParams) : base(controllerParams)
         {
@@ -12,12 +12,12 @@
         [Route("products", Name = "GetAllProducts")]
         public IActionResult GetAllProducts()
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetAllProducts), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAllProducts));
             IEnumerable<ProductDto> productDtos = _services.Product.GetAll();
 
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(productDtos);
         }
 
@@ -25,16 +25,16 @@
         [Route("products/{id:guid}", Name = "GetProductById")]
         public IActionResult GetProductById([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetProductById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetProductById));
             ProductDto? productDto = _services.Product.GetById(id);
             if (productDto == null)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(productDto);
         }
 
@@ -42,12 +42,12 @@
         [Route("products", Name = "CreateProduct")]
         public IActionResult CreateProduct([FromBody]ProductForCreationDto creationDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(CreateProduct), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CreateProduct));
             ProductDto productDto = _services.Product.Create(creationDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return CreatedAtRoute("GetProductById", new { id = productDto.Id }, productDto);
         }
 
@@ -55,17 +55,17 @@
         [Route("products/{id:guid}", Name = "UpdateProductFully")]
         public IActionResult UpdateProductFully([FromRoute]Guid id, [FromBody]ProductForUpdateDto updateDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(UpdateProductFully), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(UpdateProductFully));
             if (_services.Product.IsValidId(id) == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
             bool result = _services.Product.UpdateFully(id, updateDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -73,16 +73,16 @@
         [Route("products/{id:guid}", Name = "DeleteProductSoftly")]
         public IActionResult DeleteProductSoftly([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteProductSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteProductSoftly));
             bool result = _services.Product.DeleteSoftly(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -90,16 +90,16 @@
         [Route("admin/products/{id:guid}", Name = "DeleteProductHard")]
         public IActionResult DeleteProductHard([FromRoute] Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteProductHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteProductHard));
             bool result = _services.Product.DeleteHard(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 

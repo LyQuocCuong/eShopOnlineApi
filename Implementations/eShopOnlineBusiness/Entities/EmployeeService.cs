@@ -2,7 +2,7 @@
 {
     internal sealed class EmployeeService : AbstractService, IEmployeeService
     {
-        protected override string ChildClassName => nameof(EmployeeService);
+        protected override string ClassName => nameof(EmployeeService);
 
         public EmployeeService(ServiceParams serviceParams) : base(serviceParams)
         {
@@ -10,18 +10,18 @@
 
         public IEnumerable<EmployeeDto> GetAll()
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             IEnumerable<Employee> employees = _repository.Employee.GetAll(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
         }
 
         public EmployeeDto? GetById(Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             Employee? employee = _repository.Employee.GetById(isTrackChanges: false, id);
             if (employee == null)
             {
-                LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
                 return null;
             }
             return _mapService.Execute<Employee, EmployeeDto>(employee);
@@ -29,13 +29,13 @@
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(IsValidId));
             return _repository.Employee.IsValidId(id);
         }
 
         public EmployeeDto Create(EmployeeForCreationDto creationDto)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
 
             Employee newEmployee = _mapService.Execute<EmployeeForCreationDto, Employee>(creationDto);
             _repository.Employee.Create(newEmployee);
@@ -46,8 +46,9 @@
 
         public bool UpdateFully(Guid id, EmployeeForUpdateDto updateDto)
         {
+            LogMethodInfo(nameof(UpdateFully));
+
             bool result = true;
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForStartingMethodExecution);
             Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
             if (employee != null)
             {
@@ -56,18 +57,18 @@
             }
             else
             {
-                LogInfo(nameof(UpdateFully), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
                 result = false;
             }
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 
         public bool DeleteSoftly(Guid id)
         {
+            LogMethodInfo(nameof(DeleteSoftly));
+
             bool result = true;
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletingEmployee(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
@@ -82,19 +83,19 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteSoftly), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 
         public bool DeleteHard(Guid id)
         {
+            LogMethodInfo(nameof(DeleteHard));
+
             bool result = true;
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletingEmployee(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
@@ -110,11 +111,10 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteHard), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 

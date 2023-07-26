@@ -8,9 +8,9 @@
 
         bool IsValidId(Guid id);
 
-        Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletion(Guid id);
+        Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletingEmployee(Guid id);
 
-        Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteEmployeeCondition> checkList);
+        Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletingEmployee(Guid id, List<DeleteEmployeeCondition> checkList);
 
         void Create(Employee employee);
 

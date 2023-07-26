@@ -1,4 +1,5 @@
 ﻿using Contracts.Business.Managers;
+using Shared.Templates;
 
 namespace eShopOnlineApiRestful.Abstracts
 {
@@ -8,7 +9,7 @@ namespace eShopOnlineApiRestful.Abstracts
     {
         private readonly ILogService _logService;
         protected readonly IServiceManager _services;
-        protected abstract string ChildClassName { get; }
+        protected abstract string ClassName { get; }
 
         protected AbstractApiController(ControllerParams controllerParams)
         {
@@ -17,55 +18,70 @@ namespace eShopOnlineApiRestful.Abstracts
         }
 
         [NonAction]
-        protected void LogInfoRequest()
+        protected void LogRequestInfo()
         {
-            _logService.LogInfo("=============================================================");
-            _logService.LogInfo($"[REQUEST][METHOD - {Request.Method}] PATH - {Request.Path}");
+            _logService.LogInfo(LogContentsTemplate.RequestInfo(Request.Method, Request.Path));
         }
 
         [NonAction]
-        protected void LogInfoResponse()
+        protected void LogResponseInfo()
         {
+            string message = LogContentsTemplate.ResponseInfo(Response.StatusCode.ToString());
             if (Response.StatusCode is 
                 400 or 401 or 402 or 403 or 404 or 405 or 406)
             {
-                _logService.LogWarning($"[RESPONSE][STATUS CODE - {Response.StatusCode}]");
+                _logService.LogWarning(message);
             }
             else
             {
-                _logService.LogInfo($"[RESPONSE][STATUS CODE - {Response.StatusCode}]");
+                _logService.LogInfo(message);
             }
+            _logService.LogInfo(LogContentsTemplate.SeparatorLine);
+        }
+
+        #region LOG FUNCTIONS
+
+        [NonAction]
+        protected void LogMethodInfo(string methodName)
+        {
+            _logService.LogInfo(LogContentsTemplate.ControllerMethodInfo(this.ClassName, methodName));
         }
 
         [NonAction]
-        private string GenerateMessages(string methodName, string message)
+        protected void LogMethodReturnInfo(string result)
         {
-            return LogMessages.FormatMessageForController(ChildClassName, methodName, message);
+            _logService.LogInfo(LogContentsTemplate.ControllerMethodReturn(result));
+        }
+
+        private static string FormatContent(string content)
+        {
+            return LogContentsTemplate.ControllerFormat(content);
         }
 
         [NonAction]
-        protected void LogDebug(string methodName, string message)
+        protected void LogInfo(string message)
         {
-            _logService.LogDebug(GenerateMessages(methodName, message));
+            _logService.LogInfo(FormatContent(message));
         }
 
         [NonAction]
-        protected void LogError(string methodName, string message)
+        protected void LogError(string message)
         {
-            _logService.LogError(GenerateMessages(methodName, message));
+            _logService.LogError(FormatContent(message));
         }
 
         [NonAction]
-        protected void LogInfo(string methodName, string message)
+        protected void LogDebug(string message)
         {
-            _logService.LogInfo(GenerateMessages(methodName, message));
+            _logService.LogDebug(FormatContent(message));
         }
 
         [NonAction]
-        protected void LogWarning(string methodName, string message)
+        protected void LogWarning(string message)
         {
-            _logService.LogWarning(GenerateMessages(methodName, message));
+            _logService.LogWarning(FormatContent(message));
         }
 
+        #endregion
     }
 }

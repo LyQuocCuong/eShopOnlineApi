@@ -2,7 +2,7 @@
 {
     internal sealed class CompanyService : AbstractService, ICompanyService
     {
-        protected override string ChildClassName => nameof(CompanyService);
+        protected override string ClassName => nameof(CompanyService);
 
         public CompanyService(ServiceParams serviceParams) : base(serviceParams)
         {
@@ -10,18 +10,18 @@
 
         public IEnumerable<CompanyDto> GetAll()
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             IEnumerable<Company> companies = _repository.Company.GetAll(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Company>, IEnumerable<CompanyDto>>(companies);
         }
 
         public CompanyDto? GetById(Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             Company? company = _repository.Company.GetById(isTrackChanges: false, id);
             if (company == null)
             {
-                LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Company), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Company), id));
                 return null;
             }
             return _mapService.Execute<Company, CompanyDto>(company);
@@ -29,14 +29,14 @@
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(IsValidId));
             return _repository.Company.IsValidId(id);
         }
 
         public bool UpdateFully(Guid id, CompanyForUpdateDto updateDto)
         {
+            LogMethodInfo(nameof(UpdateFully));
             bool result = true;
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForStartingMethodExecution);
             Company? company = _repository.Company.GetById(isTrackChanges: true, id);
             if (company != null)
             {
@@ -45,10 +45,9 @@
             }
             else
             {
-                LogInfo(nameof(UpdateFully), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Company), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Company), id));
                 result = false;                
             }
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 

@@ -2,7 +2,7 @@
 {
     internal sealed class CustomerService : AbstractService, ICustomerService
     {
-        protected override string ChildClassName => nameof(CustomerService);
+        protected override string ClassName => nameof(CustomerService);
 
         public CustomerService(ServiceParams serviceParams) : base(serviceParams)
         {
@@ -10,24 +10,25 @@
 
         public IEnumerable<CustomerDto> GetAll()
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             IEnumerable<Customer> customers = _repository.Customer.GetAll(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Customer>, IEnumerable<CustomerDto>>(customers);
         }
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(IsValidId));
             return _repository.Customer.IsValidId(id);
         }
 
         public CustomerDto? GetById(Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
+
             Customer? customer = _repository.Customer.GetById(isTrackChanges: false, id);
             if (customer == null)
             {
-                LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Customer), id));
                 return null;
             }
             return _mapService.Execute<Customer, CustomerDto>(customer);
@@ -35,7 +36,7 @@
 
         public CustomerDto Create(CustomerForCreationDto creationDto)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
 
             Customer newCustomer = _mapService.Execute<CustomerForCreationDto, Customer>(creationDto);
             _repository.Customer.Create(newCustomer);
@@ -46,8 +47,9 @@
 
         public bool UpdateFully(Guid id, CustomerForUpdateDto updateDto)
         {
+            LogMethodInfo(nameof(UpdateFully));
+
             bool result = true;
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForStartingMethodExecution);
             Customer? customer = _repository.Customer.GetById(isTrackChanges: true, id);
             if (customer != null)
             {
@@ -56,18 +58,18 @@
             }
             else
             {
-                LogInfo(nameof(UpdateFully), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Customer), id));
                 result = false;
-            }            
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForFinishingMethodExecution);
+            }
             return result;
         }
 
         public bool DeleteSoftly(Guid id)
         {
+            LogMethodInfo(nameof(DeleteSoftly));
+
             bool result = true;
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Customer.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Customer.CheckRequiredConditionsForDeletingCustomer(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
@@ -82,19 +84,18 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteSoftly), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Customer), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 
         public bool DeleteHard(Guid id)
         {
+            LogMethodInfo(nameof(DeleteHard));
             bool result = true;
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Customer.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Customer.CheckRequiredConditionsForDeletingCustomer(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
@@ -110,11 +111,10 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteHard), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Customer), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 

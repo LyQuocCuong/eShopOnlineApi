@@ -1,6 +1,7 @@
 ﻿using Contracts.Repositories.Abstracts;
 using Domains.Abstracts;
 using Microsoft.EntityFrameworkCore;
+using Shared.Templates;
 
 namespace eShopOnlineRepositories.Abstracts
 {
@@ -8,7 +9,7 @@ namespace eShopOnlineRepositories.Abstracts
     {
         private readonly DbSet<TEntity> _dbSet;
         private readonly ILogService _logService;
-        protected abstract string ChildClassName { get; }
+        protected abstract string ClassName { get; }
 
         protected AbstractRepository(RepositoryParams repositoryParams)
         {
@@ -20,10 +21,10 @@ namespace eShopOnlineRepositories.Abstracts
         {
             if (isTrackChanges)
             {
-                _logService.LogInfo(LogMessages.FormatMessageForEFCore($"[TRACKING] Executing {nameof(FindAll)}() method"));
+                _logService.LogInfo(EFCoreLogMessages.QueryTracking(nameof(FindAll)));
                 return _dbSet;
             }
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore($"[NO-TRACKING] Executing {nameof(FindAll)}() method"));
+            _logService.LogInfo(EFCoreLogMessages.QueryNoTracking(nameof(FindAll)));
             return _dbSet.AsNoTracking();
         }
 
@@ -31,10 +32,10 @@ namespace eShopOnlineRepositories.Abstracts
         {
             if (isTrackChanges)
             {
-                _logService.LogInfo(LogMessages.FormatMessageForEFCore($"[TRACKING] Executing {nameof(FindByCondition)}() method"));
+                _logService.LogInfo(EFCoreLogMessages.QueryTracking(expression.ToString()));
                 return _dbSet.Where(expression);
             }
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore($"[NO-TRACKING] Executing {nameof(FindByCondition)}() method"));
+            _logService.LogInfo(EFCoreLogMessages.QueryNoTracking(expression.ToString()));
             return _dbSet.Where(expression).AsNoTracking();
         }
 
@@ -42,11 +43,10 @@ namespace eShopOnlineRepositories.Abstracts
         {
             entity.CreatedDate = DateTime.UtcNow;
             entity.UpdatedDate = DateTime.UtcNow;
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[CREATE] Assing NowDate(UTC) to the CreatedDate, UpdatedDate"));
+            _logService.LogInfo(EFCoreLogMessages.Message("Assing NowDate(UTC) to the CreatedDate, UpdatedDate"));
 
             _dbSet.Add(entity);
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[CREATE] Change EntityState"));
-
+            _logService.LogInfo(EFCoreLogMessages.Create);
         }
 
         public void UpdateEntity(TEntity entity)
@@ -60,38 +60,53 @@ namespace eShopOnlineRepositories.Abstracts
             // Due to "where TEntity : BaseEntity"
             // I can use properties of BaseEntity
             entity.IsDeleted = true;
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[SOFT-DELETE] Set (IsDeleted) to TRUE"));
+            _logService.LogInfo(EFCoreLogMessages.SoftDelete);
         }
 
         public void DeleteEntityHard(TEntity entity)
         {
             _dbSet.Remove(entity);
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[HARD-DELETE] Change EntityState"));
+            _logService.LogInfo(EFCoreLogMessages.HardDelete);
         }
 
-        private string GenerateMessages(string methodName, string message)
+        #region LOG FUNCTIONS
+
+        protected void LogMethodInfo(string methodName)
         {
-            return LogMessages.FormatMessageForRepository(ChildClassName, methodName, message);
+            _logService.LogInfo(LogContentsTemplate.RepositoryMethodInfo(this.ClassName, methodName));
         }
 
-        public void LogDebug(string methodName, string message)
+        protected void LogMethodReturnInfo(string result)
         {
-            _logService.LogDebug(GenerateMessages(methodName, message));
+            _logService.LogInfo(LogContentsTemplate.RepositoryMethodReturn(result));
         }
 
-        public void LogError(string methodName, string message)
+        private static string FormatContent(string content)
         {
-            _logService.LogError(GenerateMessages(methodName, message));
+            return LogContentsTemplate.RepositoryFormat(content);
         }
 
-        public void LogInfo(string methodName, string message)
+        protected void LogInfo(string message)
         {
-            _logService.LogInfo(GenerateMessages(methodName, message));
+            _logService.LogInfo(FormatContent(message));
         }
 
-        public void LogWarning(string methodName, string message)
+        protected void LogError(string message)
         {
-            _logService.LogWarning(GenerateMessages(methodName, message));
+            _logService.LogError(FormatContent(message));
         }
+
+        protected void LogDebug(string message)
+        {
+            _logService.LogDebug(FormatContent(message));
+        }
+
+        protected void LogWarning(string message)
+        {
+            _logService.LogWarning(FormatContent(message));
+        }
+
+        #endregion
+
     }
 }

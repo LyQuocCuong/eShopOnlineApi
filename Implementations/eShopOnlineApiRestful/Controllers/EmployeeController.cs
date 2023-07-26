@@ -2,7 +2,7 @@
 {
     public sealed class EmployeeController : AbstractApiController
     {
-        protected override string ChildClassName => nameof(EmployeeController);
+        protected override string ClassName => nameof(EmployeeController);
 
         public EmployeeController(ControllerParams controllerParams) : base(controllerParams)
         {
@@ -12,12 +12,12 @@
         [Route("employees", Name = "GetAllEmployees")]
         public IActionResult GetAllEmployees()
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetAllEmployees), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAllEmployees));
             IEnumerable<EmployeeDto> employeeDtos = _services.Employee.GetAll();
 
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(employeeDtos);
         }
 
@@ -25,16 +25,16 @@
         [Route("employees/{id:guid}", Name = "GetEmployeeById")]
         public IActionResult GetEmployeeById([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetEmployeeById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetEmployeeById));
             EmployeeDto? employeeDto = _services.Employee.GetById(id);
             if (employeeDto == null)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(employeeDto);
         }
 
@@ -42,12 +42,12 @@
         [Route("employees", Name = "CreateEmployee")]
         public IActionResult CreateEmployee([FromBody]EmployeeForCreationDto creationDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(CreateEmployee), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CreateEmployee));
             EmployeeDto employeeDto = _services.Employee.Create(creationDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return CreatedAtRoute("GetEmployeeById", new { id = employeeDto.Id }, employeeDto);
         }
 
@@ -55,17 +55,17 @@
         [Route("employees/{id:guid}", Name = "UpdateEmployeeFully")]
         public IActionResult UpdateEmployeeFully([FromRoute]Guid id, [FromBody]EmployeeForUpdateDto updateDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(UpdateEmployeeFully), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(UpdateEmployeeFully));
             if (_services.Employee.IsValidId(id) == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
             bool result = _services.Employee.UpdateFully(id, updateDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -73,16 +73,16 @@
         [Route("employees/{id:guid}", Name = "DeleteEmployeeSoftly")]
         public IActionResult DeleteEmployeeSoftly([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteEmployeeSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteEmployeeSoftly));
             bool result = _services.Employee.DeleteSoftly(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -90,16 +90,16 @@
         [Route("admin/employees/{id:guid}", Name = "DeleteEmployeeHard")]
         public IActionResult DeleteEmployeeHard([FromRoute] Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteEmployeeHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteEmployeeHard));
             bool result = _services.Employee.DeleteHard(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
