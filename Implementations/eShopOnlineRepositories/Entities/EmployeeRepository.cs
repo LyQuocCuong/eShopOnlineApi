@@ -2,7 +2,7 @@
 {
     internal sealed class EmployeeRepository : AbstractRepository<Employee>, IEmployeeRepository
     {
-        protected override string ChildClassName => nameof(EmployeeRepository);
+        protected override string ClassName => nameof(EmployeeRepository);
 
         public EmployeeRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
@@ -10,44 +10,49 @@
 
         public IEnumerable<Employee> GetAll(bool isTrackChanges)
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             return base.FindAll(isTrackChanges);
         }
 
         public Employee? GetById(bool isTrackChanges, Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             return base.FindByCondition(e => e.Id == id, isTrackChanges).FirstOrDefault();
         }
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
-            return base.FindByCondition(e => e.Id == id, isTrackChanges: false).Any();
+            LogMethodInfo(nameof(IsValidId));
+
+            bool result = base.FindByCondition(e => e.Id == id, isTrackChanges: false).Any();
+
+            LogMethodReturnInfo(result.ToString());
+            return result;
         }
 
-        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletingEmployee(Guid id)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingAnEmployee);
+            LogMethodInfo(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingEmployee)));
+            return CheckRequiredConditionsForDeletingEmployee(id, DefaultDeleteEntityConditions.CheckListForDeletingAnEmployee);
         }
 
-        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteEmployeeCondition> checkList)
+        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletingEmployee(Guid id, List<DeleteEmployeeCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CheckRequiredConditionsForDeletingEmployee));
 
             var result = new Dictionary<DeleteEmployeeCondition, bool>();
 
-            Employee? employee = base.FindByCondition(e => e.Id == id, isTrackChanges : false).FirstOrDefault();
-            DeleteEmployeeCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingEmployee.IsExistingInDatabase);
-            if (isExistingInDatabaseCondition != null)
+            DeleteEmployeeCondition? prerequisiteCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingEmployee.IsExistingInDatabase);
+            if (prerequisiteCondition != null)
             {
-                result.Add(isExistingInDatabaseCondition, false);
-                checkList.Remove(isExistingInDatabaseCondition);
+                result.Add(prerequisiteCondition, false);
+                checkList.Remove(prerequisiteCondition);
+
+                Employee? employee = base.FindByCondition(e => e.Id == id, isTrackChanges: false).FirstOrDefault();
                 if (employee != null)
                 {
-                    result[isExistingInDatabaseCondition] = true;
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+                    result[prerequisiteCondition] = true;
+                    LogInfo(RepositoryLogMessages.PassedCondition(prerequisiteCondition.ToString()));
 
                     // checking Other Conditions
                     foreach (var item in checkList)
@@ -74,48 +79,48 @@
                                 }
                                 break;
                             default:
-                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                LogWarning(RepositoryLogMessages.NotImplementedCondition(item.ToString()));
                                 break;
                         }
                         if (result[item])
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.PassedCondition(item.ToString()));
                         }
                         else
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.FailedCondition(item.ToString()));
                             break;  // stop checking
                         }
                     }
                 }
                 else
                 {
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Employee), id.ToString()));
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+                    LogInfo(RepositoryLogMessages.ObjectNotExistInDB(nameof(Employee), id));
+                    LogInfo(RepositoryLogMessages.FailedCondition(prerequisiteCondition.ToString()));
                 }
             }
             else
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase."));
+                LogInfo(RepositoryLogMessages.MissingPrerequisiteCondition(ConditionsForDeletingEmployee.IsExistingInDatabase.ToString()));
             }
             return result;
         }
 
         public void Create(Employee employee)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
             base.CreateEntity(employee);
         }
 
         public void DeleteSoftly(Employee employee)
         {
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteSoftly));
             base.DeleteEntitySoftly(employee);
         }
 
         public void DeleteHard(Employee employee)
         {
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteHard));
             base.DeleteEntityHard(employee);
         }
     }

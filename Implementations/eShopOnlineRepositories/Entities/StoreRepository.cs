@@ -2,7 +2,7 @@
 {
     internal sealed class StoreRepository : AbstractRepository<Store>, IStoreRepository
     {
-        protected override string ChildClassName => nameof(StoreRepository);
+        protected override string ClassName => nameof(StoreRepository);
 
         public StoreRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
@@ -10,45 +10,45 @@
 
         public IEnumerable<Store> GetAll(bool isTrackChanges)
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             return base.FindAll(isTrackChanges);
         }
 
         public Store? GetById(bool isTrackChanges, Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             return base.FindByCondition(s => s.Id == id, isTrackChanges).FirstOrDefault();
         }
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(IsValidId));
             return base.FindByCondition(s => s.Id == id, isTrackChanges: false).Any();
         }
 
-        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletingStore(Guid id)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
+            LogMethodInfo(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingStore)));
+            return CheckRequiredConditionsForDeletingStore(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
         }
 
-        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteStoreCondition> checkList)
+        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletingStore(Guid id, List<DeleteStoreCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CheckRequiredConditionsForDeletingStore));
 
             var result = new Dictionary<DeleteStoreCondition, bool>();
             
-            Store? store = base.FindByCondition(s => s.Id == id, isTrackChanges: false).FirstOrDefault();
-            DeleteStoreCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingStore.IsExistingInDatabase);
-
-            if (isExistingInDatabaseCondition != null)
+            DeleteStoreCondition? prerequisiteCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingStore.IsExistingInDatabase);
+            if (prerequisiteCondition != null)
             {
-                result.Add(isExistingInDatabaseCondition, false);
-                checkList.Remove(isExistingInDatabaseCondition);
+                result.Add(prerequisiteCondition, false);
+                checkList.Remove(prerequisiteCondition);
+
+                Store? store = base.FindByCondition(s => s.Id == id, isTrackChanges: false).FirstOrDefault();
                 if (store != null)
                 {
-                    result[isExistingInDatabaseCondition] = true;
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+                    result[prerequisiteCondition] = true;
+                    LogInfo(RepositoryLogMessages.PassedCondition(prerequisiteCondition.ToString()));
 
                     // checking Other Conditions
                     foreach (var item in checkList)
@@ -63,48 +63,48 @@
                                 }
                                 break;
                             default:
-                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                LogWarning(RepositoryLogMessages.NotImplementedCondition(item.ToString()));
                                 break;
                         }
                         if (result[item])
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.PassedCondition(item.ToString()));
                         }
                         else
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.FailedCondition(item.ToString()));
                             break;  // stop checking
                         }
                     }
                 }
                 else
                 {
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(isExistingInDatabaseCondition.ToString()));
+                    LogInfo(RepositoryLogMessages.ObjectNotExistInDB(nameof(Store), id));
+                    LogInfo(RepositoryLogMessages.FailedCondition(prerequisiteCondition.ToString()));
                 }
             }
             else
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase Condition."));
+                LogInfo(RepositoryLogMessages.MissingPrerequisiteCondition(ConditionsForDeletingStore.IsExistingInDatabase.ToString()));
             }
             return result;
         }
 
         public void Create(Store store)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
             base.CreateEntity(store);
         }       
 
         public void DeleteSoftly(Store store)
         {
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteSoftly));
             base.DeleteEntitySoftly(store);
         }
 
         public void DeleteHard(Store store)
         {
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteHard));
             base.DeleteEntityHard(store);
         }
 

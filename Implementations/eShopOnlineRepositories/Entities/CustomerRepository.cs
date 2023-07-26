@@ -2,7 +2,7 @@
 {
     internal sealed class CustomerRepository : AbstractRepository<Customer>, ICustomerRepository
     {
-        protected override string ChildClassName => nameof(CustomerRepository);
+        protected override string ClassName => nameof(CustomerRepository);
 
         public CustomerRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
@@ -10,47 +10,50 @@
 
         public IEnumerable<Customer> GetAll(bool isTrackChanges)
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             return base.FindAll(isTrackChanges);
         }
 
         public Customer? GetById(bool isTrackChanges, Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             return base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefault();
         }
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
-            return base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
+            LogMethodInfo(nameof(IsValidId));
+            
+            bool result = base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
+
+            LogMethodReturnInfo(result.ToString());
+            return result;
         }
 
-        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletingCustomer(Guid id)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingACustomer);
+            LogMethodInfo(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingCustomer)));
+            return CheckRequiredConditionsForDeletingCustomer(id, DefaultDeleteEntityConditions.CheckListForDeletingACustomer);
         }
 
-        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteCustomerCondition> checkList)
+        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletingCustomer(Guid id, List<DeleteCustomerCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CheckRequiredConditionsForDeletingCustomer));
 
             var result = new Dictionary<DeleteCustomerCondition, bool>();
             
-            Customer? customer = base.FindByCondition(c => c.Id == id, isTrackChanges: false).FirstOrDefault();
-            DeleteCustomerCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingCustomer.IsExistingInDatabase);
-            
-            if (isExistingInDatabaseCondition != null)
+            DeleteCustomerCondition? prerequisiteCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingCustomer.IsExistingInDatabase);
+            if (prerequisiteCondition != null)
             {
-                result.Add(isExistingInDatabaseCondition, false);
-                checkList.Remove(isExistingInDatabaseCondition);
+                result.Add(prerequisiteCondition, false);
+                checkList.Remove(prerequisiteCondition);
 
+                Customer? customer = base.FindByCondition(c => c.Id == id, isTrackChanges: false).FirstOrDefault();
                 if (customer != null)
                 {
-                    result[isExistingInDatabaseCondition] = true;
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
-                    
+                    result[prerequisiteCondition] = true;
+                    LogInfo(RepositoryLogMessages.PassedCondition(prerequisiteCondition.ToString()));
+
                     // checking Other Conditions
                     foreach (var item in checkList)
                     {
@@ -58,54 +61,54 @@
                         switch (item.Condition)
                         {
                             case ConditionsForDeletingCustomer.IsNotDeletedSoftly:
-                                if (customer!.IsDeleted == false)
+                                if (customer.IsDeleted == false)
                                 {
                                     result[item] = true;
                                 }
                                 break;
                             default:
-                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                LogWarning(RepositoryLogMessages.NotImplementedCondition(item.ToString()));
                                 break;
                         }
                         if (result[item])
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.PassedCondition(item.ToString()));
                         }
                         else
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.FailedCondition(item.ToString()));
                             break;  // stop checking
                         }
                     }
                 }
                 else
                 {
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Customer), id.ToString()));
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(isExistingInDatabaseCondition.ToString()));
+                    LogInfo(RepositoryLogMessages.ObjectNotExistInDB(nameof(Customer), id));
+                    LogInfo(RepositoryLogMessages.FailedCondition(prerequisiteCondition.ToString()));
                 }
             }
             else
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase Condition."));
+                LogInfo(RepositoryLogMessages.MissingPrerequisiteCondition(ConditionsForDeletingCustomer.IsExistingInDatabase.ToString()));
             }
             return result;
         }
 
         public void Create(Customer customer)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
             base.CreateEntity(customer);
         }
 
         public void DeleteSoftly(Customer customer)
         {
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteSoftly));
             base.DeleteEntitySoftly(customer);
         }
 
         public void DeleteHard(Customer customer)
         {
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteHard));
             base.DeleteEntityHard(customer);
         }
 

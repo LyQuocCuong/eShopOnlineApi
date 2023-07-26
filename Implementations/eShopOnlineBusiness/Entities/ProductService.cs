@@ -2,7 +2,7 @@
 {
     internal sealed class ProductService : AbstractService, IProductService
     {
-        protected override string ChildClassName => nameof(ProductService);
+        protected override string ClassName => nameof(ProductService);
 
         public ProductService(ServiceParams serviceParams) : base(serviceParams)
         {
@@ -10,18 +10,18 @@
 
         public IEnumerable<ProductDto> GetAll()
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             IEnumerable<Product> products = _repository.Product.GetAll(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
         }
 
         public ProductDto? GetById(Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             Product? product = _repository.Product.GetById(isTrackChanges: false, id);
             if(product == null)
             {
-                LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Product), id));
                 return null;
             }
             return _mapService.Execute<Product, ProductDto>(product);
@@ -29,13 +29,13 @@
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(IsValidId));
             return _repository.Product.IsValidId(id);
         }
 
         public ProductDto Create(ProductForCreationDto creationDto)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
 
             Product newProduct = _mapService.Execute<ProductForCreationDto, Product>(creationDto);
             _repository.Product.Create(newProduct);
@@ -46,8 +46,9 @@
 
         public bool UpdateFully(Guid id, ProductForUpdateDto updateDto)
         {
+            LogMethodInfo(nameof(UpdateFully));
+
             bool result = true;
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForStartingMethodExecution);
             Product? product = _repository.Product.GetById(isTrackChanges: true, id);
             if (product != null)
             {
@@ -56,18 +57,18 @@
             }
             else
             {
-                LogInfo(nameof(UpdateFully), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Product), id));
                 result = false;
             }
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 
         public bool DeleteSoftly(Guid id)
         {
+            LogMethodInfo(nameof(DeleteSoftly));
+
             bool result = true;
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Product.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Product.CheckRequiredConditionsForDeletingProduct(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
@@ -83,19 +84,19 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteSoftly), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Product), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 
         public bool DeleteHard(Guid id)
         {
+            LogMethodInfo(nameof(DeleteHard));
+
             bool result = true;
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Product.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Product.CheckRequiredConditionsForDeletingProduct(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
@@ -111,11 +112,10 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteHard), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Product), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 

@@ -16,13 +16,13 @@ namespace eShopOnlineUtilities.AutoMapper
 
         public TDestination Execute<TSource, TDestination>(TSource source)
         {
-            _logService.LogInfo(LogMessages.FormatMessageForMappingService(typeof(TSource).Name, typeof(TDestination).Name));
+            _logService.LogInfo(MapLogContent.MappingInfo<TSource, TDestination>());
             return _autoMapper.Map<TSource, TDestination>(source);
         }
 
         public TDestination Execute<TSource, TDestination>(TSource source, TDestination destination)
         {
-            _logService.LogInfo(LogMessages.FormatMessageForMappingService(typeof(TSource).Name, typeof(TDestination).Name));
+            _logService.LogInfo(MapLogContent.MappingInfo<TSource, TDestination>());
             return _autoMapper.Map(source, destination);
         }
     }

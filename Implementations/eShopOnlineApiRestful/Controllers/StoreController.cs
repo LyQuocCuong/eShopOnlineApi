@@ -2,7 +2,7 @@
 {
     public sealed class StoreController : AbstractApiController
     {
-        protected override string ChildClassName => nameof(StoreController);
+        protected override string ClassName => nameof(StoreController);
 
         public StoreController(ControllerParams controllerParams) : base(controllerParams)
         {
@@ -12,12 +12,12 @@
         [Route("stores", Name = "GetAllStores")]
         public IActionResult GetAllStores()
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetAllStores), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAllStores));
             IEnumerable<StoreDto> storeDtos = _services.Store.GetAll();
 
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(storeDtos);
         }
 
@@ -25,16 +25,16 @@
         [Route("stores/{id:guid}", Name = "GetStoreById")]
         public IActionResult GetStoreById([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetStoreById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetStoreById));
             StoreDto? storeDto = _services.Store.GetById(id);
             if (storeDto == null)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(storeDto);
         }
 
@@ -42,12 +42,12 @@
         [Route("stores", Name = "CreateStore")]
         public IActionResult CreateStore([FromBody]StoreForCreationDto creationDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(CreateStore), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CreateStore));
             StoreDto storeDto = _services.Store.Create(creationDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return CreatedAtRoute("GetStoreById", new { id = storeDto.Id }, storeDto);
         }
 
@@ -55,17 +55,17 @@
         [Route("stores/{id:guid}", Name = "UpdateStoreFully")]
         public IActionResult UpdateStoreFully([FromRoute]Guid id, [FromBody]StoreForUpdateDto updateDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(UpdateStoreFully), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(UpdateStoreFully));
             if (_services.Store.IsValidId(id) == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
             bool result = _services.Store.UpdateFully(id, updateDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -73,16 +73,16 @@
         [Route("stores/{id:guid}", Name = "DeleteStoreSoftly")]
         public IActionResult DeleteStoreSoftly([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteStoreSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteStoreSoftly));
             bool result = _services.Store.DeleteSoftly(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -90,16 +90,16 @@
         [Route("admin/stores/{id:guid}", Name = "DeleteStoreHard")]
         public IActionResult DeleteStoreHard([FromRoute] Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteStoreHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteStoreHard));
             bool result = _services.Store.DeleteHard(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 

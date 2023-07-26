@@ -2,7 +2,7 @@
 {
     public sealed class CompanyController : AbstractApiController
     {
-        protected override string ChildClassName => nameof(CompanyController);
+        protected override string ClassName => nameof(CompanyController);
 
         public CompanyController(ControllerParams controllerParams) : base(controllerParams)
         {
@@ -12,12 +12,12 @@
         [Route("companies", Name = "GetAllCompanies")]
         public IActionResult GetAllCompanies()
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetAllCompanies), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAllCompanies));
             IEnumerable<CompanyDto> companyDtos = _services.Company.GetAll();
 
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(companyDtos);
         }
 
@@ -25,17 +25,17 @@
         [Route("companies/{id:guid}", Name = "GetCompanyById")]
         public IActionResult GetCompanyById([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetCompanyById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetCompanyById));
             CompanyDto? companyDto = _services.Company.GetById(id);
             if (companyDto == null)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
 
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(companyDto);
         }
 
@@ -43,17 +43,17 @@
         [Route("companies/{id:guid}", Name = "UpdateCompanyFully")]
         public IActionResult UpdateCompanyFully([FromRoute]Guid id, [FromBody]CompanyForUpdateDto updateDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(UpdateCompanyFully), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(UpdateCompanyFully));
             if (_services.Company.IsValidId(id) == false)
             {
-                LogInfoResponse(); 
+                LogResponseInfo(); 
                 return NotFound();
             }
             bool result = _services.Company.UpdateFully(id, updateDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 

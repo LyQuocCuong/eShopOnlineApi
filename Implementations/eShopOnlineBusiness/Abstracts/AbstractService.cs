@@ -1,6 +1,7 @@
 ﻿using Contracts.Business.Abstracts;
 using Contracts.Repositories.Managers;
 using Contracts.Utilities.Mapper;
+using Shared.Templates;
 
 namespace eShopOnlineBusiness.Abstracts
 {
@@ -9,7 +10,7 @@ namespace eShopOnlineBusiness.Abstracts
         private readonly ILogService _logService;
         protected readonly IRepositoryManager _repository;
         protected readonly IMapService _mapService;
-        protected abstract string ChildClassName { get; }
+        protected abstract string ClassName { get; }
 
         protected AbstractService(ServiceParams serviceParams)
         {
@@ -18,30 +19,43 @@ namespace eShopOnlineBusiness.Abstracts
             _mapService = serviceParams.MapService;
         }
 
-        private string GenerateMessages(string methodName, string message)
+        #region LOG FUNCTIONS
+
+        protected void LogMethodInfo(string methodName)
         {
-            return LogMessages.FormatMessageForBusiness(ChildClassName, methodName, message);
+            _logService.LogInfo(LogContentsTemplate.BusinessMethodInfo(this.ClassName, methodName));
         }
 
-        public void LogDebug(string methodName, string message)
+        protected void LogMethodReturnInfo(string result)
         {
-            _logService.LogDebug(GenerateMessages(methodName, message));
+            _logService.LogInfo(LogContentsTemplate.BusinessMethodReturn(result));
         }
 
-        public void LogError(string methodName, string message)
+        private static string FormatContent(string content)
         {
-            _logService.LogError(GenerateMessages(methodName, message));
+            return LogContentsTemplate.BusinesFormat(content);
         }
 
-        public void LogInfo(string methodName, string message)
+        protected void LogInfo(string message)
         {
-            _logService.LogInfo(GenerateMessages(methodName, message));
+            _logService.LogInfo(FormatContent(message));
         }
 
-        public void LogWarning(string methodName, string message)
+        protected void LogError(string message)
         {
-            _logService.LogWarning(GenerateMessages(methodName, message));
+            _logService.LogError(FormatContent(message));
         }
 
+        protected void LogDebug(string message)
+        {
+            _logService.LogDebug(FormatContent(message));
+        }
+
+        protected void LogWarning(string message)
+        {
+            _logService.LogWarning(FormatContent(message));
+        }
+
+        #endregion
     }
 }

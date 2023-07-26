@@ -28,9 +28,9 @@ namespace eShopOnlineRepositories.Managers
 
         public void SaveChanges()
         {
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[SAVE] START saving to Database."));
+            _logService.LogInfo(EFCoreLogMessages.BeginSaving);
             _context.SaveChanges();
-            _logService.LogInfo(LogMessages.FormatMessageForEFCore("[SAVE] FINISH saving to Database."));
+            _logService.LogInfo(EFCoreLogMessages.EndSaving);
         }
 
         public ICompanyRepository Company => _company.Value;

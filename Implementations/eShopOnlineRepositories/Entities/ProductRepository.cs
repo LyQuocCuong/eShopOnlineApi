@@ -2,7 +2,7 @@
 {
     internal sealed class ProductRepository : AbstractRepository<Product>, IProductRepository
     {
-        protected override string ChildClassName => nameof(ProductRepository);
+        protected override string ClassName => nameof(ProductRepository);
 
         public ProductRepository(RepositoryParams repositoryParams) : base(repositoryParams)
         {
@@ -10,45 +10,49 @@
 
         public IEnumerable<Product> GetAll(bool isTrackChanges)
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             return base.FindAll(isTrackChanges);
         }
 
         public Product? GetById(bool isTrackChanges, Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             return base.FindByCondition(p => p.Id == id, isTrackChanges).FirstOrDefault();
         }
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
-            return base.FindByCondition(p => p.Id == id, isTrackChanges: false).Any();
+            LogMethodInfo(nameof(IsValidId));
+
+            bool result = base.FindByCondition(p => p.Id == id, isTrackChanges: false).Any();
+
+            LogMethodReturnInfo(result.ToString());
+            return result;
         }
 
-        public Dictionary<DeleteProductCondition, bool> CheckRequiredConditionsForDeletion(Guid id)
+        public Dictionary<DeleteProductCondition, bool> CheckRequiredConditionsForDeletingProduct(Guid id)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingWithDefaultCheckList);
-            return CheckRequiredConditionsForDeletion(id, DefaultDeleteEntityConditions.CheckListForDeletingAProduct);
+            LogMethodInfo(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingProduct)));
+            return CheckRequiredConditionsForDeletingProduct(id, DefaultDeleteEntityConditions.CheckListForDeletingAProduct);
         }
 
-        public Dictionary<DeleteProductCondition, bool> CheckRequiredConditionsForDeletion(Guid id, List<DeleteProductCondition> checkList)
+        public Dictionary<DeleteProductCondition, bool> CheckRequiredConditionsForDeletingProduct(Guid id, List<DeleteProductCondition> checkList)
         {
-            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CheckRequiredConditionsForDeletingProduct));
 
             var result = new Dictionary<DeleteProductCondition, bool>();
             
-            Product? product = base.FindByCondition(p => p.Id == id, isTrackChanges: false).FirstOrDefault();
-            DeleteProductCondition? isExistingInDatabaseCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingProduct.IsExistingInDatabase);
-
-            if (isExistingInDatabaseCondition != null)
+            DeleteProductCondition? prerequisiteCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingProduct.IsExistingInDatabase);
+            if (prerequisiteCondition != null)
             {
-                result.Add(isExistingInDatabaseCondition, false);
-                checkList.Remove(isExistingInDatabaseCondition);
+                result.Add(prerequisiteCondition, false);
+                checkList.Remove(prerequisiteCondition);
+
+                Product? product = base.FindByCondition(p => p.Id == id, isTrackChanges: false).FirstOrDefault();
                 if (product != null)
                 {
-                    result[isExistingInDatabaseCondition] = true;
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(isExistingInDatabaseCondition.ToString()));
+                    result[prerequisiteCondition] = true;
+                    LogInfo(RepositoryLogMessages.PassedCondition(prerequisiteCondition.ToString()));
 
                     // checking Other Conditions
                     foreach (var item in checkList)
@@ -63,48 +67,48 @@
                                 }
                                 break;
                             default:
-                                LogWarning(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(LogMessages.MessageForNotImplementedCondition));
+                                LogWarning(RepositoryLogMessages.NotImplementedCondition(item.ToString()));
                                 break;
                         }
                         if (result[item])
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectPassed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.PassedCondition(item.ToString()));
                         }
                         else
                         {
-                            LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(item.ToString()));
+                            LogInfo(RepositoryLogMessages.FailedCondition(item.ToString()));
                             break;  // stop checking
                         }
                     }
                 }
                 else
                 {
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Product), id.ToString()));
-                    LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed(isExistingInDatabaseCondition.ToString()));
+                    LogInfo(RepositoryLogMessages.ObjectNotExistInDB(nameof(Product), id));
+                    LogInfo(RepositoryLogMessages.FailedCondition(prerequisiteCondition.ToString()));
                 }
             }
             else
             {
-                LogInfo(nameof(CheckRequiredConditionsForDeletion), LogMessages.FormatMessageForObjectFailed("Missing IsExistingInDatabase."));
+                LogInfo(RepositoryLogMessages.MissingPrerequisiteCondition(ConditionsForDeletingProduct.IsExistingInDatabase.ToString()));
             }
             return result;
         }
 
         public void Create(Product product)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
             base.CreateEntity(product);
         }        
 
         public void DeleteSoftly(Product product)
         {
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteSoftly));
             base.DeleteEntitySoftly(product);
         }
 
         public void DeleteHard(Product product)
         {
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteHard));
             base.DeleteEntityHard(product);
         }
 

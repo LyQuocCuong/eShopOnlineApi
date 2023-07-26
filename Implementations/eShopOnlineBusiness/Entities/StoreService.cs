@@ -2,7 +2,7 @@
 {
     internal sealed class StoreService : AbstractService, IStoreService
     {
-        protected override string ChildClassName => nameof(StoreService);
+        protected override string ClassName => nameof(StoreService);
 
         public StoreService(ServiceParams serviceParams) : base(serviceParams)
         {
@@ -10,18 +10,18 @@
 
         public IEnumerable<StoreDto> GetAll()
         {
-            LogInfo(nameof(GetAll), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAll));
             IEnumerable<Store> stores = _repository.Store.GetAll(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Store>, IEnumerable<StoreDto>>(stores);
         }
 
         public StoreDto? GetById(Guid id)
         {
-            LogInfo(nameof(GetById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetById));
             Store? store = _repository.Store.GetById(isTrackChanges: false, id);
             if (store == null)
             {
-                LogInfo(nameof(GetById), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Store), id));
                 return null;
             }
             return _mapService.Execute<Store, StoreDto>(store);
@@ -29,13 +29,13 @@
 
         public bool IsValidId(Guid id)
         {
-            LogInfo(nameof(IsValidId), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(IsValidId));
             return _repository.Store.IsValidId(id);
         }
 
         public StoreDto Create(StoreForCreationDto creationDto)
         {
-            LogInfo(nameof(Create), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(Create));
 
             Store newStore = _mapService.Execute<StoreForCreationDto, Store>(creationDto);
             _repository.Store.Create(newStore);
@@ -46,8 +46,9 @@
 
         public bool UpdateFully(Guid id, StoreForUpdateDto updateDto)
         {
+            LogMethodInfo(nameof(UpdateFully));
+
             bool result = true;
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForStartingMethodExecution);
             Store? store = _repository.Store.GetById(isTrackChanges: true, id);
             if (store != null)
             {
@@ -56,18 +57,18 @@
             }
             else
             {
-                LogInfo(nameof(UpdateFully), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
+                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Store), id));
                 result = false;
-            }            
-            LogInfo(nameof(UpdateFully), LogMessages.MessageForFinishingMethodExecution);
+            }
             return result;
         }
 
         public bool DeleteSoftly(Guid id)
         {
+            LogMethodInfo(nameof(DeleteSoftly));
+
             bool result = true;
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Store.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Store.CheckRequiredConditionsForDeletingStore(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
@@ -83,19 +84,19 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteSoftly), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Store), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteSoftly), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 
         public bool DeleteHard(Guid id)
         {
+            LogMethodInfo(nameof(DeleteHard));
+
             bool result = true;
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForStartingMethodExecution);
-            var resultCheckList = _repository.Store.CheckRequiredConditionsForDeletion(id);
+            var resultCheckList = _repository.Store.CheckRequiredConditionsForDeletingStore(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
@@ -111,11 +112,10 @@
                 }
                 else
                 {
-                    LogInfo(nameof(DeleteHard), LogMessages.FormatMessageForObjectWithIdNotExistingInDatabase(nameof(Store), id.ToString()));
+                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Store), id));
                     result = false;
                 }
             }
-            LogInfo(nameof(DeleteHard), LogMessages.MessageForFinishingMethodExecution);
             return result;
         }
 

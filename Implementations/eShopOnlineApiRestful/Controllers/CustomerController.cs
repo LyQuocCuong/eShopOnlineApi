@@ -2,7 +2,7 @@
 {
     public sealed class CustomerController : AbstractApiController
     {
-        protected override string ChildClassName => nameof(CustomerController);
+        protected override string ClassName => nameof(CustomerController);
 
         public CustomerController(ControllerParams controllerParams) : base(controllerParams)
         {
@@ -12,12 +12,12 @@
         [Route("customers", Name = "GetAllCustomers")]
         public IActionResult GetAllCustomers()
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetAllCustomers), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetAllCustomers));
             IEnumerable<CustomerDto> employeeDto = _services.Customer.GetAll();
 
-            LogInfoResponse();
+            LogResponseInfo();
             return Ok(employeeDto);
         }
 
@@ -25,17 +25,17 @@
         [Route("customers/{id:guid}", Name = "GetCustomerById")]
         public IActionResult GetCustomerById([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(GetCustomerById), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(GetCustomerById));
             CustomerDto? employeeDto = _services.Customer.GetById(id);
             if (employeeDto == null)
             {
-                LogInfoResponse(); 
+                LogResponseInfo(); 
                 return NotFound();
             }
 
-            LogInfoResponse(); 
+            LogResponseInfo(); 
             return Ok(employeeDto);
         }
 
@@ -43,12 +43,12 @@
         [Route("customers", Name = "CreateCustomer")]
         public IActionResult CreateCustomer([FromBody]CustomerForCreationDto creationDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(CreateCustomer), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(CreateCustomer));
             CustomerDto customerDto = _services.Customer.Create(creationDto);
 
-            LogInfoResponse(); 
+            LogResponseInfo(); 
             return CreatedAtRoute("GetCustomerById", new { id = customerDto.Id }, customerDto);
         }
 
@@ -56,17 +56,17 @@
         [Route("customers/{id:guid}", Name = "UpdateCustomerFully")]
         public IActionResult UpdateCustomerFully([FromRoute]Guid id, [FromBody]CustomerForUpdateDto updateDto)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(UpdateCustomerFully), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(UpdateCustomerFully));
             if (_services.Customer.IsValidId(id) == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return NotFound();
             }
             bool result = _services.Customer.UpdateFully(id, updateDto);
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -74,17 +74,17 @@
         [Route("customers/{id:guid}", Name = "DeleteCustomerSoftly")]
         public IActionResult DeleteCustomerSoftly([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteCustomerSoftly), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteCustomerSoftly));
             bool result = _services.Customer.DeleteSoftly(id);
             if (result == false)
             {
-                LogInfoResponse();
+                LogResponseInfo();
                 return BadRequest();
             }
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 
@@ -92,17 +92,17 @@
         [Route("admin/customers/{id:guid}", Name = "DeleteCustomerHard")]
         public IActionResult DeleteCustomerHard([FromRoute]Guid id)
         {
-            LogInfoRequest();
+            LogRequestInfo();
 
-            LogInfo(nameof(DeleteCustomerHard), LogMessages.MessageForExecutingMethod);
+            LogMethodInfo(nameof(DeleteCustomerHard));
             bool result = _services.Customer.DeleteHard(id);
             if (result == false)
             {
-                LogInfoResponse(); 
+                LogResponseInfo(); 
                 return BadRequest();
             }
 
-            LogInfoResponse();
+            LogResponseInfo();
             return NoContent();
         }
 

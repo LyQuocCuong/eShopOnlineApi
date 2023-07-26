@@ -7,5 +7,6 @@ global using Domains.Entities;
 global using Domains.SeedingEntities;
 global using eShopOnlineEFCore.Context;
 global using eShopOnlineRepositories.Abstracts;
+global using eShopOnlineRepositories.LogMessages;
 global using eShopOnlineRepositories.Parameters;
 global using System.Linq.Expressions;
