@@ -1,8 +1,8 @@
 ﻿using Shared.Templates;
 
-namespace eShopOnlineUtilities.LogContents
+namespace eShopOnlineUtilities.LogMessages
 {
-    internal static class MapLogContent
+    internal static class MapLogMessages
     {
         public static string MappingInfo<TSource, TDestination>()
         {
