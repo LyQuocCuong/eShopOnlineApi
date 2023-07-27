@@ -1,4 +1,5 @@
-﻿using Shared.Templates;
+﻿using eShopOnlineRepositories.Helpers;
+using Shared.Templates;
 
 namespace eShopOnlineRepositories.LogMessages
 {
@@ -14,15 +15,21 @@ namespace eShopOnlineRepositories.LogMessages
             return FormatContent($"{message}");
         }
 
-        internal static string QueryTracking(string expression)
+        internal static string QueryTracking(Expression expressionTree)
         {
+            string expression = LogExpressionTreeHelper.PrintExpression(expressionTree);
             return FormatContent($"(Tracking) Expression: {expression}");
         }
 
-        internal static string QueryNoTracking(string expression)
+        internal static string QueryNoTracking(Expression expressionTree)
         {
+            string expression = LogExpressionTreeHelper.PrintExpression(expressionTree);
             return FormatContent($"(No-Tracking) Expression: {expression}");
         }
+
+        internal static string QueryTrackingFindAll = FormatContent($"(Tracking) FindAll()");
+
+        internal static string QueryNoTrackingFindAll = FormatContent($"(No-Tracking) FindAll()");
 
         internal static string Create = FormatContent($"(Create) Change EntityState.Added");
 

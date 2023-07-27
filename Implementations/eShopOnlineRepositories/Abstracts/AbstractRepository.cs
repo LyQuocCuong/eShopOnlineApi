@@ -21,10 +21,10 @@ namespace eShopOnlineRepositories.Abstracts
         {
             if (isTrackChanges)
             {
-                _logService.LogInfo(EFCoreLogMessages.QueryTracking(nameof(FindAll)));
+                _logService.LogInfo(EFCoreLogMessages.QueryTrackingFindAll);
                 return _dbSet;
             }
-            _logService.LogInfo(EFCoreLogMessages.QueryNoTracking(nameof(FindAll)));
+            _logService.LogInfo(EFCoreLogMessages.QueryNoTrackingFindAll);
             return _dbSet.AsNoTracking();
         }
 
@@ -32,10 +32,10 @@ namespace eShopOnlineRepositories.Abstracts
         {
             if (isTrackChanges)
             {
-                _logService.LogInfo(EFCoreLogMessages.QueryTracking(expression.ToString()));
+                _logService.LogInfo(EFCoreLogMessages.QueryTracking(expression.Body));
                 return _dbSet.Where(expression);
             }
-            _logService.LogInfo(EFCoreLogMessages.QueryNoTracking(expression.ToString()));
+            _logService.LogInfo(EFCoreLogMessages.QueryNoTracking(expression.Body));
             return _dbSet.Where(expression).AsNoTracking();
         }
 
