@@ -7,15 +7,15 @@ namespace eShopOnlineBusiness.Parameters
     {
         public readonly IRepositoryManager RepositoryManager;
         public readonly IMapService MapService;
-        public readonly ILogService LogService;
+        //public readonly ILogService LogService;
 
         public ServiceParams(IRepositoryManager repositoryManager, 
-                             IMapService mapService,
-                             ILogService logService)
+                             IMapService mapService
+                             /*ILogService logService*/)
         {
             RepositoryManager = repositoryManager;
             MapService = mapService;
-            LogService = logService;
+            //LogService = logService;
         }
     }
 }

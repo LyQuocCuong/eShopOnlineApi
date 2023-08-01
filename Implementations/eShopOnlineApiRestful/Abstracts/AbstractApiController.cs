@@ -7,20 +7,20 @@ namespace eShopOnlineApiRestful.Abstracts
     [Route("api")]
     public abstract class AbstractApiController : ControllerBase
     {
-        private readonly ILogService _logService;
+        //private readonly ILogService _logService;
         protected readonly IServiceManager _services;
         protected abstract string ClassName { get; }
 
         protected AbstractApiController(ControllerParams controllerParams)
         {
-            _logService = controllerParams.LogService;
+            //_logService = controllerParams.LogService;
             _services = controllerParams.ServiceManager;
         }
 
         [NonAction]
         protected void LogRequestInfo()
         {
-            _logService.LogInfo(LogContentsTemplate.RequestInfo(Request.Method, Request.Path));
+            //_logService.LogInfo(LogContentsTemplate.RequestInfo(Request.Method, Request.Path));
         }
 
         [NonAction]
@@ -30,13 +30,13 @@ namespace eShopOnlineApiRestful.Abstracts
             if (Response.StatusCode is 
                 400 or 401 or 402 or 403 or 404 or 405 or 406)
             {
-                _logService.LogWarning(message);
+                //_logService.LogWarning(message);
             }
             else
             {
-                _logService.LogInfo(message);
+                //_logService.LogInfo(message);
             }
-            _logService.LogInfo(LogContentsTemplate.SeparatorLine);
+            //_logService.LogInfo(LogContentsTemplate.SeparatorLine);
         }
 
         #region LOG FUNCTIONS
@@ -44,13 +44,13 @@ namespace eShopOnlineApiRestful.Abstracts
         [NonAction]
         protected void LogMethodInfo(string methodName)
         {
-            _logService.LogInfo(LogContentsTemplate.ControllerMethodInfo(this.ClassName, methodName));
+            //_logService.LogInfo(LogContentsTemplate.ControllerMethodInfo(this.ClassName, methodName));
         }
 
         [NonAction]
         protected void LogMethodReturnInfo(string result)
         {
-            _logService.LogInfo(LogContentsTemplate.ControllerMethodReturn(result));
+            //_logService.LogInfo(LogContentsTemplate.ControllerMethodReturn(result));
         }
 
         private static string FormatContent(string content)
@@ -61,25 +61,25 @@ namespace eShopOnlineApiRestful.Abstracts
         [NonAction]
         protected void LogInfo(string message)
         {
-            _logService.LogInfo(FormatContent(message));
+            //_logService.LogInfo(FormatContent(message));
         }
 
         [NonAction]
         protected void LogError(string message)
         {
-            _logService.LogError(FormatContent(message));
+            //_logService.LogError(FormatContent(message));
         }
 
         [NonAction]
         protected void LogDebug(string message)
         {
-            _logService.LogDebug(FormatContent(message));
+            //_logService.LogDebug(FormatContent(message));
         }
 
         [NonAction]
         protected void LogWarning(string message)
         {
-            _logService.LogWarning(FormatContent(message));
+            //_logService.LogWarning(FormatContent(message));
         }
 
         #endregion
