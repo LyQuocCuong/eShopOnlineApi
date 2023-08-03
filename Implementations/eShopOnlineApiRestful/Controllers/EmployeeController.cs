@@ -1,10 +1,12 @@
 ﻿namespace eShopOnlineApiRestful.Controllers
 {
-    public sealed class EmployeeController : AbstractApiController
+    public sealed class EmployeeController : AbstractApiController<EmployeeController>
     {
         protected override string ClassName => nameof(EmployeeController);
 
-        public EmployeeController(ControllerParams controllerParams) : base(controllerParams)
+        public EmployeeController(ILogger<EmployeeController> logger, 
+                                  ControllerParams controllerParams) 
+            : base(logger, controllerParams)
         {
         }
 

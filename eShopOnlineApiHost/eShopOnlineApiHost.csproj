@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LogsDev\**" />
+    <Compile Remove="LogsProd\**" />
+    <Compile Remove="Logs\**" />
+    <Content Remove="LogsDev\**" />
+    <Content Remove="LogsProd\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="LogsDev\**" />
+    <EmbeddedResource Remove="LogsProd\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="LogsDev\**" />
+    <None Remove="LogsProd\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
