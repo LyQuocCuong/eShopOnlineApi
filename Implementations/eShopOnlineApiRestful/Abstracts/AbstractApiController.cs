@@ -5,15 +5,19 @@ namespace eShopOnlineApiRestful.Abstracts
 {
     [ApiController]
     [Route("api")]
-    public abstract class AbstractApiController : ControllerBase
+    public abstract class AbstractApiController<TDerivedController> : ControllerBase
     {
+        protected readonly ILogger<TDerivedController> _logger;
+
         //private readonly ILogService _logService;
         protected readonly IServiceManager _services;
         protected abstract string ClassName { get; }
 
-        protected AbstractApiController(ControllerParams controllerParams)
+        protected AbstractApiController(ILogger<TDerivedController> logger, 
+                                        ControllerParams controllerParams)
         {
             //_logService = controllerParams.LogService;
+            _logger = logger;
             _services = controllerParams.ServiceManager;
         }
 

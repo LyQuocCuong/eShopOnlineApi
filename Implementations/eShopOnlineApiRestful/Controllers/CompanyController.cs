@@ -1,10 +1,12 @@
 ﻿namespace eShopOnlineApiRestful.Controllers
 {
-    public sealed class CompanyController : AbstractApiController
+    public sealed class CompanyController : AbstractApiController<CompanyController>
     {
         protected override string ClassName => nameof(CompanyController);
 
-        public CompanyController(ControllerParams controllerParams) : base(controllerParams)
+        public CompanyController(ILogger<CompanyController> logger, 
+                                 ControllerParams controllerParams) 
+            : base(logger, controllerParams)
         {
         }
 
@@ -12,6 +14,7 @@
         [Route("companies", Name = "GetAllCompanies")]
         public IActionResult GetAllCompanies()
         {
+            _logger.LogInformation("ax");
             LogRequestInfo();
 
             LogMethodInfo(nameof(GetAllCompanies));

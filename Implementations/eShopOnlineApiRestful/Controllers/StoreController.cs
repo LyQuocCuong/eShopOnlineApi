@@ -1,10 +1,12 @@
 ﻿namespace eShopOnlineApiRestful.Controllers
 {
-    public sealed class StoreController : AbstractApiController
+    public sealed class StoreController : AbstractApiController<StoreController>
     {
         protected override string ClassName => nameof(StoreController);
 
-        public StoreController(ControllerParams controllerParams) : base(controllerParams)
+        public StoreController(ILogger<StoreController> logger, 
+                               ControllerParams controllerParams) 
+            : base(logger, controllerParams)
         {
         }
 
