@@ -1,6 +1,4 @@
-using eShopOnlineApiRestful.Parameters;
 using NLog;
-using NLog.Web;
 
 namespace eShopOnlineApiHost
 {
@@ -14,27 +12,22 @@ namespace eShopOnlineApiHost
                                 optional: true,
                                 candidateFilePaths: new List<string> { SystemVariables.NLogConfigFilePath })
                             .GetCurrentClassLogger();
-            logger.Info("INIT main");
+            logger.Info("INIT MAIN");
 
             try
             {
-                var builder = WebApplication.CreateBuilder(args);   // Include configuring 4 default LogProviders
+                var builder = WebApplication.CreateBuilder(args);   // Include 4 default LogProviders
 
-                // Add services to the container.
-                builder.Services.AddScoped<ControllerParams>();
+                // Add the ApiRESTful module
                 builder.Services.AddControllers()
                     .AddApplicationPart(typeof(eShopOnlineApiRestful.AssemblyReference).Assembly);
 
-                // NLog: Dependency injection ==> ILogger<T> interface
-                builder.Logging.ClearProviders();   // Clear ALL LogProviders
-                builder.Host.UseNLog();
-
-                // My DIRegister
-                builder.Services.DIRegister_ShopOnlineContext(builder.Configuration);
-                builder.Services.DIRegister_Repositories();
-                builder.Services.DIRegister_Business();
-                //builder.Services.DIRegister_NLog();
-                builder.Services.DIRegister_AutoMapper();
+                // DI Registration (AFTER adding Controllers)
+                builder.Services.DIRegister_eShopOnlineEFCore(builder.Configuration);
+                builder.Services.DIRegister_eShopOnlineUtilities(builder);
+                builder.Services.DIRegister_eShopOnlineRepositories();
+                builder.Services.DIRegister_eShopOnlineBusiness();
+                builder.Services.DIRegister_eShopOnlineApiRestful();
 
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                 builder.Services.AddEndpointsApiExplorer();

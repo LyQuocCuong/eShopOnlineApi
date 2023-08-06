@@ -14,16 +14,17 @@ namespace eShopOnlineRepositories.Managers
         private readonly Lazy<IProductRepository> _product;
         private readonly Lazy<IStoreRepository> _store;
 
-        public RepositoryManager(RepositoryParams repositoryParams) 
+        public RepositoryManager(RepositoryILoggers loggerParams, 
+                                 RepositoryParams repositoryParams) 
         {
             _context = repositoryParams.Context;
             //_logService = repositoryParams.LogService;
 
-            _company = new Lazy<ICompanyRepository>(() => new CompanyRepository(repositoryParams));
-            _customer = new Lazy<ICustomerRepository>(() => new CustomerRepository(repositoryParams));
-            _employee = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(repositoryParams));
-            _product = new Lazy<IProductRepository>(() => new ProductRepository(repositoryParams));
-            _store = new Lazy<IStoreRepository>(() => new StoreRepository(repositoryParams));
+            _company = new Lazy<ICompanyRepository>(() => new CompanyRepository(loggerParams.Company, repositoryParams));
+            _customer = new Lazy<ICustomerRepository>(() => new CustomerRepository(loggerParams.Customer, repositoryParams));
+            _employee = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(loggerParams.Employee, repositoryParams));
+            _product = new Lazy<IProductRepository>(() => new ProductRepository(loggerParams.Product, repositoryParams));
+            _store = new Lazy<IStoreRepository>(() => new StoreRepository(loggerParams.Store, repositoryParams));
         }
 
         public void SaveChanges()

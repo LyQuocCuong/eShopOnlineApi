@@ -2,7 +2,7 @@
 
 namespace eShopOnlineUtilities.LogMessages
 {
-    internal static class MapLogMessages
+    internal static class MappingLogs
     {
         private static bool IsCollectionType(Type genericType)
         {

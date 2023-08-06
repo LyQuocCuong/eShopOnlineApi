@@ -1,28 +1,29 @@
-﻿using Contracts.Utilities.Logger;
-using Contracts.Utilities.Mapper;
+﻿using Contracts.Utilities.Mapper;
+using eShopOnlineUtilities.LogMessages;
 
 namespace eShopOnlineUtilities.AutoMapper
 {
     public sealed class AutoMapperService : IMapService
     {
         private readonly IMapper _autoMapper;
-        //private readonly ILogService _logService;
+        private readonly ILogger<AutoMapperService> _logger;
 
-        public AutoMapperService(IMapper autoMapper/*, ILogService logService*/)
+        public AutoMapperService(ILogger<AutoMapperService> logger, 
+                                 IMapper autoMapper)
         {
+            _logger = logger;
             _autoMapper = autoMapper;
-            //_logService = logService;
         }
 
         public TDestination Execute<TSource, TDestination>(TSource source)
         {
-            //_logService.LogInfo(MapLogMessages.MappingInfo<TSource, TDestination>());
+            _logger.LogInformation(MappingLogs.MappingInfo<TSource, TDestination>());
             return _autoMapper.Map<TSource, TDestination>(source);
         }
 
         public TDestination Execute<TSource, TDestination>(TSource source, TDestination destination)
         {
-            //_logService.LogInfo(MapLogMessages.MappingInfo<TSource, TDestination>());
+            _logger.LogInformation(MappingLogs.MappingInfo<TSource, TDestination>());
             return _autoMapper.Map(source, destination);
         }
     }
