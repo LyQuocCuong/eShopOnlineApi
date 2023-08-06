@@ -1,27 +1,25 @@
 ﻿namespace eShopOnlineBusiness.Entities
 {
-    internal sealed class EmployeeService : AbstractService, IEmployeeService
+    public sealed class EmployeeService : AbstractService<EmployeeService>, IEmployeeService
     {
-        protected override string ClassName => nameof(EmployeeService);
-
-        public EmployeeService(ServiceParams serviceParams) : base(serviceParams)
+        internal EmployeeService(ILogger<EmployeeService> logger, 
+                                 ServiceParams serviceParams) 
+            : base(logger, serviceParams)
         {
         }
 
         public IEnumerable<EmployeeDto> GetAll()
         {
-            LogMethodInfo(nameof(GetAll));
             IEnumerable<Employee> employees = _repository.Employee.GetAll(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
         }
 
         public EmployeeDto? GetById(Guid id)
         {
-            LogMethodInfo(nameof(GetById));
             Employee? employee = _repository.Employee.GetById(isTrackChanges: false, id);
             if (employee == null)
             {
-                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
+                _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Employee), id));
                 return null;
             }
             return _mapService.Execute<Employee, EmployeeDto>(employee);
@@ -29,14 +27,11 @@
 
         public bool IsValidId(Guid id)
         {
-            LogMethodInfo(nameof(IsValidId));
             return _repository.Employee.IsValidId(id);
         }
 
         public EmployeeDto Create(EmployeeForCreationDto creationDto)
         {
-            LogMethodInfo(nameof(Create));
-
             Employee newEmployee = _mapService.Execute<EmployeeForCreationDto, Employee>(creationDto);
             _repository.Employee.Create(newEmployee);
             _repository.SaveChanges();
@@ -46,8 +41,6 @@
 
         public bool UpdateFully(Guid id, EmployeeForUpdateDto updateDto)
         {
-            LogMethodInfo(nameof(UpdateFully));
-
             bool result = true;
             Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
             if (employee != null)
@@ -57,7 +50,7 @@
             }
             else
             {
-                LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
+                _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Employee), id));
                 result = false;
             }
             return result;
@@ -65,8 +58,6 @@
 
         public bool DeleteSoftly(Guid id)
         {
-            LogMethodInfo(nameof(DeleteSoftly));
-
             bool result = true;
             var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletingEmployee(id);
             if (resultCheckList.Any(condition => condition.Value == false))
@@ -83,7 +74,7 @@
                 }
                 else
                 {
-                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
+                    _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Employee), id));
                     result = false;
                 }
             }
@@ -92,8 +83,6 @@
 
         public bool DeleteHard(Guid id)
         {
-            LogMethodInfo(nameof(DeleteHard));
-
             bool result = true;
             var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletingEmployee(id);
             if (resultCheckList.Any(condition => condition.Value == false))
@@ -111,7 +100,7 @@
                 }
                 else
                 {
-                    LogInfo(BusinessLogMessages.ObjectNotExistInDB(nameof(Employee), id));
+                    _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Employee), id));
                     result = false;
                 }
             }

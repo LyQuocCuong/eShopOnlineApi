@@ -5,13 +5,10 @@ namespace eShopOnlineApiRestful.Parameters
     public sealed class ControllerParams
     {
         public readonly IServiceManager ServiceManager;
-        //public readonly ILogService LogService;
 
-        public ControllerParams(IServiceManager serviceManager
-                                /*ILogService logService*/) 
+        public ControllerParams(IServiceManager serviceManager) 
         {
             ServiceManager = serviceManager;
-            //LogService = logService;
         }
     }
 }

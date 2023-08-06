@@ -11,13 +11,14 @@ namespace eShopOnlineBusiness.Managers
         private readonly Lazy<IProductService> _product;
         private readonly Lazy<IStoreService> _store;
 
-        public ServiceManager(ServiceParams serviceParams)
+        public ServiceManager(ServiceILoggers serviceLoggers, 
+                              ServiceParams serviceParams)
         {
-            _company = new Lazy<ICompanyService>(() => new CompanyService(serviceParams));
-            _customer = new Lazy<ICustomerService>(() => new CustomerService(serviceParams));
-            _employee = new Lazy<IEmployeeService>(() => new EmployeeService(serviceParams));
-            _product = new Lazy<IProductService>(() => new ProductService(serviceParams));
-            _store = new Lazy<IStoreService>(() => new StoreService(serviceParams));
+            _company = new Lazy<ICompanyService>(() => new CompanyService(serviceLoggers.Company, serviceParams));
+            _customer = new Lazy<ICustomerService>(() => new CustomerService(serviceLoggers.Customer, serviceParams));
+            _employee = new Lazy<IEmployeeService>(() => new EmployeeService(serviceLoggers.Employee, serviceParams));
+            _product = new Lazy<IProductService>(() => new ProductService(serviceLoggers.Product, serviceParams));
+            _store = new Lazy<IStoreService>(() => new StoreService(serviceLoggers.Store, serviceParams));
         }
 
         public ICompanyService Company => _company.Value;

@@ -2,11 +2,11 @@
 global using Contracts.Repositories.Conditions.DeleteEntityConditionObjects;
 global using Contracts.Repositories.Conditions.Enums;
 global using Contracts.Repositories.Entities;
-global using Contracts.Utilities.Logger;
 global using Domains.Entities;
 global using Domains.SeedingEntities;
 global using eShopOnlineEFCore.Context;
 global using eShopOnlineRepositories.Abstracts;
 global using eShopOnlineRepositories.LogMessages;
 global using eShopOnlineRepositories.Parameters;
+global using Microsoft.Extensions.Logging;
 global using System.Linq.Expressions;

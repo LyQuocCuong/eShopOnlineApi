@@ -3,7 +3,7 @@ using Shared.Templates;
 
 namespace eShopOnlineRepositories.LogMessages
 {
-    internal static class EFCoreLogMessages
+    internal static class EFCoreLogs
     {
         private static string FormatContent(string content)
         {
