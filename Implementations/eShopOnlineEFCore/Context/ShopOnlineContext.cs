@@ -6,7 +6,8 @@ namespace eShopOnlineEFCore.Context
     {
         public ShopOnlineContext(DbContextOptions<ShopOnlineContext> options)
             : base (options)
-        { 
+        {
+            RelationalDatabaseFacadeExtensions.Migrate(this.Database);  // Auto create Database if NOT existing
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
