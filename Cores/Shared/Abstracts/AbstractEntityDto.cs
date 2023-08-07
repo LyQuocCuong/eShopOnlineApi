@@ -4,8 +4,8 @@
     {
         public bool IsDeleted { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDateUtcZero { get; set; }
 
-        public DateTime UpdatedDate { get; set; }
+        public DateTime UpdatedDateUtcZero { get; set; }
     }
 }

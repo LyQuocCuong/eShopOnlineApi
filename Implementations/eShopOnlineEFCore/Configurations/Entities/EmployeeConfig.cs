@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace eShopOnlineEFCore.Configurations.Entities
+﻿namespace eShopOnlineEFCore.Configurations.Entities
 {
     internal sealed class EmployeeConfig : IEntityTypeConfiguration<Employee>
     {
@@ -32,13 +30,28 @@ namespace eShopOnlineEFCore.Configurations.Entities
             builder.Property(props => props.Address).HasColumnOrder(++index);
             builder.Property(props => props.Phone).HasColumnOrder(++index);
             builder.Property(props => props.IsDeleted).HasColumnOrder(++index);
-            builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
-            builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
+            builder.Property(props => props.CreatedDateUtcZero).HasColumnOrder(++index);
+            builder.Property(props => props.UpdatedDateUtcZero).HasColumnOrder(++index);
         }
 
         private void ConfigSeedingData(EntityTypeBuilder<Employee> builder)
         {
-            builder.HasData(SeedingEntities.ROOT_ADMIN);
+            List<Employee> employees = new List<Employee>()
+            {
+                new Employee()
+                {
+                    Id = SeedingEntities.ROOT_ADMIN.Id,
+                    WorkingStoreId = SeedingEntities.ROOT_ADMIN.WorkingStoreId,
+                    Code = SeedingEntities.ROOT_ADMIN.Code,
+                    FirstName = SeedingEntities.ROOT_ADMIN.FirstName,
+                    LastName = SeedingEntities.ROOT_ADMIN.LastName,
+                    Phone = SeedingEntities.ROOT_ADMIN.Phone,
+                    IsDeleted = SeedingEntities.DefaultIsDeleted,
+                    CreatedDateUtcZero = SeedingEntities.DefaultCreatedDateUtcZero,
+                    UpdatedDateUtcZero = SeedingEntities.DefaultUpdatedDateUtcZero
+                }
+            };
+            builder.HasData(employees);
         }
 
     }

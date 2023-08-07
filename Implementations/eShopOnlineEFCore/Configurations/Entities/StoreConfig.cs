@@ -33,8 +33,8 @@ namespace eShopOnlineEFCore.Configurations.Entities
             builder.Property(props => props.Address).HasColumnOrder(++index);
             builder.Property(props => props.Phone).HasColumnOrder(++index);
             builder.Property(props => props.IsDeleted).HasColumnOrder(++index);
-            builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
-            builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
+            builder.Property(props => props.CreatedDateUtcZero).HasColumnOrder(++index);
+            builder.Property(props => props.UpdatedDateUtcZero).HasColumnOrder(++index);
         }
 
         private void ConfigManyEmployeesRelationship(EntityTypeBuilder<Store> builder)

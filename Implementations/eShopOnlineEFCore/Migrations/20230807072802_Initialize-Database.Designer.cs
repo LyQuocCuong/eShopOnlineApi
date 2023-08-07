@@ -12,8 +12,8 @@ using eShopOnlineEFCore.Context;
 namespace eShopOnlineEFCore.Migrations
 {
     [DbContext(typeof(ShopOnlineContext))]
-    [Migration("20230714111849_SeedingDefaultDataForCompanyAndEmployee")]
-    partial class SeedingDefaultDataForCompanyAndEmployee
+    [Migration("20230807072802_Initialize-Database")]
+    partial class InitializeDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,11 +35,11 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(6);
 
-                    b.Property<bool>("IsRemoved")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnOrder(5);
 
@@ -51,25 +51,13 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(7);
 
                     b.HasKey("Id");
 
                     b.ToTable("Company", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Address = "",
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRemoved = false,
-                            Name = "LQC Company",
-                            Phone = "1234567890",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Domains.Entities.Customer", b =>
@@ -87,7 +75,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(8);
 
@@ -95,7 +83,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<bool>("IsRemoved")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnOrder(7);
 
@@ -107,7 +95,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(6);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(9);
 
@@ -131,7 +119,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(9);
 
@@ -139,7 +127,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
-                    b.Property<bool>("IsRemoved")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnOrder(8);
 
@@ -151,7 +139,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(7);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(10);
 
@@ -164,20 +152,6 @@ namespace eShopOnlineEFCore.Migrations
                     b.HasIndex("WorkingStoreId");
 
                     b.ToTable("Employee", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000101"),
-                            Address = "",
-                            Code = "ADMIN101",
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Henry",
-                            IsRemoved = false,
-                            LastName = "Admin",
-                            Phone = "",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Domains.Entities.Product", b =>
@@ -191,11 +165,11 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(5);
 
-                    b.Property<bool>("IsRemoved")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnOrder(4);
 
@@ -203,7 +177,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(6);
 
@@ -231,11 +205,11 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(9);
 
-                    b.Property<bool>("IsRemoved")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnOrder(8);
 
@@ -251,7 +225,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(7);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(10);
 

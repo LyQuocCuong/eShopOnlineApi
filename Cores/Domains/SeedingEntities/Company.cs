@@ -10,9 +10,6 @@ namespace Domains.SeedingEntities
             Name = "LQC Company",
             Address = "",
             Phone = "1234567890",
-            IsDeleted = DefaultIsDeleted,
-            CreatedDate = DefaultCreatedDate,
-            UpdatedDate = DefaultUpdateDate
         };
     }
 }

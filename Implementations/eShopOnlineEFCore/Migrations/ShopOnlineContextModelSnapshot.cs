@@ -33,7 +33,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(6);
 
@@ -49,7 +49,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(7);
 
@@ -62,11 +62,11 @@ namespace eShopOnlineEFCore.Migrations
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
                             Address = "",
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDateUtcZero = new DateTime(2023, 10, 27, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             Name = "LQC Company",
                             Phone = "1234567890",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdatedDateUtcZero = new DateTime(2023, 10, 27, 0, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -85,7 +85,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(8);
 
@@ -105,7 +105,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(6);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(9);
 
@@ -129,7 +129,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(9);
 
@@ -149,7 +149,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(7);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(10);
 
@@ -167,14 +167,13 @@ namespace eShopOnlineEFCore.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000101"),
-                            Address = "",
                             Code = "ADMIN101",
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDateUtcZero = new DateTime(2023, 10, 27, 0, 0, 0, 0, DateTimeKind.Utc),
                             FirstName = "Henry",
                             IsDeleted = false,
                             LastName = "Admin",
                             Phone = "",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdatedDateUtcZero = new DateTime(2023, 10, 27, 0, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -189,7 +188,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(5);
 
@@ -201,7 +200,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(6);
 
@@ -229,7 +228,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(9);
 
@@ -249,7 +248,7 @@ namespace eShopOnlineEFCore.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(7);
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedDateUtcZero")
                         .HasColumnType("datetime2")
                         .HasColumnOrder(10);
 
