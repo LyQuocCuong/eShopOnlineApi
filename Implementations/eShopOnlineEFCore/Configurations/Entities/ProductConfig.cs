@@ -27,8 +27,8 @@ namespace eShopOnlineEFCore.Configurations.Entities
             builder.Property(props => props.Code).HasColumnOrder(++index);
             builder.Property(props => props.Name).HasColumnOrder(++index);
             builder.Property(props => props.IsDeleted).HasColumnOrder(++index);
-            builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
-            builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
+            builder.Property(props => props.CreatedDateUtcZero).HasColumnOrder(++index);
+            builder.Property(props => props.UpdatedDateUtcZero).HasColumnOrder(++index);
         }
 
     }

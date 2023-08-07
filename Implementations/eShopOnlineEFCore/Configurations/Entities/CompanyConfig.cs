@@ -27,13 +27,26 @@
             builder.Property(props => props.Address).HasColumnOrder(++index);
             builder.Property(props => props.Phone).HasColumnOrder(++index);
             builder.Property(props => props.IsDeleted).HasColumnOrder(++index);
-            builder.Property(props => props.CreatedDate).HasColumnOrder(++index);
-            builder.Property(props => props.UpdatedDate).HasColumnOrder(++index);
+            builder.Property(props => props.CreatedDateUtcZero).HasColumnOrder(++index);
+            builder.Property(props => props.UpdatedDateUtcZero).HasColumnOrder(++index);
         }
 
         private void ConfigSeedingData(EntityTypeBuilder<Company> builder)
         {
-            builder.HasData(SeedingEntities.DEFAULT_COMPANY);
+            List<Company> companies = new List<Company>()
+            {
+                new Company()
+                {
+                    Id = SeedingEntities.DEFAULT_COMPANY.Id,
+                    Name = SeedingEntities.DEFAULT_COMPANY.Name,
+                    Address = SeedingEntities.DEFAULT_COMPANY.Address,
+                    Phone = SeedingEntities.DEFAULT_COMPANY.Phone,
+                    IsDeleted = SeedingEntities.DefaultIsDeleted,
+                    CreatedDateUtcZero = SeedingEntities.DefaultCreatedDateUtcZero,
+                    UpdatedDateUtcZero = SeedingEntities.DefaultUpdatedDateUtcZero
+                }
+            };
+            builder.HasData(companies);
         }
 
         private void ConfigManyStoresRelationship(EntityTypeBuilder<Company> builder)

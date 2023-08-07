@@ -28,10 +28,10 @@
                            right_prop => right_prop.MapFrom(left => left.Phone))
                 .ForMember(right => right.IsDeleted,
                            right_prop => right_prop.MapFrom(left => left.IsDeleted))
-                .ForMember(right => right.CreatedDate,
-                           right_prop => right_prop.MapFrom(left => left.CreatedDate))
-                .ForMember(right => right.UpdatedDate,
-                           right_prop => right_prop.MapFrom(left => left.UpdatedDate));
+                .ForMember(right => right.CreatedDateUtcZero,
+                           right_prop => right_prop.MapFrom(left => left.CreatedDateUtcZero))
+                .ForMember(right => right.UpdatedDateUtcZero,
+                           right_prop => right_prop.MapFrom(left => left.UpdatedDateUtcZero));
         }
 
         private void ReverseMapping_StoreForCreationDto_And_Store()

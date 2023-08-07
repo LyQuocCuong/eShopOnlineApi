@@ -36,8 +36,8 @@ namespace eShopOnlineRepositories.Abstracts
 
         public void CreateEntity(TEntity entity)
         {
-            entity.CreatedDate = DateTime.UtcNow;
-            entity.UpdatedDate = DateTime.UtcNow;
+            entity.CreatedDateUtcZero = DateTime.UtcNow;
+            entity.UpdatedDateUtcZero = DateTime.UtcNow;
 
             _dbSet.Add(entity);
         }
@@ -53,6 +53,7 @@ namespace eShopOnlineRepositories.Abstracts
             // Due to "where TEntity : BaseEntity"
             // I can use properties of BaseEntity
             entity.IsDeleted = true;
+            entity.UpdatedDateUtcZero = DateTime.UtcNow;
         }
 
         public void DeleteEntityHard(TEntity entity)
