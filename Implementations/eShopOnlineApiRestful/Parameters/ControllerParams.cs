@@ -2,7 +2,7 @@
 
 namespace eShopOnlineApiRestful.Parameters
 {
-    public sealed class ControllerParams
+    public class ControllerParams
     {
         public readonly IServiceManager ServiceManager;
 

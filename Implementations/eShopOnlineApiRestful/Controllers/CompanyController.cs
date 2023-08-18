@@ -23,19 +23,25 @@
             CompanyDto? companyDto = _services.Company.GetById(id);
             if (companyDto == null)
             {
-                return NotFound();
+                return NotFound("CompanyId is non-existing");
             }
             return Ok(companyDto);
         }
 
         [HttpPut]
         [Route("companies/{id:guid}", Name = "UpdateCompanyFully")]
-        public IActionResult UpdateCompanyFully([FromRoute]Guid id, [FromBody]CompanyForUpdateDto updateDto)
+        public IActionResult UpdateCompanyFully([FromRoute]Guid id, 
+                                                [FromBody]CompanyForUpdateDto? updateDto)
         {
             if (_services.Company.IsValidId(id) == false)
             {
-                return NotFound();
+                return NotFound("Company ID is non-existing.");
             }
+            if (updateDto == null)
+            {
+                return BadRequest("updateDto object is NULL.");
+            }
+            
             bool result = _services.Company.UpdateFully(id, updateDto);
             return NoContent();
         }
