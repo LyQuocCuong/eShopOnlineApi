@@ -9,9 +9,10 @@
 
         public CompanyControllerTest() 
         {
-            _stubServices = new Mock<IServiceManager>();
-            var _stubControllerParams = new Mock<ControllerParams>(_stubServices.Object);
+            // Strict - Mocking ENOUGH the needed methods 
+            _stubServices = new Mock<IServiceManager>(MockBehavior.Strict);
 
+            var _stubControllerParams = new Mock<ControllerParams>(_stubServices.Object);
             var _stubLogger = Mock.Of<ILogger<CompanyController>>();    // instead of "A.Object"
             _mockCompanyController = new CompanyController(_stubLogger, _stubControllerParams.Object);
         }
@@ -198,6 +199,15 @@
                 .Returns(returnedResult);
         }
 
+        private void Mocking_Company_UpdateFully(Guid companyId, 
+                                                 CompanyForUpdateDto updateDto,
+                                                 bool returnedResult)
+        {
+            _stubServices
+                .Setup(s => s.Company.UpdateFully(companyId, updateDto))
+                .Returns(returnedResult);
+        }
+
         private IActionResult Act_UpdateCompanyFully(Guid companyId, CompanyForUpdateDto? updateDto)
         {
             return _mockCompanyController.UpdateCompanyFully(companyId, updateDto);
@@ -261,13 +271,19 @@
         {
             // TestData
             Guid existingCompanyId = FakeCompany.CompanyNo1.Id;
-            bool validationResult = true;
             CompanyForUpdateDto? updateObj = FakeCompany.UpdateObject;
+            bool resultIsValidIdFunc = true;
+            bool resultUpdateFullyFunc = true;
 
             // Arrange
             Mocking_Company_IsValidId(
                 companyId: existingCompanyId,
-                returnedResult: validationResult
+                returnedResult: resultIsValidIdFunc
+            );
+            Mocking_Company_UpdateFully(
+                companyId: existingCompanyId,
+                updateDto: updateObj,
+                returnedResult: resultUpdateFullyFunc
             );
 
             // Act
