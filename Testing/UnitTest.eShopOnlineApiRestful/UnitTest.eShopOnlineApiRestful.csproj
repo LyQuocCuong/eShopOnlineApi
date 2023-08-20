@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\eShopOnlineFake\eShopOnlineFake.csproj" />
+    <ProjectReference Include="..\eShopOnlineTestingUtilities\eShopOnlineTestingUtilities.csproj" />
   </ItemGroup>
 
 </Project>
