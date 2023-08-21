@@ -9,18 +9,18 @@
         }
 
         [HttpGet]
-        [Route("stores", Name = "GetAllStores")]
-        public IActionResult GetAllStores()
+        [Route("stores", Name = "GetAllStoresAsync")]
+        public async Task<IActionResult> GetAllStoresAsync()
         {
-            IEnumerable<StoreDto> storeDtos = _services.Store.GetAll();
+            IEnumerable<StoreDto> storeDtos = await _services.Store.GetAllAsync();
             return Ok(storeDtos);
         }
 
         [HttpGet]
-        [Route("stores/{id:guid}", Name = "GetStoreById")]
-        public IActionResult GetStoreById([FromRoute]Guid id)
+        [Route("stores/{id:guid}", Name = "GetStoreByIdAsync")]
+        public async Task<IActionResult> GetStoreByIdAsync([FromRoute]Guid id)
         {
-            StoreDto? storeDto = _services.Store.GetById(id);
+            StoreDto? storeDto = await _services.Store.GetByIdAsync(id);
             if (storeDto == null)
             {
                 return NotFound();
@@ -29,30 +29,30 @@
         }
 
         [HttpPost]
-        [Route("stores", Name = "CreateStore")]
-        public IActionResult CreateStore([FromBody]StoreForCreationDto creationDto)
+        [Route("stores", Name = "CreateStoreAsync")]
+        public async Task<IActionResult> CreateStoreAsync([FromBody]StoreForCreationDto creationDto)
         {
-            StoreDto storeDto = _services.Store.Create(creationDto);
+            StoreDto storeDto = await _services.Store.CreateAsync(creationDto);
             return CreatedAtRoute("GetStoreById", new { id = storeDto.Id }, storeDto);
         }
 
         [HttpPut]
-        [Route("stores/{id:guid}", Name = "UpdateStoreFully")]
-        public IActionResult UpdateStoreFully([FromRoute]Guid id, [FromBody]StoreForUpdateDto updateDto)
+        [Route("stores/{id:guid}", Name = "UpdateStoreFullyAsync")]
+        public async Task<IActionResult> UpdateStoreFullyAsync([FromRoute]Guid id, [FromBody]StoreForUpdateDto updateDto)
         {
-            if (_services.Store.IsValidId(id) == false)
+            if (await _services.Store.IsValidIdAsync(id) == false)
             {
                 return NotFound();
             }
-            bool result = _services.Store.UpdateFully(id, updateDto);
+            bool result = await _services.Store.UpdateFullyAsync(id, updateDto);
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("stores/{id:guid}", Name = "DeleteStoreSoftly")]
-        public IActionResult DeleteStoreSoftly([FromRoute]Guid id)
+        [Route("stores/{id:guid}", Name = "DeleteStoreSoftlyAsync")]
+        public async Task<IActionResult> DeleteStoreSoftlyAsync([FromRoute]Guid id)
         {
-            bool result = _services.Store.DeleteSoftly(id);
+            bool result = await _services.Store.DeleteSoftlyAsync(id);
             if (result == false)
             {
                 return BadRequest();
@@ -61,10 +61,10 @@
         }
 
         [HttpDelete]
-        [Route("admin/stores/{id:guid}", Name = "DeleteStoreHard")]
-        public IActionResult DeleteStoreHard([FromRoute] Guid id)
+        [Route("admin/stores/{id:guid}", Name = "DeleteStoreHardAsync")]
+        public async Task<IActionResult> DeleteStoreHardAsync([FromRoute] Guid id)
         {
-            bool result = _services.Store.DeleteHard(id);
+            bool result = await _services.Store.DeleteHardAsync(id);
             if (result == false)
             {
                 return BadRequest();

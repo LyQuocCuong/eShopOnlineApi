@@ -2,15 +2,15 @@
 {
     public interface IProductRepository
     {
-        Product? GetById(bool isTrackChanges, Guid id);
+        Task<Product?> GetByIdAsync(bool isTrackChanges, Guid id);
 
-        IEnumerable<Product> GetAll(bool isTrackChanges);
+        Task<IEnumerable<Product>> GetAllAsync(bool isTrackChanges);
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        Dictionary<DeleteProductCondition, bool> CheckRequiredConditionsForDeletingProduct(Guid id);
+        Task<Dictionary<DeleteProductCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
 
-        Dictionary<DeleteProductCondition, bool> CheckRequiredConditionsForDeletingProduct(Guid id, List<DeleteProductCondition> checkList);
+        Task<Dictionary<DeleteProductCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteProductCondition> checkList);
 
         void Create(Product product);
 

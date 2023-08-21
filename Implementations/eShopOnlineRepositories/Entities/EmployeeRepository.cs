@@ -8,29 +8,28 @@
         {
         }
 
-        public IEnumerable<Employee> GetAll(bool isTrackChanges)
+        public async Task<IEnumerable<Employee>> GetAllAsync(bool isTrackChanges)
         {
-            return base.FindAll(isTrackChanges);
+            return await base.FindAll(isTrackChanges).ToListAsync();
         }
 
-        public Employee? GetById(bool isTrackChanges, Guid id)
+        public async Task<Employee?> GetByIdAsync(bool isTrackChanges, Guid id)
         {
-            return base.FindByCondition(e => e.Id == id, isTrackChanges).FirstOrDefault();
+            return await base.FindByCondition(e => e.Id == id, isTrackChanges).FirstOrDefaultAsync();
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            bool result = base.FindByCondition(e => e.Id == id, isTrackChanges: false).Any();
-            return result;
+            return await base.FindByCondition(e => e.Id == id, isTrackChanges: false).AnyAsync(); ;
         }
 
-        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletingEmployee(Guid id)
+        public async Task<Dictionary<DeleteEmployeeCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id)
         {
-            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingEmployee)));
-            return CheckRequiredConditionsForDeletingEmployee(id, DefaultDeleteEntityConditions.CheckListForDeletingAnEmployee);
+            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletionAsync)));
+            return await CheckRequiredConditionsForDeletionAsync(id, DefaultDeleteEntityConditions.CheckListForDeletingAnEmployee);
         }
 
-        public Dictionary<DeleteEmployeeCondition, bool> CheckRequiredConditionsForDeletingEmployee(Guid id, List<DeleteEmployeeCondition> checkList)
+        public async Task<Dictionary<DeleteEmployeeCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteEmployeeCondition> checkList)
         {
             var result = new Dictionary<DeleteEmployeeCondition, bool>();
 
@@ -40,7 +39,7 @@
                 result.Add(prerequisiteCondition, false);
                 checkList.Remove(prerequisiteCondition);
 
-                Employee? employee = base.FindByCondition(e => e.Id == id, isTrackChanges: false).FirstOrDefault();
+                Employee? employee = await GetByIdAsync(isTrackChanges: false, id);
                 if (employee != null)
                 {
                     result[prerequisiteCondition] = true;

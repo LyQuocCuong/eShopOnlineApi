@@ -8,29 +8,28 @@
         {
         }
 
-        public IEnumerable<Customer> GetAll(bool isTrackChanges)
+        public async Task<IEnumerable<Customer>> GetAllAsync(bool isTrackChanges)
         {
-            return base.FindAll(isTrackChanges);
+            return await base.FindAll(isTrackChanges).ToListAsync();
         }
 
-        public Customer? GetById(bool isTrackChanges, Guid id)
+        public async Task<Customer?> GetByIdAsync(bool isTrackChanges, Guid id)
         {
-            return base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefault();
+            return await base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefaultAsync();
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            bool result = base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
-            return result;
+            return await base.FindByCondition(c => c.Id == id, isTrackChanges: false).AnyAsync();
         }
 
-        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletingCustomer(Guid id)
+        public async Task<Dictionary<DeleteCustomerCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id)
         {
-            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingCustomer)));
-            return CheckRequiredConditionsForDeletingCustomer(id, DefaultDeleteEntityConditions.CheckListForDeletingACustomer);
+            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletionAsync)));
+            return await CheckRequiredConditionsForDeletionAsync(id, DefaultDeleteEntityConditions.CheckListForDeletingACustomer);
         }
 
-        public Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletingCustomer(Guid id, List<DeleteCustomerCondition> checkList)
+        public async Task<Dictionary<DeleteCustomerCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteCustomerCondition> checkList)
         {
             var result = new Dictionary<DeleteCustomerCondition, bool>();
             
@@ -40,7 +39,7 @@
                 result.Add(prerequisiteCondition, false);
                 checkList.Remove(prerequisiteCondition);
 
-                Customer? customer = base.FindByCondition(c => c.Id == id, isTrackChanges: false).FirstOrDefault();
+                Customer? customer = await GetByIdAsync(isTrackChanges: false, id);
                 if (customer != null)
                 {
                     result[prerequisiteCondition] = true;

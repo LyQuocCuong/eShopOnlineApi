@@ -2,18 +2,18 @@
 {
     public interface IStoreService
     {
-        StoreDto? GetById(Guid id);
+        Task<StoreDto?> GetByIdAsync(Guid id);
 
-        IEnumerable<StoreDto> GetAll();
+        Task<IEnumerable<StoreDto>> GetAllAsync();
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        StoreDto Create(StoreForCreationDto creationDto);
+        Task<StoreDto> CreateAsync(StoreForCreationDto creationDto);
 
-        bool UpdateFully(Guid id, StoreForUpdateDto updateDto);
+        Task<bool> UpdateFullyAsync(Guid id, StoreForUpdateDto updateDto);
 
-        bool DeleteSoftly(Guid id);
+        Task<bool> DeleteSoftlyAsync(Guid id);
 
-        bool DeleteHard(Guid id);
+        Task<bool> DeleteHardAsync(Guid id);
     }
 }

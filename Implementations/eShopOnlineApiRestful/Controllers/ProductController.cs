@@ -9,18 +9,18 @@
         }
 
         [HttpGet]
-        [Route("products", Name = "GetAllProducts")]
-        public IActionResult GetAllProducts()
+        [Route("products", Name = "GetAllProductsAsync")]
+        public async Task<IActionResult> GetAllProductsAsync()
         {
-            IEnumerable<ProductDto> productDtos = _services.Product.GetAll();
+            IEnumerable<ProductDto> productDtos = await _services.Product.GetAllAsync();
             return Ok(productDtos);
         }
 
         [HttpGet]
-        [Route("products/{id:guid}", Name = "GetProductById")]
-        public IActionResult GetProductById([FromRoute]Guid id)
+        [Route("products/{id:guid}", Name = "GetProductByIdAsync")]
+        public async Task<IActionResult> GetProductByIdAsync([FromRoute]Guid id)
         {
-            ProductDto? productDto = _services.Product.GetById(id);
+            ProductDto? productDto = await _services.Product.GetByIdAsync(id);
             if (productDto == null)
             {
                 return NotFound();
@@ -29,30 +29,30 @@
         }
 
         [HttpPost]
-        [Route("products", Name = "CreateProduct")]
-        public IActionResult CreateProduct([FromBody]ProductForCreationDto creationDto)
+        [Route("products", Name = "CreateProductAsync")]
+        public async Task<IActionResult> CreateProductAsync([FromBody]ProductForCreationDto creationDto)
         {
-            ProductDto productDto = _services.Product.Create(creationDto);
+            ProductDto productDto = await _services.Product.CreateAsync(creationDto);
             return CreatedAtRoute("GetProductById", new { id = productDto.Id }, productDto);
         }
 
         [HttpPut]
-        [Route("products/{id:guid}", Name = "UpdateProductFully")]
-        public IActionResult UpdateProductFully([FromRoute]Guid id, [FromBody]ProductForUpdateDto updateDto)
+        [Route("products/{id:guid}", Name = "UpdateProductFullyAsync")]
+        public async Task<IActionResult> UpdateProductFullyAsync([FromRoute]Guid id, [FromBody]ProductForUpdateDto updateDto)
         {
-            if (_services.Product.IsValidId(id) == false)
+            if (await _services.Product.IsValidIdAsync(id) == false)
             {
                 return NotFound();
             }
-            bool result = _services.Product.UpdateFully(id, updateDto);
+            bool result = await _services.Product.UpdateFullyAsync(id, updateDto);
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("products/{id:guid}", Name = "DeleteProductSoftly")]
-        public IActionResult DeleteProductSoftly([FromRoute]Guid id)
+        [Route("products/{id:guid}", Name = "DeleteProductSoftlyAsync")]
+        public async Task<IActionResult> DeleteProductSoftlyAsync([FromRoute]Guid id)
         {
-            bool result = _services.Product.DeleteSoftly(id);
+            bool result = await _services.Product.DeleteSoftlyAsync(id);
             if (result == false)
             {
                 return BadRequest();
@@ -61,10 +61,10 @@
         }
 
         [HttpDelete]
-        [Route("admin/products/{id:guid}", Name = "DeleteProductHard")]
-        public IActionResult DeleteProductHard([FromRoute] Guid id)
+        [Route("admin/products/{id:guid}", Name = "DeleteProductHardAsync")]
+        public async Task<IActionResult> DeleteProductHardAsync([FromRoute] Guid id)
         {
-            bool result = _services.Product.DeleteHard(id);
+            bool result = await _services.Product.DeleteHardAsync(id);
             if (result == false)
             {
                 return BadRequest();

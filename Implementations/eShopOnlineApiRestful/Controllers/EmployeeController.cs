@@ -9,18 +9,18 @@
         }
 
         [HttpGet]
-        [Route("employees", Name = "GetAllEmployees")]
-        public IActionResult GetAllEmployees()
+        [Route("employees", Name = "GetAllEmployeesAsync")]
+        public async Task<IActionResult> GetAllEmployeesAsync()
         {
-            IEnumerable<EmployeeDto> employeeDtos = _services.Employee.GetAll();
+            IEnumerable<EmployeeDto> employeeDtos = await _services.Employee.GetAllAsync();
             return Ok(employeeDtos);
         }
 
         [HttpGet]
-        [Route("employees/{id:guid}", Name = "GetEmployeeById")]
-        public IActionResult GetEmployeeById([FromRoute]Guid id)
+        [Route("employees/{id:guid}", Name = "GetEmployeeByIdAsync")]
+        public async Task<IActionResult> GetEmployeeByIdAsync([FromRoute]Guid id)
         {
-            EmployeeDto? employeeDto = _services.Employee.GetById(id);
+            EmployeeDto? employeeDto = await _services.Employee.GetByIdAsync(id);
             if (employeeDto == null)
             {
                 return NotFound("EmployeeId is non-existing.");
@@ -29,40 +29,40 @@
         }
 
         [HttpPost]
-        [Route("employees", Name = "CreateEmployee")]
-        public IActionResult CreateEmployee([FromBody]EmployeeForCreationDto? creationDto)
+        [Route("employees", Name = "CreateEmployeeAsync")]
+        public async Task<IActionResult> CreateEmployeeAsync([FromBody]EmployeeForCreationDto? creationDto)
         {
             if (creationDto == null)
             {
                 return BadRequest("Object for creation is NULL.");
             }
-            EmployeeDto employeeDto = _services.Employee.Create(creationDto);
+            EmployeeDto employeeDto = await _services.Employee.CreateAsync(creationDto);
 
             employeeDto.Id = Guid.Empty;    // Edited
             return CreatedAtRoute("GetEmployeeById", new { id = employeeDto.Id }, employeeDto);
         }
 
         [HttpPut]
-        [Route("employees/{id:guid}", Name = "UpdateEmployeeFully")]
-        public IActionResult UpdateEmployeeFully([FromRoute]Guid id, [FromBody]EmployeeForUpdateDto? updateDto)
+        [Route("employees/{id:guid}", Name = "UpdateEmployeeFullyAsync")]
+        public async Task<IActionResult> UpdateEmployeeFullyAsync([FromRoute]Guid id, [FromBody]EmployeeForUpdateDto? updateDto)
         {
             if (updateDto == null)
             {
                 return BadRequest("updateDto object is NULL.");
             }
-            if (_services.Employee.IsValidId(id) == false)
+            if (await _services.Employee.IsValidIdAsync(id) == false)
             {
                 return NotFound("EmployeeId is non-existing.");
             }
-            bool result = _services.Employee.UpdateFully(id, updateDto);
+            bool result = await _services.Employee.UpdateFullyAsync(id, updateDto);
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("employees/{id:guid}", Name = "DeleteEmployeeSoftly")]
-        public IActionResult DeleteEmployeeSoftly([FromRoute]Guid id)
+        [Route("employees/{id:guid}", Name = "DeleteEmployeeSoftlyAsync")]
+        public async Task<IActionResult> DeleteEmployeeSoftlyAsync([FromRoute]Guid id)
         {
-            bool result = _services.Employee.DeleteSoftly(id);
+            bool result = await _services.Employee.DeleteSoftlyAsync(id);
             if (result == false)
             {
                 return BadRequest("Can NOT delete Employee. There are somethings WRONG.");
@@ -71,10 +71,10 @@
         }
 
         [HttpDelete]
-        [Route("admin/employees/{id:guid}", Name = "DeleteEmployeeHard")]
-        public IActionResult DeleteEmployeeHard([FromRoute] Guid id)
+        [Route("admin/employees/{id:guid}", Name = "DeleteEmployeeHardAsync")]
+        public async Task<IActionResult> DeleteEmployeeHardAsync([FromRoute] Guid id)
         {
-            bool result = _services.Employee.DeleteHard(id);
+            bool result = await _services.Employee.DeleteHardAsync(id);
             if (result == false)
             {
                 return BadRequest("Can NOT delete Employee. There are somethings WRONG.");
