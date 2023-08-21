@@ -2,15 +2,15 @@
 {
     public interface ICustomerRepository
     {
-        Customer? GetById(bool isTrackChanges, Guid id);
+        Task<Customer?> GetByIdAsync(bool isTrackChanges, Guid id);
 
-        IEnumerable<Customer> GetAll(bool isTrackChanges);
+        Task<IEnumerable<Customer>> GetAllAsync(bool isTrackChanges);
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletingCustomer(Guid id);
+        Task<Dictionary<DeleteCustomerCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
 
-        Dictionary<DeleteCustomerCondition, bool> CheckRequiredConditionsForDeletingCustomer(Guid id, List<DeleteCustomerCondition> checkList);
+        Task<Dictionary<DeleteCustomerCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteCustomerCondition> checkList);
 
         void Create(Customer customer);
 

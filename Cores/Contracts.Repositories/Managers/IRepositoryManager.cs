@@ -4,7 +4,7 @@ namespace Contracts.Repositories.Managers
 {
     public interface IRepositoryManager
     {
-        void SaveChanges();
+        Task SaveChangesAsync();
 
         ICompanyRepository Company { get; }
 

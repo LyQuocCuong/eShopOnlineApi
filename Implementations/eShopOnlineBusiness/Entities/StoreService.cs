@@ -8,15 +8,15 @@
         {
         }
 
-        public IEnumerable<StoreDto> GetAll()
+        public async Task<IEnumerable<StoreDto>> GetAllAsync()
         {
-            IEnumerable<Store> stores = _repository.Store.GetAll(isTrackChanges: false);
+            IEnumerable<Store> stores = await _repository.Store.GetAllAsync(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Store>, IEnumerable<StoreDto>>(stores);
         }
 
-        public StoreDto? GetById(Guid id)
+        public async Task<StoreDto?> GetByIdAsync(Guid id)
         {
-            Store? store = _repository.Store.GetById(isTrackChanges: false, id);
+            Store? store = await _repository.Store.GetByIdAsync(isTrackChanges: false, id);
             if (store == null)
             {
                 _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Store), id));
@@ -25,28 +25,28 @@
             return _mapService.Execute<Store, StoreDto>(store);
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            return _repository.Store.IsValidId(id);
+            return await _repository.Store.IsValidIdAsync(id);
         }
 
-        public StoreDto Create(StoreForCreationDto creationDto)
+        public async Task<StoreDto> CreateAsync(StoreForCreationDto creationDto)
         {
             Store newStore = _mapService.Execute<StoreForCreationDto, Store>(creationDto);
             _repository.Store.Create(newStore);
-            _repository.SaveChanges();
+            await _repository.SaveChangesAsync();
 
             return _mapService.Execute<Store, StoreDto>(newStore);
         }
 
-        public bool UpdateFully(Guid id, StoreForUpdateDto updateDto)
+        public async Task<bool> UpdateFullyAsync(Guid id, StoreForUpdateDto updateDto)
         {
             bool result = true;
-            Store? store = _repository.Store.GetById(isTrackChanges: true, id);
+            Store? store = await _repository.Store.GetByIdAsync(isTrackChanges: true, id);
             if (store != null)
             {
                 _mapService.Execute<StoreForUpdateDto, Store>(updateDto, store);
-                _repository.SaveChanges();
+                await _repository.SaveChangesAsync();
             }
             else
             {
@@ -56,21 +56,21 @@
             return result;
         }
 
-        public bool DeleteSoftly(Guid id)
+        public async Task<bool> DeleteSoftlyAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = _repository.Store.CheckRequiredConditionsForDeletingStore(id);
+            var resultCheckList = await _repository.Store.CheckRequiredConditionsForDeletionAsync(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
             }
             else
             {
-                Store? store = _repository.Store.GetById(isTrackChanges: true, id);
+                Store? store = await _repository.Store.GetByIdAsync(isTrackChanges: true, id);
                 if (store != null)
                 {
                     _repository.Store.DeleteSoftly(store);
-                    _repository.SaveChanges();
+                    await _repository.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -82,21 +82,21 @@
             return result;
         }
 
-        public bool DeleteHard(Guid id)
+        public async Task<bool> DeleteHardAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = _repository.Store.CheckRequiredConditionsForDeletingStore(id);
+            var resultCheckList = await _repository.Store.CheckRequiredConditionsForDeletionAsync(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
             }
             else
             {
-                Store? store = _repository.Store.GetById(isTrackChanges: true, id);
+                Store? store = await _repository.Store.GetByIdAsync(isTrackChanges: true, id);
                 if (store != null)
                 {
                     _repository.Store.DeleteHard(store);
-                    _repository.SaveChanges();
+                    await _repository.SaveChangesAsync();
                     return true;
                 }
                 else

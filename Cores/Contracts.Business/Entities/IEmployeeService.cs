@@ -2,18 +2,18 @@
 {
     public interface IEmployeeService
     {
-        EmployeeDto? GetById(Guid id);
+        Task<EmployeeDto?> GetByIdAsync(Guid id);
 
-        IEnumerable<EmployeeDto> GetAll();
+        Task<IEnumerable<EmployeeDto>> GetAllAsync();
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        EmployeeDto Create(EmployeeForCreationDto creationDto);
+        Task<EmployeeDto> CreateAsync(EmployeeForCreationDto creationDto);
 
-        bool UpdateFully(Guid id, EmployeeForUpdateDto updateDto);
+        Task<bool> UpdateFullyAsync(Guid id, EmployeeForUpdateDto updateDto);
 
-        bool DeleteSoftly(Guid id);
+        Task<bool> DeleteSoftlyAsync(Guid id);
 
-        bool DeleteHard(Guid id);
+        Task<bool> DeleteHardAsync(Guid id);
     }
 }

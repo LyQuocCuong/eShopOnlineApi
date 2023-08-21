@@ -8,15 +8,15 @@
         {
         }
 
-        public IEnumerable<ProductDto> GetAll()
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
         {
-            IEnumerable<Product> products = _repository.Product.GetAll(isTrackChanges: false);
+            IEnumerable<Product> products = await _repository.Product.GetAllAsync(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
         }
 
-        public ProductDto? GetById(Guid id)
+        public async Task<ProductDto?> GetByIdAsync(Guid id)
         {
-            Product? product = _repository.Product.GetById(isTrackChanges: false, id);
+            Product? product = await _repository.Product.GetByIdAsync(isTrackChanges: false, id);
             if(product == null)
             {
                 _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Product), id));
@@ -25,28 +25,28 @@
             return _mapService.Execute<Product, ProductDto>(product);
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            return _repository.Product.IsValidId(id);
+            return await _repository.Product.IsValidIdAsync(id);
         }
 
-        public ProductDto Create(ProductForCreationDto creationDto)
+        public async Task<ProductDto> CreateAsync(ProductForCreationDto creationDto)
         {
             Product newProduct = _mapService.Execute<ProductForCreationDto, Product>(creationDto);
             _repository.Product.Create(newProduct);
-            _repository.SaveChanges();
+            await _repository.SaveChangesAsync();
 
             return _mapService.Execute<Product, ProductDto>(newProduct);
         }
 
-        public bool UpdateFully(Guid id, ProductForUpdateDto updateDto)
+        public async Task<bool> UpdateFullyAsync(Guid id, ProductForUpdateDto updateDto)
         {
             bool result = true;
-            Product? product = _repository.Product.GetById(isTrackChanges: true, id);
+            Product? product = await _repository.Product.GetByIdAsync(isTrackChanges: true, id);
             if (product != null)
             {
                 _mapService.Execute<ProductForUpdateDto, Product>(updateDto, product);
-                _repository.SaveChanges();
+                await _repository.SaveChangesAsync();
             }
             else
             {
@@ -56,21 +56,21 @@
             return result;
         }
 
-        public bool DeleteSoftly(Guid id)
+        public async Task<bool> DeleteSoftlyAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = _repository.Product.CheckRequiredConditionsForDeletingProduct(id);
+            var resultCheckList = await _repository.Product.CheckRequiredConditionsForDeletionAsync(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
             }
             else
             {
-                Product? product = _repository.Product.GetById(isTrackChanges: true, id);
+                Product? product = await _repository.Product.GetByIdAsync(isTrackChanges: true, id);
                 if (product != null)
                 {
                     _repository.Product.DeleteSoftly(product);
-                    _repository.SaveChanges();
+                    await _repository.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -82,21 +82,21 @@
             return result;
         }
 
-        public bool DeleteHard(Guid id)
+        public async Task<bool> DeleteHardAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = _repository.Product.CheckRequiredConditionsForDeletingProduct(id);
+            var resultCheckList = await _repository.Product.CheckRequiredConditionsForDeletionAsync(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 return false;
             }
             else
             {
-                Product? product = _repository.Product.GetById(isTrackChanges: true, id);
+                Product? product = await _repository.Product.GetByIdAsync(isTrackChanges: true, id);
                 if (product != null)
                 {
                     _repository.Product.DeleteHard(product);
-                    _repository.SaveChanges();
+                    await _repository.SaveChangesAsync();
                     return true;
                 }
                 else

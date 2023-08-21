@@ -27,11 +27,9 @@ namespace eShopOnlineRepositories.Managers
             _store = new Lazy<IStoreRepository>(() => new StoreRepository(loggerParams.Store, repositoryParams));
         }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            //_logService.LogInfo(EFCoreLogMessages.BeginSaving);
-            _context.SaveChanges();
-            //_logService.LogInfo(EFCoreLogMessages.EndSaving);
+            await _context.SaveChangesAsync();
         }
 
         public ICompanyRepository Company => _company.Value;

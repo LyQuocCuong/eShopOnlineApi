@@ -2,15 +2,15 @@
 {
     public interface IStoreRepository
     {
-        Store? GetById(bool isTrackChanges, Guid id);
+        Task<Store?> GetByIdAsync(bool isTrackChanges, Guid id);
 
-        IEnumerable<Store> GetAll(bool isTrackChanges);
+        Task<IEnumerable<Store>> GetAllAsync(bool isTrackChanges);
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletingStore(Guid id);
+        Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
 
-        Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletingStore(Guid id, List<DeleteStoreCondition> checkList);
+        Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteStoreCondition> checkList);
 
         void Create(Store store);
 

@@ -9,18 +9,18 @@
         }
 
         [HttpGet]
-        [Route("companies", Name = "GetAllCompanies")]
-        public IActionResult GetAllCompanies()
+        [Route("companies", Name = "GetAllCompaniesAsync")]
+        public async Task<IActionResult> GetAllCompaniesAsync()
         {
-            IEnumerable<CompanyDto> companyDtos = _services.Company.GetAll();
+            IEnumerable<CompanyDto> companyDtos = await _services.Company.GetAllAsync();
             return Ok(companyDtos);
         }
 
         [HttpGet]
-        [Route("companies/{id:guid}", Name = "GetCompanyById")]
-        public IActionResult GetCompanyById([FromRoute]Guid id)
+        [Route("companies/{id:guid}", Name = "GetCompanyByIdAsync")]
+        public async Task<IActionResult> GetCompanyByIdAsync([FromRoute]Guid id)
         {
-            CompanyDto? companyDto = _services.Company.GetById(id);
+            CompanyDto? companyDto = await _services.Company.GetByIdAsync(id);
             if (companyDto == null)
             {
                 return NotFound("CompanyId is non-existing");
@@ -29,11 +29,11 @@
         }
 
         [HttpPut]
-        [Route("companies/{id:guid}", Name = "UpdateCompanyFully")]
-        public IActionResult UpdateCompanyFully([FromRoute]Guid id, 
+        [Route("companies/{id:guid}", Name = "UpdateCompanyFullyAsync")]
+        public async Task<IActionResult> UpdateCompanyFullyAsync([FromRoute]Guid id, 
                                                 [FromBody]CompanyForUpdateDto? updateDto)
         {
-            if (_services.Company.IsValidId(id) == false)
+            if (await _services.Company.IsValidIdAsync(id) == false)
             {
                 return NotFound("Company ID is non-existing.");
             }
@@ -42,7 +42,7 @@
                 return BadRequest("updateDto object is NULL.");
             }
             
-            bool result = _services.Company.UpdateFully(id, updateDto);
+            bool result = await _services.Company.UpdateFullyAsync(id, updateDto);
             return NoContent();
         }
 

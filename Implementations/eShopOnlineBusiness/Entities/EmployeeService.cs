@@ -8,15 +8,15 @@
         {
         }
 
-        public IEnumerable<EmployeeDto> GetAll()
+        public async Task<IEnumerable<EmployeeDto>> GetAllAsync()
         {
-            IEnumerable<Employee> employees = _repository.Employee.GetAll(isTrackChanges: false);
+            IEnumerable<Employee> employees = await _repository.Employee.GetAllAsync(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
         }
 
-        public EmployeeDto? GetById(Guid id)
+        public async Task<EmployeeDto?> GetByIdAsync(Guid id)
         {
-            Employee? employee = _repository.Employee.GetById(isTrackChanges: false, id);
+            Employee? employee = await _repository.Employee.GetByIdAsync(isTrackChanges: false, id);
             if (employee == null)
             {
                 _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Employee), id));
@@ -25,28 +25,28 @@
             return _mapService.Execute<Employee, EmployeeDto>(employee);
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            return _repository.Employee.IsValidId(id);
+            return await _repository.Employee.IsValidIdAsync(id);
         }
 
-        public EmployeeDto Create(EmployeeForCreationDto creationDto)
+        public async Task<EmployeeDto> CreateAsync(EmployeeForCreationDto creationDto)
         {
             Employee newEmployee = _mapService.Execute<EmployeeForCreationDto, Employee>(creationDto);
             _repository.Employee.Create(newEmployee);
-            _repository.SaveChanges();
+            await _repository.SaveChangesAsync();
 
             return _mapService.Execute<Employee, EmployeeDto>(newEmployee);
         }
 
-        public bool UpdateFully(Guid id, EmployeeForUpdateDto updateDto)
+        public async Task<bool> UpdateFullyAsync(Guid id, EmployeeForUpdateDto updateDto)
         {
             bool result = true;
-            Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
+            Employee? employee = await _repository.Employee.GetByIdAsync(isTrackChanges: true, id);
             if (employee != null)
             {
                 _mapService.Execute<EmployeeForUpdateDto, Employee>(updateDto, employee);
-                _repository.SaveChanges();
+                await _repository.SaveChangesAsync();
             }
             else
             {
@@ -56,21 +56,21 @@
             return result;
         }
 
-        public bool DeleteSoftly(Guid id)
+        public async Task<bool> DeleteSoftlyAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletingEmployee(id);
+            var resultCheckList = await _repository.Employee.CheckRequiredConditionsForDeletionAsync(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
             }
             else
             {
-                Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
+                Employee? employee = await _repository.Employee.GetByIdAsync(isTrackChanges: true, id);
                 if (employee != null)
                 {
                     _repository.Employee.DeleteSoftly(employee);
-                    _repository.SaveChanges();
+                    await _repository.SaveChangesAsync();
                 }
                 else
                 {
@@ -81,21 +81,21 @@
             return result;
         }
 
-        public bool DeleteHard(Guid id)
+        public async Task<bool> DeleteHardAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = _repository.Employee.CheckRequiredConditionsForDeletingEmployee(id);
+            var resultCheckList = await _repository.Employee.CheckRequiredConditionsForDeletionAsync(id);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
             }
             else
             {
-                Employee? employee = _repository.Employee.GetById(isTrackChanges: true, id);
+                Employee? employee = await _repository.Employee.GetByIdAsync(isTrackChanges: true, id);
                 if (employee != null)
                 {
                     _repository.Employee.DeleteHard(employee);
-                    _repository.SaveChanges();
+                    await _repository.SaveChangesAsync();
                     result = true;
                 }
                 else

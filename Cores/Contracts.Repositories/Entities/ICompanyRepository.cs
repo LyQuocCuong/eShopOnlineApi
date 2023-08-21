@@ -2,10 +2,10 @@
 {
     public interface ICompanyRepository
     {
-        Company? GetById(bool isTrackChanges, Guid id);
+        Task<Company?> GetByIdAsync(bool isTrackChanges, Guid id);
 
-        IEnumerable<Company> GetAll(bool isTrackChanges);
+        Task<IEnumerable<Company>> GetAllAsync(bool isTrackChanges);
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
     }
 }

@@ -8,15 +8,15 @@
         {
         }
 
-        public IEnumerable<CompanyDto> GetAll()
+        public async Task<IEnumerable<CompanyDto>> GetAllAsync()
         {
-            IEnumerable<Company> companies = _repository.Company.GetAll(isTrackChanges: false);
+            IEnumerable<Company> companies = await _repository.Company.GetAllAsync(isTrackChanges: false);
             return _mapService.Execute<IEnumerable<Company>, IEnumerable<CompanyDto>>(companies);
         }
 
-        public CompanyDto? GetById(Guid id)
+        public async Task<CompanyDto?> GetByIdAsync(Guid id)
         {
-            Company? company = _repository.Company.GetById(isTrackChanges: false, id);
+            Company? company = await _repository.Company.GetByIdAsync(isTrackChanges: false, id);
             if (company == null)
             {
                 _logger.LogWarning(BusinessLogs.ObjectNotExistInDB(nameof(Company), id));
@@ -25,19 +25,19 @@
             return _mapService.Execute<Company, CompanyDto>(company);
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            return _repository.Company.IsValidId(id);
+            return await _repository.Company.IsValidIdAsync(id);
         }
 
-        public bool UpdateFully(Guid id, CompanyForUpdateDto updateDto)
+        public async Task<bool> UpdateFullyAsync(Guid id, CompanyForUpdateDto updateDto)
         {
             bool result = true;
-            Company? company = _repository.Company.GetById(isTrackChanges: true, id);
+            Company? company = await _repository.Company.GetByIdAsync(isTrackChanges: true, id);
             if (company != null)
             {
                 _mapService.Execute<CompanyForUpdateDto, Company>(updateDto, company);
-                _repository.SaveChanges();
+                await _repository.SaveChangesAsync();
             }
             else
             {

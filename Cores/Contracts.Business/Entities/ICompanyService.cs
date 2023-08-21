@@ -2,12 +2,12 @@
 {
     public interface ICompanyService
     {
-        CompanyDto? GetById(Guid id);
+        Task<CompanyDto?> GetByIdAsync(Guid id);
 
-        IEnumerable<CompanyDto> GetAll();
+        Task<IEnumerable<CompanyDto>> GetAllAsync();
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        bool UpdateFully(Guid id, CompanyForUpdateDto updateDto);
+        Task<bool> UpdateFullyAsync(Guid id, CompanyForUpdateDto updateDto);
     }
 }

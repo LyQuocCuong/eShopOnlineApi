@@ -2,18 +2,18 @@
 {
     public interface IProductService
     {
-        ProductDto? GetById(Guid id);
+        Task<ProductDto?> GetByIdAsync(Guid id);
 
-        IEnumerable<ProductDto> GetAll();
+        Task<IEnumerable<ProductDto>> GetAllAsync();
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        ProductDto Create(ProductForCreationDto creationDto);
+        Task<ProductDto> CreateAsync(ProductForCreationDto creationDto);
 
-        bool UpdateFully(Guid id, ProductForUpdateDto updateDto);
+        Task<bool> UpdateFullyAsync(Guid id, ProductForUpdateDto updateDto);
 
-        bool DeleteSoftly(Guid id);
+        Task<bool> DeleteSoftlyAsync(Guid id);
 
-        bool DeleteHard(Guid id);
+        Task<bool> DeleteHardAsync(Guid id);
     }
 }

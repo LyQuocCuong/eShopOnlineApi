@@ -12,49 +12,49 @@
                                                            _stubControllerParams.Object);
         }
 
-        #region GetAllCompanies
+        #region GetAllCompaniesAsync
 
-        private void Mock_Company_GetAll(IEnumerable<CompanyDto> returnedCompanies)
+        private void Mock_Company_GetAllAsync(IEnumerable<CompanyDto> returnedCompanies)
         {
             _stubServices
-                .Setup(s => s.Company.GetAll())
-                .Returns(returnedCompanies);
+                .Setup(s => s.Company.GetAllAsync())
+                .ReturnsAsync(returnedCompanies);
         }
 
-        private IActionResult Act_GetAllCompanies()
+        private async Task<IActionResult> Act_GetAllCompaniesAsync()
         {
-            return _mockCompanyController.GetAllCompanies();
+            return await _mockCompanyController.GetAllCompaniesAsync();
         }
 
         [Test]
-        [Category("[Action] GetAllCompanies")]
-        public void GetAllCompanies_Inputs_Parameterless_Returns_OkObjectResult()
+        [Category("[Action] GetAllCompaniesAsync")]
+        public async Task GetAllCompaniesAsync_Inputs_Parameterless_Returns_OkObjectResult()
         {
             // Inputs for Act
             var listOfCompanies = _fakeDataManager.Company.GenerateAListOfCompanies();
 
             // Arrange
-            Mock_Company_GetAll(returnedCompanies: listOfCompanies);
+            Mock_Company_GetAllAsync(returnedCompanies: listOfCompanies);
 
             // Act
-            var actionResult = Act_GetAllCompanies();
+            var actionResult = await Act_GetAllCompaniesAsync();
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<OkObjectResult>());
         }
 
         [Test]
-        [Category("[Action] GetAllCompanies")]
-        public void GetAllCompanies_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_ValidDataType()
+        [Category("[Action] GetAllCompaniesAsync")]
+        public async Task GetAllCompaniesAsync_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_ValidDataType()
         {
             // Inputs for Act
             var listOfCompanies = _fakeDataManager.Company.GenerateAListOfCompanies();
 
             // Arrange
-            Mock_Company_GetAll(returnedCompanies: listOfCompanies);
+            Mock_Company_GetAllAsync(returnedCompanies: listOfCompanies);
 
             // Act
-            var actionResult = Act_GetAllCompanies();
+            var actionResult = await Act_GetAllCompaniesAsync();
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<OkObjectResult>());
@@ -65,8 +65,8 @@
         }
 
         [Test]
-        [Category("[Action] GetAllCompanies")]
-        public void GetAllCompanies_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_SameAmountItems()
+        [Category("[Action] GetAllCompaniesAsync")]
+        public async Task GetAllCompaniesAsync_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_SameAmountItems()
         {
             // Inputs for Act
             var listOfCompanies = _fakeDataManager.Company.GenerateAListOfCompanies();
@@ -75,10 +75,10 @@
             var expectedAmountItems = listOfCompanies.Count();
 
             // Arrange
-            Mock_Company_GetAll(returnedCompanies: listOfCompanies);
+            Mock_Company_GetAllAsync(returnedCompanies: listOfCompanies);
 
             // Act
-            var actionResult = Act_GetAllCompanies();
+            var actionResult = await Act_GetAllCompaniesAsync();
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<OkObjectResult>());
@@ -95,17 +95,17 @@
         }
 
         [Test]
-        [Category("[Action] GetAllCompanies")]
-        public void GetAllCompanies_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_UniqueCompanyIds()
+        [Category("[Action] GetAllCompaniesAsync")]
+        public async Task GetAllCompaniesAsync_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_UniqueCompanyIds()
         {
             // Inputs for Act
             var listOfCompanies = _fakeDataManager.Company.GenerateAListOfCompanies();
 
             // Arrange
-            Mock_Company_GetAll(returnedCompanies: listOfCompanies);
+            Mock_Company_GetAllAsync(returnedCompanies: listOfCompanies);
 
             // Act
-            var actionResult = Act_GetAllCompanies();
+            var actionResult = await Act_GetAllCompaniesAsync();
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<OkObjectResult>());
@@ -124,55 +124,55 @@
 
         #endregion
 
-        #region GetCompanyById
+        #region GetCompanyByIdAsync
 
-        private void Mocking_Company_GetById(Guid companyId, CompanyDto? returnedCompany)
+        private void Mocking_Company_GetByIdAsync(Guid companyId, CompanyDto? returnedCompany)
         {
             _stubServices
-                .Setup(s => s.Company.GetById(companyId))
-                .Returns(returnedCompany);
+                .Setup(s => s.Company.GetByIdAsync(companyId))
+                .ReturnsAsync(returnedCompany);
         }
 
-        private IActionResult Act_GetCompanyById(Guid companyId)
+        private async Task<IActionResult> Act_GetCompanyByIdAsync(Guid companyId)
         {
-            return _mockCompanyController.GetCompanyById(companyId);
+            return await _mockCompanyController.GetCompanyByIdAsync(companyId);
         }
 
         [Test]
-        [Category("[Action] GetCompanyById")]
-        public void GetCompanyById_Inputs_ExistingCompanyId_Returns_OkObjectResult()
+        [Category("[Action] GetCompanyByIdAsync")]
+        public async Task GetCompanyByIdAsync_Inputs_ExistingCompanyId_Returns_OkObjectResult()
         {
             // Inputs for Act
             var existingCompany = _fakeDataManager.Company.GenerateCompanyNo1();
 
             // Arrange
-            Mocking_Company_GetById(
+            Mocking_Company_GetByIdAsync(
                 companyId: existingCompany.Id,
                 returnedCompany: existingCompany
             );
 
             // Act
-            var actionResult = Act_GetCompanyById(companyId: existingCompany.Id);
+            var actionResult = await Act_GetCompanyByIdAsync(companyId: existingCompany.Id);
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<OkObjectResult>());
         }
 
         [Test]
-        [Category("[Action] GetCompanyById")]
-        public void GetCompanyById_Inputs_ExistingCompanyId_Returns_OkObjectResult_Include_Object_Has_ValidDataType()
+        [Category("[Action] GetCompanyByIdAsync")]
+        public async Task GetCompanyByIdAsync_Inputs_ExistingCompanyId_Returns_OkObjectResult_Include_Object_Has_ValidDataType()
         {
             // Inputs for Act
             var existingCompany = _fakeDataManager.Company.GenerateCompanyNo1();
 
             // Arrange
-            Mocking_Company_GetById(
+            Mocking_Company_GetByIdAsync(
                 companyId: existingCompany.Id,
                 returnedCompany: existingCompany
             );
 
             // Act
-            var actionResult = Act_GetCompanyById(companyId: existingCompany.Id);
+            var actionResult = await Act_GetCompanyByIdAsync(companyId: existingCompany.Id);
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<OkObjectResult>());
@@ -183,20 +183,20 @@
         }
 
         [Test]
-        [Category("[Action] GetCompanyById")]
-        public void GetCompanyById_Inputs_NonExistingCompanyId_Returns_NotFoundObjectResult_Include_MessageString()
+        [Category("[Action] GetCompanyByIdAsync")]
+        public async Task GetCompanyByIdAsync_Inputs_NonExistingCompanyId_Returns_NotFoundObjectResult_Include_MessageString()
         {
             // Inputs for Act
             Guid nonExistingCompanyId = _fakeDataManager.Company.GenerateNonExistingCompanyId();
 
             // Arrange
-            Mocking_Company_GetById(
+            Mocking_Company_GetByIdAsync(
                 companyId: nonExistingCompanyId,
                 returnedCompany: null
             );
 
             // Act
-            var actionResult = Act_GetCompanyById(companyId: nonExistingCompanyId);
+            var actionResult = await Act_GetCompanyByIdAsync(companyId: nonExistingCompanyId);
 
             // Assert
             Assert.That(actionResult, Is.InstanceOf<NotFoundObjectResult>());
@@ -208,45 +208,45 @@
 
         #endregion
 
-        #region UpdateCompanyFully
+        #region UpdateCompanyFullyAsync
 
-        private void Mocking_Company_IsValidId(Guid companyId, bool returnedResult)
+        private void Mocking_Company_IsValidIdAsync(Guid companyId, bool returnedResult)
         {
             _stubServices
-                .Setup(s => s.Company.IsValidId(companyId))
-                .Returns(returnedResult);
+                .Setup(s => s.Company.IsValidIdAsync(companyId))
+                .ReturnsAsync(returnedResult);
         }
 
-        private void Mocking_Company_UpdateFully(Guid companyId, 
+        private void Mocking_Company_UpdateFullyAsync(Guid companyId, 
                                                  CompanyForUpdateDto updateDto,
                                                  bool returnedResult)
         {
             _stubServices
-                .Setup(s => s.Company.UpdateFully(companyId, updateDto))
-                .Returns(returnedResult);
+                .Setup(s => s.Company.UpdateFullyAsync(companyId, updateDto))
+                .ReturnsAsync(returnedResult);
         }
 
-        private IActionResult Act_UpdateCompanyFully(Guid companyId, CompanyForUpdateDto? updateDto)
+        private async Task<IActionResult> Act_UpdateCompanyFullyAsync(Guid companyId, CompanyForUpdateDto? updateDto)
         {
-            return _mockCompanyController.UpdateCompanyFully(companyId, updateDto);
+            return await _mockCompanyController.UpdateCompanyFullyAsync(companyId, updateDto);
         }
 
         [Test]
-        [Category("[Action] UpdateCompanyFully")]
-        public void UpdateCompanyFully_Inputs_NonExistingCompanyId_And_OtherExpectedInputs_Returns_NotFoundObjResult()
+        [Category("[Action] UpdateCompanyFullyAsync")]
+        public async Task UpdateCompanyFullyAsync_Inputs_NonExistingCompanyId_And_OtherExpectedInputs_Returns_NotFoundObjResult()
         {
             // Inputs for Act
             Guid nonExistingCompanyId = _fakeDataManager.Company.GenerateNonExistingCompanyId();
             var updateDataObj = _fakeDataManager.Company.GenerateUpdateDataObj();
 
             // Arrange
-            Mocking_Company_IsValidId(
+            Mocking_Company_IsValidIdAsync(
                 companyId: nonExistingCompanyId, 
                 returnedResult: false
             );
 
             // Act
-            var actionResult = Act_UpdateCompanyFully(
+            var actionResult = await Act_UpdateCompanyFullyAsync(
                 companyId: nonExistingCompanyId, 
                 updateDto: updateDataObj
             );
@@ -256,21 +256,21 @@
         }
 
         [Test]
-        [Category("[Action] UpdateCompanyFully")]
-        public void UpdateCompanyFully_Inputs_NullUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
+        [Category("[Action] UpdateCompanyFullyAsync")]
+        public async Task UpdateCompanyFullyAsync_Inputs_NullUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
             // Inputs for Act
             Guid existingCompanyId = _fakeDataManager.Company.GenerateCompanyNo1().Id;
             CompanyForUpdateDto? updateDataObj = null;
 
             // Arrange
-            Mocking_Company_IsValidId(
+            Mocking_Company_IsValidIdAsync(
                 companyId: existingCompanyId,
                 returnedResult: true
             );
 
             // Act
-            var actionResult = Act_UpdateCompanyFully(
+            var actionResult = await Act_UpdateCompanyFullyAsync(
                 companyId: existingCompanyId,
                 updateDto: updateDataObj
             );
@@ -280,26 +280,26 @@
         }
 
         [Test]
-        [Category("[Action] UpdateCompanyFully")]
-        public void UpdateCompanyFully_Inputs_ExpectedData_Returns_NoContentResult()
+        [Category("[Action] UpdateCompanyFullyAsync")]
+        public async Task UpdateCompanyFullyAsync_Inputs_ExpectedData_Returns_NoContentResult()
         {
             // Inputs for Act
             Guid existingCompanyId = _fakeDataManager.Company.GenerateCompanyNo1().Id;
             CompanyForUpdateDto? updateDataObj = _fakeDataManager.Company.GenerateUpdateDataObj();
 
             // Arrange
-            Mocking_Company_IsValidId(
+            Mocking_Company_IsValidIdAsync(
                 companyId: existingCompanyId,
                 returnedResult: true
             );
-            Mocking_Company_UpdateFully(
+            Mocking_Company_UpdateFullyAsync(
                 companyId: existingCompanyId,
                 updateDto: updateDataObj,
                 returnedResult: true
             );
 
             // Act
-            var actionResult = Act_UpdateCompanyFully(
+            var actionResult = await Act_UpdateCompanyFullyAsync(
                 companyId: existingCompanyId,
                 updateDto: updateDataObj
             );

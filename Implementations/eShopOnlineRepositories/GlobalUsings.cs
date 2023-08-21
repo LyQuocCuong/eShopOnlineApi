@@ -8,5 +8,6 @@ global using eShopOnlineEFCore.Context;
 global using eShopOnlineRepositories.Abstracts;
 global using eShopOnlineRepositories.LogMessages;
 global using eShopOnlineRepositories.Parameters;
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 global using System.Linq.Expressions;

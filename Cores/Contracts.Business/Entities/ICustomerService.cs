@@ -2,18 +2,18 @@
 {
     public interface ICustomerService
     {
-        CustomerDto? GetById(Guid id);
+        Task<CustomerDto?> GetByIdAsync(Guid id);
 
-        IEnumerable<CustomerDto> GetAll();
+        Task<IEnumerable<CustomerDto>> GetAllAsync();
 
-        bool IsValidId(Guid id);
+        Task<bool> IsValidIdAsync(Guid id);
 
-        CustomerDto Create(CustomerForCreationDto creationDto);
+        Task<CustomerDto> CreateAsync(CustomerForCreationDto creationDto);
 
-        bool UpdateFully(Guid id, CustomerForUpdateDto updateDto);
+        Task<bool> UpdateFullyAsync(Guid id, CustomerForUpdateDto updateDto);
 
-        bool DeleteSoftly(Guid id);
+        Task<bool> DeleteSoftlyAsync(Guid id);
 
-        bool DeleteHard(Guid id);
+        Task<bool> DeleteHardAsync(Guid id);
     }
 }

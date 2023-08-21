@@ -8,28 +8,28 @@
         {
         }
 
-        public IEnumerable<Store> GetAll(bool isTrackChanges)
+        public async Task<IEnumerable<Store>> GetAllAsync(bool isTrackChanges)
         {
-            return base.FindAll(isTrackChanges);
+            return await base.FindAll(isTrackChanges).ToListAsync();
         }
 
-        public Store? GetById(bool isTrackChanges, Guid id)
+        public async Task<Store?> GetByIdAsync(bool isTrackChanges, Guid id)
         {
-            return base.FindByCondition(s => s.Id == id, isTrackChanges).FirstOrDefault();
+            return await base.FindByCondition(s => s.Id == id, isTrackChanges).FirstOrDefaultAsync();
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            return base.FindByCondition(s => s.Id == id, isTrackChanges: false).Any();
+            return await base.FindByCondition(s => s.Id == id, isTrackChanges: false).AnyAsync();
         }
 
-        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletingStore(Guid id)
+        public async Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id)
         {
-            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletingStore)));
-            return CheckRequiredConditionsForDeletingStore(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
+            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletionAsync)));
+            return await CheckRequiredConditionsForDeletionAsync(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
         }
 
-        public Dictionary<DeleteStoreCondition, bool> CheckRequiredConditionsForDeletingStore(Guid id, List<DeleteStoreCondition> checkList)
+        public async Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteStoreCondition> checkList)
         {
             var result = new Dictionary<DeleteStoreCondition, bool>();
             
@@ -39,7 +39,7 @@
                 result.Add(prerequisiteCondition, false);
                 checkList.Remove(prerequisiteCondition);
 
-                Store? store = base.FindByCondition(s => s.Id == id, isTrackChanges: false).FirstOrDefault();
+                Store? store = await GetByIdAsync(isTrackChanges: false, id);
                 if (store != null)
                 {
                     result[prerequisiteCondition] = true;

@@ -8,20 +8,19 @@
         {
         }
 
-        public IEnumerable<Company> GetAll(bool isTrackChanges)
+        public async Task<IEnumerable<Company>> GetAllAsync(bool isTrackChanges)
         {
-            return base.FindAll(isTrackChanges);
+            return await base.FindAll(isTrackChanges).ToListAsync();
         }
 
-        public Company? GetById(bool isTrackChanges, Guid id)
+        public async Task<Company?> GetByIdAsync(bool isTrackChanges, Guid id)
         {
-            return base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefault();
+            return await base.FindByCondition(c => c.Id == id, isTrackChanges).FirstOrDefaultAsync();
         }
 
-        public bool IsValidId(Guid id)
+        public async Task<bool> IsValidIdAsync(Guid id)
         {
-            bool result = base.FindByCondition(c => c.Id == id, isTrackChanges: false).Any();
-            return result;
+            return await base.FindByCondition(c => c.Id == id, isTrackChanges: false).AnyAsync(); ;
         }
     }
 }
