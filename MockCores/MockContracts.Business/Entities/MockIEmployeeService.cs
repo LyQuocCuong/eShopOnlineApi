@@ -4,7 +4,7 @@
     {
         public static Mock<IEmployeeService> GetInstance()
         {
-            var mockEmployeeService = new Mock<IEmployeeService>();
+            var mockEmployeeService = new Mock<IEmployeeService>(MockBehavior.Strict);
 
             // Fake Data
             FakeDataForEmployee fakeDataForEmployee = new FakeDataForEmployee();
