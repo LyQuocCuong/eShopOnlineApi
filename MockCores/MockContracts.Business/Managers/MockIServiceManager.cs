@@ -12,7 +12,7 @@ namespace MockContracts.Business.Managers
             var mockEmployeeService = MockIEmployeeService.GetInstance();
 
             // SetUps
-            var mockServiceManager = new Mock<IServiceManager>();
+            var mockServiceManager = new Mock<IServiceManager>(MockBehavior.Strict);
             mockServiceManager
                 .Setup(s => s.Company)
                 .Returns(mockCompanyService.Object);
