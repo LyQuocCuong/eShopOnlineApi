@@ -43,6 +43,10 @@
             }
             
             bool result = await _services.Company.UpdateFullyAsync(id, updateDto);
+            if (result == false)
+            {
+                return BadRequest("Can not update");
+            }
             return NoContent();
         }
 

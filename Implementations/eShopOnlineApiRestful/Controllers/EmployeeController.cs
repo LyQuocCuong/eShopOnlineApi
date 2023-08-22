@@ -37,8 +37,6 @@
                 return BadRequest("Object for creation is NULL.");
             }
             EmployeeDto employeeDto = await _services.Employee.CreateAsync(creationDto);
-
-            employeeDto.Id = Guid.Empty;    // Edited
             return CreatedAtRoute("GetEmployeeById", new { id = employeeDto.Id }, employeeDto);
         }
 
@@ -55,6 +53,10 @@
                 return NotFound("EmployeeId is non-existing.");
             }
             bool result = await _services.Employee.UpdateFullyAsync(id, updateDto);
+            if (result == false)
+            {
+                return BadRequest("Can NOT update");
+            }
             return NoContent();
         }
 
