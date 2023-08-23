@@ -1,7 +1,7 @@
 ﻿using eShopOnlineApiRestful.Parameters;
 using Microsoft.Extensions.Logging;
 using MockContracts.Business.Managers;
-using MockContracts.Utilities.Logger;
+using MockContracts.Utilities.LogService;
 
 namespace UnitTest.eShopOnlineApiRestful.Abstracts
 {

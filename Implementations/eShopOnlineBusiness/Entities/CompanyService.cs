@@ -2,7 +2,7 @@
 {
     public sealed class CompanyService : AbstractService<CompanyService>, ICompanyService
     {
-        internal CompanyService(ILogger<CompanyService> logger, 
+        public CompanyService(ILogger<CompanyService> logger, 
                               ServiceParams serviceParams) 
             : base(logger, serviceParams)
         {

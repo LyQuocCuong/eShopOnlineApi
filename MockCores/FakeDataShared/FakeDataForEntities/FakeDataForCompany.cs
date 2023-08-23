@@ -24,6 +24,18 @@
             };
         }
 
+        public IEnumerable<Company> GetListOfCompanies()
+        {
+            return new List<Company>()
+            {
+                new Company()
+                {
+                    Id = this.GetExistingCompanyId(),
+                    Name = "Company 01"
+                }
+            };
+        }
+
         public CompanyForUpdateDto GetValidUpdateDto()
         {
             return new CompanyForUpdateDto()
