@@ -19,7 +19,7 @@
             var companyController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await companyController.GetAllCompaniesAsync();  // GeneralResult
+            var okObjResult = await companyController.GetAllCompaniesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
@@ -34,7 +34,7 @@
             var companyController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await companyController.GetAllCompaniesAsync();
+            var okObjResult = await companyController.GetAllCompaniesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
@@ -51,11 +51,11 @@
             var companyController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await companyController.GetAllCompaniesAsync();
+            var okObjResult = await companyController.GetAllCompaniesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
-            var collectionData = (IEnumerable<CompanyDto>) okObjResult.Value;
+            var collectionData = okObjResult.Value as IEnumerable<CompanyDto>;
             Assert.That(collectionData, Is.Not.Null);
             Assert.That(
                 collectionData.Count(), Is.EqualTo(expectedCollectionData.Count()),
@@ -71,11 +71,11 @@
             var companyController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await companyController.GetAllCompaniesAsync();
+            var okObjResult = await companyController.GetAllCompaniesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
-            var collectionData = (IEnumerable<CompanyDto>)okObjResult.Value;
+            var collectionData = okObjResult.Value as IEnumerable<CompanyDto>;
             Assert.That(collectionData, Is.Not.Null);
             Assert.That(
                 collectionData.Select(c => c.Id), Is.Unique,
@@ -153,7 +153,7 @@
             var companyController = InitController();
 
             // Act
-            var notFoundObjResult = (NotFoundObjectResult)await companyController.UpdateCompanyFullyAsync(nonExistingCompanyId, validUpdateDto);
+            var notFoundObjResult = await companyController.UpdateCompanyFullyAsync(nonExistingCompanyId, validUpdateDto) as NotFoundObjectResult;
 
             // Assert
             Assert.That(notFoundObjResult, Is.Not.Null);
@@ -170,7 +170,7 @@
             var companyController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await companyController.UpdateCompanyFullyAsync(existingCompanyId, null);
+            var badRequestObjResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, null) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -188,7 +188,7 @@
             var companyController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await companyController.UpdateCompanyFullyAsync(existingCompanyId, invalidUpdateDto);
+            var badRequestObjResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, invalidUpdateDto) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -206,7 +206,7 @@
             var companyController = InitController();
 
             // Act
-            var noContentResult = (NoContentResult)await companyController.UpdateCompanyFullyAsync(existingCompanyId, validUpdateDto);
+            var noContentResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, validUpdateDto) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
