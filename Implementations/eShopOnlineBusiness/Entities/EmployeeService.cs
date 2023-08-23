@@ -2,7 +2,7 @@
 {
     public sealed class EmployeeService : AbstractService<EmployeeService>, IEmployeeService
     {
-        internal EmployeeService(ILogger<EmployeeService> logger, 
+        public EmployeeService(ILogger<EmployeeService> logger, 
                                  ServiceParams serviceParams) 
             : base(logger, serviceParams)
         {

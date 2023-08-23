@@ -34,6 +34,18 @@
             };
         }
 
+        public IEnumerable<Employee> GetListOfEmployees()
+        {
+            return new List<Employee>()
+            {
+                new Employee()
+                {
+                    Id = this.GetExistingEmployeeId(),
+                    Code = "E001"
+                }
+            };
+        }
+
         public EmployeeForUpdateDto GetValidUpdateDto()
         {
             return new EmployeeForUpdateDto()

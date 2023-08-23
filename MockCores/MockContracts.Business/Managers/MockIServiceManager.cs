@@ -3,7 +3,7 @@ using MockContracts.Business.Entities;
 
 namespace MockContracts.Business.Managers
 {
-    public class MockIServiceManager
+    public sealed class MockIServiceManager
     {
         public static Mock<IServiceManager> GetInstance()
         {

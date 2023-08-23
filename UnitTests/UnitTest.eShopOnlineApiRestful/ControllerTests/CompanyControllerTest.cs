@@ -68,8 +68,6 @@
         public async Task GetAllCompaniesAsync_Inputs_Parameterless_Returns_OkObjectResult_Include_Collection_Has_UniqueCompanyIds()
         {
             // Arrange
-            var fakeDataForCompany = new FakeDataForCompany();
-            var expectedCollectionData = fakeDataForCompany.GetListOfCompanyDtos();
             var companyController = InitController();
 
             // Act
