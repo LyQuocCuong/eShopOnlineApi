@@ -19,7 +19,7 @@
             var employeeController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await employeeController.GetAllEmployeesAsync();  // GeneralResult
+            var okObjResult = await employeeController.GetAllEmployeesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
@@ -34,7 +34,7 @@
             var employeeController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await employeeController.GetAllEmployeesAsync();
+            var okObjResult = await employeeController.GetAllEmployeesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
@@ -51,11 +51,11 @@
             var employeeController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await employeeController.GetAllEmployeesAsync();
+            var okObjResult = await employeeController.GetAllEmployeesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
-            var collectionData = (IEnumerable<EmployeeDto>)okObjResult.Value;
+            var collectionData = okObjResult.Value as IEnumerable<EmployeeDto>;
             Assert.That(collectionData, Is.Not.Null);
             Assert.That(
                 collectionData.Count(), Is.EqualTo(expectedCollectionData.Count()),
@@ -73,11 +73,11 @@
             var employeeController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await employeeController.GetAllEmployeesAsync();
+            var okObjResult = await employeeController.GetAllEmployeesAsync() as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
-            var collectionData = (IEnumerable<EmployeeDto>)okObjResult.Value;
+            var collectionData = okObjResult.Value as IEnumerable<EmployeeDto>;
             Assert.That(collectionData, Is.Not.Null);
             Assert.That(
                 collectionData.Select(c => c.Id), Is.Unique,
@@ -99,7 +99,7 @@
             var employeeController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await employeeController.GetEmployeeByIdAsync(existingEmployeeId);
+            var okObjResult = await employeeController.GetEmployeeByIdAsync(existingEmployeeId) as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
@@ -116,7 +116,7 @@
             var employeeController = InitController();
 
             // Act
-            var okObjResult = (OkObjectResult)await employeeController.GetEmployeeByIdAsync(existingEmployeeId);
+            var okObjResult = await employeeController.GetEmployeeByIdAsync(existingEmployeeId) as OkObjectResult;
 
             // Assert
             Assert.That(okObjResult, Is.Not.Null);
@@ -133,7 +133,7 @@
             var employeeController = InitController();
 
             // Act
-            var notFoundObjResult = (NotFoundObjectResult)await employeeController.GetEmployeeByIdAsync(nonExistingEmployeeId);
+            var notFoundObjResult = await employeeController.GetEmployeeByIdAsync(nonExistingEmployeeId) as NotFoundObjectResult;
 
             // Assert
             Assert.That(notFoundObjResult, Is.Not.Null);
@@ -155,7 +155,7 @@
             var employeeController = InitController();
 
             // Act
-            var notFoundObjResult = (NotFoundObjectResult)await employeeController.UpdateEmployeeFullyAsync(nonExistingEmployeeId, validUpdateDto);
+            var notFoundObjResult = await employeeController.UpdateEmployeeFullyAsync(nonExistingEmployeeId, validUpdateDto) as NotFoundObjectResult;
 
             // Assert
             Assert.That(notFoundObjResult, Is.Not.Null);
@@ -172,7 +172,7 @@
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, null);
+            var badRequestObjResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, null) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -190,7 +190,7 @@
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, invalidUpdateDto);
+            var badRequestObjResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, invalidUpdateDto) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -208,7 +208,7 @@
             var employeeController = InitController();
 
             // Act
-            var noContentResult = (NoContentResult)await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, validUpdateDto);
+            var noContentResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, validUpdateDto) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
@@ -227,7 +227,7 @@
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await employeeController.CreateEmployeeAsync(null);
+            var badRequestObjResult = await employeeController.CreateEmployeeAsync(null) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -244,7 +244,7 @@
             var employeeController = InitController();
 
             // Act
-            var routeResult = (CreatedAtRouteResult)await employeeController.CreateEmployeeAsync(validCreationDto);
+            var routeResult = await employeeController.CreateEmployeeAsync(validCreationDto) as CreatedAtRouteResult;
 
             // Assert
             Assert.That(routeResult, Is.Not.Null);
@@ -262,7 +262,7 @@
             var employeeController = InitController();
 
             // Act
-            var routeResult = (CreatedAtRouteResult)await employeeController.CreateEmployeeAsync(validCreationDto);
+            var routeResult = await employeeController.CreateEmployeeAsync(validCreationDto) as CreatedAtRouteResult;
 
             // Assert
             Assert.That(routeResult, Is.Not.Null);
@@ -284,7 +284,7 @@
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await employeeController.DeleteEmployeeSoftlyAsync(unableDeletedEmployeeId);
+            var badRequestObjResult = await employeeController.DeleteEmployeeSoftlyAsync(unableDeletedEmployeeId) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -301,7 +301,7 @@
             var employeeController = InitController();
 
             // Act
-            var noContentResult = (NoContentResult)await employeeController.DeleteEmployeeSoftlyAsync(ableDeletedEmployeeId);
+            var noContentResult = await employeeController.DeleteEmployeeSoftlyAsync(ableDeletedEmployeeId) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
@@ -322,7 +322,7 @@
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = (BadRequestObjectResult)await employeeController.DeleteEmployeeHardAsync(unableDeletedEmployeeId);
+            var badRequestObjResult = await employeeController.DeleteEmployeeHardAsync(unableDeletedEmployeeId) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -339,7 +339,7 @@
             var employeeController = InitController();
 
             // Act
-            var noContentResult = (NoContentResult)await employeeController.DeleteEmployeeHardAsync(ableDeletedEmployeeId);
+            var noContentResult = await employeeController.DeleteEmployeeHardAsync(ableDeletedEmployeeId) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
