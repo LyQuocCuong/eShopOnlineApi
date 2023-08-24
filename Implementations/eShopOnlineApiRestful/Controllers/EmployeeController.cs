@@ -9,7 +9,7 @@
         }
 
         [HttpGet]
-        [Route("employees", Name = "GetAllEmployeesAsync")]
+        [Route("employees", Name = nameof(GetAllEmployeesAsync))]
         public async Task<IActionResult> GetAllEmployeesAsync()
         {
             IEnumerable<EmployeeDto> employeeDtos = await _services.Employee.GetAllAsync();
@@ -17,7 +17,7 @@
         }
 
         [HttpGet]
-        [Route("employees/{id:guid}", Name = "GetEmployeeByIdAsync")]
+        [Route("employees/{id:guid}", Name = nameof(GetEmployeeByIdAsync))]
         public async Task<IActionResult> GetEmployeeByIdAsync([FromRoute]Guid id)
         {
             EmployeeDto? employeeDto = await _services.Employee.GetByIdAsync(id);
@@ -29,7 +29,7 @@
         }
 
         [HttpPost]
-        [Route("employees", Name = "CreateEmployeeAsync")]
+        [Route("employees", Name = nameof(CreateEmployeeAsync))]
         public async Task<IActionResult> CreateEmployeeAsync([FromBody]EmployeeForCreationDto? creationDto)
         {
             if (creationDto == null)
@@ -37,11 +37,11 @@
                 return BadRequest("Object for creation is NULL.");
             }
             EmployeeDto employeeDto = await _services.Employee.CreateAsync(creationDto);
-            return CreatedAtRoute("GetEmployeeById", new { id = employeeDto.Id }, employeeDto);
+            return CreatedAtRoute(nameof(GetEmployeeByIdAsync), new { id = employeeDto.Id }, employeeDto);
         }
 
         [HttpPut]
-        [Route("employees/{id:guid}", Name = "UpdateEmployeeFullyAsync")]
+        [Route("employees/{id:guid}", Name = nameof(UpdateEmployeeFullyAsync))]
         public async Task<IActionResult> UpdateEmployeeFullyAsync([FromRoute]Guid id, [FromBody]EmployeeForUpdateDto? updateDto)
         {
             if (updateDto == null)
@@ -61,7 +61,7 @@
         }
 
         [HttpDelete]
-        [Route("employees/{id:guid}", Name = "DeleteEmployeeSoftlyAsync")]
+        [Route("employees/{id:guid}", Name = nameof(DeleteEmployeeSoftlyAsync))]
         public async Task<IActionResult> DeleteEmployeeSoftlyAsync([FromRoute]Guid id)
         {
             bool result = await _services.Employee.DeleteSoftlyAsync(id);
@@ -73,7 +73,7 @@
         }
 
         [HttpDelete]
-        [Route("admin/employees/{id:guid}", Name = "DeleteEmployeeHardAsync")]
+        [Route("admin/employees/{id:guid}", Name = nameof(DeleteEmployeeHardAsync))]
         public async Task<IActionResult> DeleteEmployeeHardAsync([FromRoute] Guid id)
         {
             bool result = await _services.Employee.DeleteHardAsync(id);

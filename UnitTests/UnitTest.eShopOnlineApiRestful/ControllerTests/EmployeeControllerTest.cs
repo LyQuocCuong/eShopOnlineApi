@@ -249,7 +249,7 @@
             // Assert
             Assert.That(routeResult, Is.Not.Null);
             Assert.That(routeResult.StatusCode, Is.EqualTo(StatusCodes.Status201Created));
-            Assert.That(routeResult.RouteName, Is.EqualTo("GetEmployeeById"));
+            Assert.That(routeResult.RouteName, Is.EqualTo(nameof(employeeController.GetEmployeeByIdAsync)));
         }
 
         [Test]

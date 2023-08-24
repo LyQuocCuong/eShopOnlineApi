@@ -9,7 +9,7 @@
         }
 
         [HttpGet]
-        [Route("companies", Name = "GetAllCompaniesAsync")]
+        [Route("companies", Name = nameof(GetAllCompaniesAsync))]
         public async Task<IActionResult> GetAllCompaniesAsync()
         {
             IEnumerable<CompanyDto> companyDtos = await _services.Company.GetAllAsync();
@@ -17,7 +17,7 @@
         }
 
         [HttpGet]
-        [Route("companies/{id:guid}", Name = "GetCompanyByIdAsync")]
+        [Route("companies/{id:guid}", Name = nameof(GetCompanyByIdAsync))]
         public async Task<IActionResult> GetCompanyByIdAsync([FromRoute]Guid id)
         {
             CompanyDto? companyDto = await _services.Company.GetByIdAsync(id);
@@ -29,7 +29,7 @@
         }
 
         [HttpPut]
-        [Route("companies/{id:guid}", Name = "UpdateCompanyFullyAsync")]
+        [Route("companies/{id:guid}", Name = nameof(UpdateCompanyFullyAsync))]
         public async Task<IActionResult> UpdateCompanyFullyAsync([FromRoute]Guid id, 
                                                 [FromBody]CompanyForUpdateDto? updateDto)
         {
