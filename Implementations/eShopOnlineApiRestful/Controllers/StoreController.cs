@@ -9,7 +9,7 @@
         }
 
         [HttpGet]
-        [Route("stores", Name = "GetAllStoresAsync")]
+        [Route("stores", Name = nameof(GetAllStoresAsync))]
         public async Task<IActionResult> GetAllStoresAsync()
         {
             IEnumerable<StoreDto> storeDtos = await _services.Store.GetAllAsync();
@@ -17,7 +17,7 @@
         }
 
         [HttpGet]
-        [Route("stores/{id:guid}", Name = "GetStoreByIdAsync")]
+        [Route("stores/{id:guid}", Name = nameof(GetStoreByIdAsync))]
         public async Task<IActionResult> GetStoreByIdAsync([FromRoute]Guid id)
         {
             StoreDto? storeDto = await _services.Store.GetByIdAsync(id);
@@ -29,15 +29,15 @@
         }
 
         [HttpPost]
-        [Route("stores", Name = "CreateStoreAsync")]
+        [Route("stores", Name = nameof(CreateStoreAsync))]
         public async Task<IActionResult> CreateStoreAsync([FromBody]StoreForCreationDto creationDto)
         {
             StoreDto storeDto = await _services.Store.CreateAsync(creationDto);
-            return CreatedAtRoute("GetStoreById", new { id = storeDto.Id }, storeDto);
+            return CreatedAtRoute(nameof(GetStoreByIdAsync), new { id = storeDto.Id }, storeDto);
         }
 
         [HttpPut]
-        [Route("stores/{id:guid}", Name = "UpdateStoreFullyAsync")]
+        [Route("stores/{id:guid}", Name = nameof(UpdateStoreFullyAsync))]
         public async Task<IActionResult> UpdateStoreFullyAsync([FromRoute]Guid id, [FromBody]StoreForUpdateDto updateDto)
         {
             if (await _services.Store.IsValidIdAsync(id) == false)
@@ -49,7 +49,7 @@
         }
 
         [HttpDelete]
-        [Route("stores/{id:guid}", Name = "DeleteStoreSoftlyAsync")]
+        [Route("stores/{id:guid}", Name = nameof(DeleteStoreSoftlyAsync))]
         public async Task<IActionResult> DeleteStoreSoftlyAsync([FromRoute]Guid id)
         {
             bool result = await _services.Store.DeleteSoftlyAsync(id);
@@ -61,7 +61,7 @@
         }
 
         [HttpDelete]
-        [Route("admin/stores/{id:guid}", Name = "DeleteStoreHardAsync")]
+        [Route("admin/stores/{id:guid}", Name = nameof(DeleteStoreHardAsync))]
         public async Task<IActionResult> DeleteStoreHardAsync([FromRoute] Guid id)
         {
             bool result = await _services.Store.DeleteHardAsync(id);

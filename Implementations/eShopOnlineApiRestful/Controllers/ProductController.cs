@@ -9,7 +9,7 @@
         }
 
         [HttpGet]
-        [Route("products", Name = "GetAllProductsAsync")]
+        [Route("products", Name = nameof(GetAllProductsAsync))]
         public async Task<IActionResult> GetAllProductsAsync()
         {
             IEnumerable<ProductDto> productDtos = await _services.Product.GetAllAsync();
@@ -17,7 +17,7 @@
         }
 
         [HttpGet]
-        [Route("products/{id:guid}", Name = "GetProductByIdAsync")]
+        [Route("products/{id:guid}", Name = nameof(GetProductByIdAsync))]
         public async Task<IActionResult> GetProductByIdAsync([FromRoute]Guid id)
         {
             ProductDto? productDto = await _services.Product.GetByIdAsync(id);
@@ -29,15 +29,15 @@
         }
 
         [HttpPost]
-        [Route("products", Name = "CreateProductAsync")]
+        [Route("products", Name = nameof(CreateProductAsync))]
         public async Task<IActionResult> CreateProductAsync([FromBody]ProductForCreationDto creationDto)
         {
             ProductDto productDto = await _services.Product.CreateAsync(creationDto);
-            return CreatedAtRoute("GetProductById", new { id = productDto.Id }, productDto);
+            return CreatedAtRoute(nameof(GetProductByIdAsync), new { id = productDto.Id }, productDto);
         }
 
         [HttpPut]
-        [Route("products/{id:guid}", Name = "UpdateProductFullyAsync")]
+        [Route("products/{id:guid}", Name = nameof(UpdateProductFullyAsync))]
         public async Task<IActionResult> UpdateProductFullyAsync([FromRoute]Guid id, [FromBody]ProductForUpdateDto updateDto)
         {
             if (await _services.Product.IsValidIdAsync(id) == false)
@@ -49,7 +49,7 @@
         }
 
         [HttpDelete]
-        [Route("products/{id:guid}", Name = "DeleteProductSoftlyAsync")]
+        [Route("products/{id:guid}", Name = nameof(DeleteProductSoftlyAsync))]
         public async Task<IActionResult> DeleteProductSoftlyAsync([FromRoute]Guid id)
         {
             bool result = await _services.Product.DeleteSoftlyAsync(id);
@@ -61,7 +61,7 @@
         }
 
         [HttpDelete]
-        [Route("admin/products/{id:guid}", Name = "DeleteProductHardAsync")]
+        [Route("admin/products/{id:guid}", Name = nameof(DeleteProductHardAsync))]
         public async Task<IActionResult> DeleteProductHardAsync([FromRoute] Guid id)
         {
             bool result = await _services.Product.DeleteHardAsync(id);
