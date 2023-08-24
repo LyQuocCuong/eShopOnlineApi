@@ -1,5 +1,10 @@
-﻿global using Contracts.Business.Entities;
+﻿global using Contracts.Business.Conditions.DeleteEntities;
+global using Contracts.Business.Conditions.DeleteEntities.Dictionaries;
+global using Contracts.Business.Conditions.DeleteEntities.Enums;
+global using Contracts.Business.Conditions.DeleteEntities.Models;
+global using Contracts.Business.Services;
 global using Domains.Entities;
+global using Domains.SeedingEntities;
 global using eShopOnlineBusiness.Abstracts;
 global using eShopOnlineBusiness.LogMessages;
 global using eShopOnlineBusiness.Parameters;

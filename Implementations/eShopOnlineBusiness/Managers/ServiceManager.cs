@@ -1,5 +1,5 @@
 ﻿using Contracts.Business.Managers;
-using eShopOnlineBusiness.Entities;
+using eShopOnlineBusiness.Services;
 
 namespace eShopOnlineBusiness.Managers
 {

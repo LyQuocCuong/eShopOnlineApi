@@ -1,5 +1,5 @@
 ﻿using Contracts.Business.Managers;
-using MockContracts.Business.Entities;
+using MockContracts.Business.Services;
 
 namespace MockContracts.Business.Managers
 {

@@ -8,9 +8,9 @@
 
         Task<bool> IsValidIdAsync(Guid id);
 
-        Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
+        //Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
 
-        Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteStoreCondition> checkList);
+        //Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteStoreCondition> checkList);
 
         void Create(Store store);
 

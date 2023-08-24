@@ -1,4 +1,4 @@
-﻿namespace MockContracts.Business.Entities
+﻿namespace MockContracts.Business.Services
 {
     internal sealed class MockICompanyService
     {

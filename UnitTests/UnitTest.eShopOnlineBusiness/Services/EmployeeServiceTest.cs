@@ -1,4 +1,4 @@
-﻿namespace UnitTest.eShopOnlineBusiness.Entities
+﻿namespace UnitTest.eShopOnlineBusiness.Services
 {
     [TestFixture]
     [TestOf(typeof(EmployeeService))]
