@@ -23,67 +23,67 @@
             return await base.FindByCondition(s => s.Id == id, isTrackChanges: false).AnyAsync();
         }
 
-        public async Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id)
-        {
-            _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletionAsync)));
-            return await CheckRequiredConditionsForDeletionAsync(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
-        }
+        //public async Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id)
+        //{
+        //    _logger.LogInformation(string.Concat("(DEFAULT)", nameof(CheckRequiredConditionsForDeletionAsync)));
+        //    return await CheckRequiredConditionsForDeletionAsync(id, DefaultDeleteEntityConditions.CheckListForDeletingAStore);
+        //}
 
-        public async Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteStoreCondition> checkList)
-        {
-            var result = new Dictionary<DeleteStoreCondition, bool>();
+        //public async Task<Dictionary<DeleteStoreCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteStoreCondition> checkList)
+        //{
+        //    var result = new Dictionary<DeleteStoreCondition, bool>();
             
-            DeleteStoreCondition? prerequisiteCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingStore.IsExistingInDatabase);
-            if (prerequisiteCondition != null)
-            {
-                result.Add(prerequisiteCondition, false);
-                checkList.Remove(prerequisiteCondition);
+        //    DeleteStoreCondition? prerequisiteCondition = checkList.FirstOrDefault(item => item.Condition == ConditionsForDeletingStore.IsExistingInDatabase);
+        //    if (prerequisiteCondition != null)
+        //    {
+        //        result.Add(prerequisiteCondition, false);
+        //        checkList.Remove(prerequisiteCondition);
 
-                Store? store = await GetByIdAsync(isTrackChanges: false, id);
-                if (store != null)
-                {
-                    result[prerequisiteCondition] = true;
-                    _logger.LogInformation(RepositoryLogs.PassedCondition(prerequisiteCondition.ToString()));
+        //        Store? store = await GetByIdAsync(isTrackChanges: false, id);
+        //        if (store != null)
+        //        {
+        //            result[prerequisiteCondition] = true;
+        //            _logger.LogInformation(RepositoryLogs.PassedCondition(prerequisiteCondition.ToString()));
 
-                    // checking Other Conditions
-                    foreach (var item in checkList)
-                    {
-                        result.Add(item, false);
-                        switch (item.Condition)
-                        {
-                            case ConditionsForDeletingStore.IsNotDeletedSoftly:
-                                if (store.IsDeleted == false)
-                                {
-                                    result[item] = true;
-                                }
-                                break;
-                            default:
-                                _logger.LogWarning(RepositoryLogs.NotImplementedCondition(item.ToString()));
-                                break;
-                        }
-                        if (result[item])
-                        {
-                            _logger.LogInformation(RepositoryLogs.PassedCondition(item.ToString()));
-                        }
-                        else
-                        {
-                            _logger.LogWarning(RepositoryLogs.FailedCondition(item.ToString()));
-                            break;  // stop checking
-                        }
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning(RepositoryLogs.ObjectNotExistInDB(nameof(Store), id));
-                    _logger.LogWarning(RepositoryLogs.FailedCondition(prerequisiteCondition.ToString()));
-                }
-            }
-            else
-            {
-                _logger.LogError(RepositoryLogs.MissingPrerequisiteCondition(ConditionsForDeletingStore.IsExistingInDatabase.ToString()));
-            }
-            return result;
-        }
+        //            // checking Other Conditions
+        //            foreach (var item in checkList)
+        //            {
+        //                result.Add(item, false);
+        //                switch (item.Condition)
+        //                {
+        //                    case ConditionsForDeletingStore.IsNotDeletedSoftly:
+        //                        if (store.IsDeleted == false)
+        //                        {
+        //                            result[item] = true;
+        //                        }
+        //                        break;
+        //                    default:
+        //                        _logger.LogWarning(RepositoryLogs.NotImplementedCondition(item.ToString()));
+        //                        break;
+        //                }
+        //                if (result[item])
+        //                {
+        //                    _logger.LogInformation(RepositoryLogs.PassedCondition(item.ToString()));
+        //                }
+        //                else
+        //                {
+        //                    _logger.LogWarning(RepositoryLogs.FailedCondition(item.ToString()));
+        //                    break;  // stop checking
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _logger.LogWarning(RepositoryLogs.ObjectNotExistInDB(nameof(Store), id));
+        //            _logger.LogWarning(RepositoryLogs.FailedCondition(prerequisiteCondition.ToString()));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _logger.LogError(RepositoryLogs.MissingPrerequisiteCondition(ConditionsForDeletingStore.IsExistingInDatabase.ToString()));
+        //    }
+        //    return result;
+        //}
 
         public void Create(Store store)
         {

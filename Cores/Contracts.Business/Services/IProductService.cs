@@ -1,4 +1,4 @@
-﻿namespace Contracts.Business.Entities
+﻿namespace Contracts.Business.Services
 {
     public interface IProductService
     {

@@ -1,4 +1,4 @@
-﻿namespace eShopOnlineBusiness.Entities
+﻿namespace eShopOnlineBusiness.Services
 {
     public sealed class CustomerService : AbstractService<CustomerService>, ICustomerService
     {
@@ -56,10 +56,44 @@
             return result;
         }
 
+        private async Task<Dictionary<DeleteCustomerCondition, bool>> CheckConditionsForDeletingACustomerAsync(Guid id, List<DeleteCustomerCondition> checkList)
+        {
+            var result = new Dictionary<DeleteCustomerCondition, bool>()
+            {
+                { DeleteCustomerConditionDictionary.IsExistingInDatabase, false },
+            };
+
+            Customer? customer = await _repository.Customer.GetByIdAsync(isTrackChanges: false, id);
+            if (customer == null)
+            {
+                return result;   // stop
+            }
+
+            result[DeleteCustomerConditionDictionary.IsExistingInDatabase] = true;
+            checkList.Remove(DeleteCustomerConditionDictionary.IsExistingInDatabase);
+
+            foreach (var item in checkList)
+            {
+                result.Add(item, false);
+                switch (item.Condition)
+                {
+                    case DeleteCustomerConditionsEnum.IsNotDeletedSoftly:
+                        if (customer.IsDeleted == false)
+                        {
+                            result[item] = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return result;
+        }
+
         public async Task<bool> DeleteSoftlyAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = await _repository.Customer.CheckRequiredConditionsForDeletionAsync(id);
+            var resultCheckList = await CheckConditionsForDeletingACustomerAsync(id, DefaultRequiredConditions.DeleteACustomer);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
@@ -84,7 +118,7 @@
         public async Task<bool> DeleteHardAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = await _repository.Customer.CheckRequiredConditionsForDeletionAsync(id);
+            var resultCheckList = await CheckConditionsForDeletingACustomerAsync(id, DefaultRequiredConditions.DeleteACustomer);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;

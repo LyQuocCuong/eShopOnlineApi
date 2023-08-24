@@ -8,9 +8,9 @@
 
         Task<bool> IsValidIdAsync(Guid id);
 
-        Task<Dictionary<DeleteEmployeeCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
+        //Task<Dictionary<DeleteEmployeeCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id);
 
-        Task<Dictionary<DeleteEmployeeCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteEmployeeCondition> checkList);
+        //Task<Dictionary<DeleteEmployeeCondition, bool>> CheckRequiredConditionsForDeletionAsync(Guid id, List<DeleteEmployeeCondition> checkList);
 
         void Create(Employee employee);
 

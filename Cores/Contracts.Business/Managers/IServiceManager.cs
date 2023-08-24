@@ -1,4 +1,4 @@
-﻿using Contracts.Business.Entities;
+﻿using Contracts.Business.Services;
 
 namespace Contracts.Business.Managers
 {

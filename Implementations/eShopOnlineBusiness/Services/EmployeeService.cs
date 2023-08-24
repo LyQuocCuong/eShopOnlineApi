@@ -1,4 +1,4 @@
-﻿namespace eShopOnlineBusiness.Entities
+﻿namespace eShopOnlineBusiness.Services
 {
     public sealed class EmployeeService : AbstractService<EmployeeService>, IEmployeeService
     {
@@ -56,10 +56,56 @@
             return result;
         }
 
+        private async Task<Dictionary<DeleteEmployeeCondition, bool>> CheckConditionsForDeletingAnEmployeeAsync(Guid id, List<DeleteEmployeeCondition> checkList)
+        {
+            var result = new Dictionary<DeleteEmployeeCondition, bool>()
+            {
+                { DeleteEmployeeConditionDictionary.IsExistingInDatabase, false },
+            };
+
+            Employee? employee = await _repository.Employee.GetByIdAsync(isTrackChanges: false, id);
+            if (employee == null)
+            {
+                return result;   // stop
+            }
+
+            result[DeleteEmployeeConditionDictionary.IsExistingInDatabase] = true;
+            checkList.Remove(DeleteEmployeeConditionDictionary.IsExistingInDatabase);
+
+            foreach (var item in checkList)
+            {
+                result.Add(item, false);
+                switch (item.Condition)
+                {
+                    case DeleteEmployeeConditionsEnum.IsNotDeletedSoftly:
+                        if (employee.IsDeleted == false)
+                        {
+                            result[item] = true;
+                        }
+                        break;
+                    case DeleteEmployeeConditionsEnum.IsNotAdminRoot:
+                        if (employee.Id != SeedingEntities.ROOT_ADMIN.Id)
+                        {
+                            result[item] = true;
+                        }
+                        break;
+                    case DeleteEmployeeConditionsEnum.IsNotManagerOfStore:
+                        if (employee.ManagingStore == null)
+                        {
+                            result[item] = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return result;
+        }
+
         public async Task<bool> DeleteSoftlyAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = await _repository.Employee.CheckRequiredConditionsForDeletionAsync(id);
+            var resultCheckList = await CheckConditionsForDeletingAnEmployeeAsync(id, DefaultRequiredConditions.DeleteAnEmployee);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;
@@ -84,7 +130,7 @@
         public async Task<bool> DeleteHardAsync(Guid id)
         {
             bool result = true;
-            var resultCheckList = await _repository.Employee.CheckRequiredConditionsForDeletionAsync(id);
+            var resultCheckList = await CheckConditionsForDeletingAnEmployeeAsync(id, DefaultRequiredConditions.DeleteAnEmployee);
             if (resultCheckList.Any(condition => condition.Value == false))
             {
                 result = false;

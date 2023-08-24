@@ -1,4 +1,4 @@
-﻿namespace eShopOnlineBusiness.Entities
+﻿namespace eShopOnlineBusiness.Services
 {
     public sealed class CompanyService : AbstractService<CompanyService>, ICompanyService
     {
