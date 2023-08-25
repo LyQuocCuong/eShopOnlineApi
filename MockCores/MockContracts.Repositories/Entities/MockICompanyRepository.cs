@@ -5,8 +5,8 @@
         public static Mock<ICompanyRepository> GetInstance()
         {
             // Fake Data
+            Guid nonExistingCompanyId = FakeDataForCompany.GetNonExistingCompanyId();
             var fakeDataForCompany = new FakeDataForCompany();
-            Guid nonExistingCompanyId = fakeDataForCompany.GetNonExistingCompanyId();
             var listOfCompanies = fakeDataForCompany.GetListOfCompanies();
 
             // SetUps

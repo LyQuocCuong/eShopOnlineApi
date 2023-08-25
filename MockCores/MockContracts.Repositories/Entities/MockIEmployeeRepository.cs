@@ -5,8 +5,8 @@
         public static Mock<IEmployeeRepository> GetInstance()
         {
             // Fake Data
+            Guid nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            Guid nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
             var listOfEmployees = fakeDataForEmployee.GetListOfEmployees();
 
             // SetUps

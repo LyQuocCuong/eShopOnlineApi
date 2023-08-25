@@ -2,25 +2,43 @@
 {
     public sealed class FakeDataForCompany
     {
-        public Guid GetExistingCompanyId()
+        public static Guid GetNonExistingCompanyId()
         {
             return new Guid("00000000-0000-0000-0000-000000000001");
         }
 
-        public Guid GetNonExistingCompanyId()
+        public static Guid GetNormalCompanyId()
         {
-            return new Guid("00000000-0000-0000-0000-000000000009");
+            return new Guid("10000000-0000-0000-0000-000000000001");
+        }
+
+        public CompanyDto GetNormalCompanyDto()
+        {
+            return new CompanyDto()
+            {
+                Id = GetNormalCompanyId(),
+                Name = "A Normal Company",
+                Address = "xxx",
+                Phone = "xxx"
+            };
         }
 
         public IEnumerable<CompanyDto> GetListOfCompanyDtos()
         {
             return new List<CompanyDto>()
             {
-                new CompanyDto()
-                {
-                    Id = this.GetExistingCompanyId(),
-                    Name = "Company 01"
-                }
+                GetNormalCompanyDto(),
+            };
+        }
+
+        public Company GetNormalCompany()
+        {
+            return new Company()
+            {
+                Id = GetNormalCompanyId(),
+                Name = "A Normal Company",
+                Address = "xxx",
+                Phone = "xxx"
             };
         }
 
@@ -28,11 +46,7 @@
         {
             return new List<Company>()
             {
-                new Company()
-                {
-                    Id = this.GetExistingCompanyId(),
-                    Name = "Company 01"
-                }
+                GetNormalCompany(),
             };
         }
 
@@ -40,7 +54,9 @@
         {
             return new CompanyForUpdateDto()
             {
-                Name = "Valid Object",
+                Name = "Valid",     // used for Mocking comparision (Valid / Invalid)
+                Address = "yyy",
+                Phone = "yyy"
             };
         }
 
@@ -48,7 +64,9 @@
         {
             return new CompanyForUpdateDto()
             {
-                Name = "Invalid Object",
+                Name = "Invalid",   // used for Mocking comparision (Valid / Invalid)
+                Address = "yyy",
+                Phone = "yyy"
             };
         }
 

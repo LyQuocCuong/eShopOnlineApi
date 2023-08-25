@@ -7,8 +7,8 @@
             var mockCompanyService = new Mock<ICompanyService>(MockBehavior.Strict);
 
             // Fake Data
+            Guid nonExistingCompanyId = FakeDataForCompany.GetNonExistingCompanyId();
             FakeDataForCompany fakeDataForCompany = new FakeDataForCompany();
-            Guid nonExistingCompanyId = fakeDataForCompany.GetNonExistingCompanyId();
             IEnumerable<CompanyDto> listOfCompanyDtos = fakeDataForCompany.GetListOfCompanyDtos();
             CompanyForUpdateDto invalidUpdateDto = fakeDataForCompany.GetInvalidUpdateDto();
 

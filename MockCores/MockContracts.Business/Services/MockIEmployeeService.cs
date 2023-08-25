@@ -7,9 +7,10 @@
             var mockEmployeeService = new Mock<IEmployeeService>(MockBehavior.Strict);
 
             // Fake Data
+            Guid nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
+            Guid rootAdminId = FakeDataForEmployee.GetRootAdminId();
+            Guid managerIdOfStore = FakeDataForEmployee.GetManagerIdOfStore();
             FakeDataForEmployee fakeDataForEmployee = new FakeDataForEmployee();
-            Guid nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
-            Guid unableDeleteEmployeeId = fakeDataForEmployee.GetUnableDeletedEmployeeId();
             IEnumerable<EmployeeDto> listOfEmployeeDtos = fakeDataForEmployee.GetListOfEmployeeDtos();
             EmployeeForUpdateDto invalidUpdateDto = fakeDataForEmployee.GetInvalidUpdateDto();
             EmployeeDto newlyCreatedEmployeeDto = fakeDataForEmployee.GetNewlyCreatedEmployeeDto();
@@ -43,14 +44,18 @@
                 .Setup(s => s.DeleteSoftlyAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Guid employeeId) =>
                 {
-                    return employeeId != unableDeleteEmployeeId;
+                    return (employeeId != nonExistingEmployeeId
+                        && employeeId != rootAdminId
+                        && employeeId != managerIdOfStore);
                 });
 
             mockEmployeeService
                 .Setup(s => s.DeleteHardAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Guid employeeId) =>
                 {
-                    return employeeId != unableDeleteEmployeeId;
+                    return (employeeId != nonExistingEmployeeId
+                        && employeeId != rootAdminId
+                        && employeeId != managerIdOfStore);
                 });
 
             return mockEmployeeService;
