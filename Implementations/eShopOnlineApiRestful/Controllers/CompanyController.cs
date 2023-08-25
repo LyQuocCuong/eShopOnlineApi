@@ -30,16 +30,30 @@
 
         [HttpPut]
         [Route("companies/{id:guid}", Name = nameof(UpdateCompanyFullyAsync))]
-        public async Task<IActionResult> UpdateCompanyFullyAsync([FromRoute]Guid id, 
-                                                [FromBody]CompanyForUpdateDto? updateDto)
+        public async Task<IActionResult> UpdateCompanyFullyAsync(
+            [FromRoute]Guid id, 
+            [FromBody]CompanyForUpdateDto? updateDto,
+            [FromServices]IValidator<CompanyForUpdateDto> updateDtoValidator)
         {
-            if (await _services.Company.IsValidIdAsync(id) == false)
-            {
-                return NotFound("Company ID is non-existing.");
-            }
             if (updateDto == null)
             {
                 return BadRequest("updateDto object is NULL.");
+            }
+
+            ValidationResult validationResult = await updateDtoValidator.ValidateAsync(updateDto);
+            if (validationResult.IsValid == false)
+            {
+                // Copy the validation results into ModelState.
+                validationResult.AddErrorsToModelStateObj(this.ModelState);
+
+                // ASP.NET uses the ModelState collection to populate 
+                // error messages in the View (like MVC framework).
+                return UnprocessableEntity(this.ModelState);
+            }
+
+            if (await _services.Company.IsValidIdAsync(id) == false)
+            {
+                return NotFound("Company ID is non-existing.");
             }
             
             bool result = await _services.Company.UpdateFullyAsync(id, updateDto);

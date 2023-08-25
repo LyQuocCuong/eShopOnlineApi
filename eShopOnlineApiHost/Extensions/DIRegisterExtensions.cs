@@ -1,6 +1,8 @@
 ﻿using Contracts.Business.Managers;
 using Contracts.Repositories.Managers;
 using Contracts.Utilities.Mapper;
+using eShopOnlineApiRestful.FluentValidators.DTOs.CreationDtos;
+using eShopOnlineApiRestful.FluentValidators.DTOs.UpdateDtos;
 using eShopOnlineApiRestful.Parameters;
 using eShopOnlineBusiness.Managers;
 using eShopOnlineBusiness.Parameters;
@@ -9,8 +11,11 @@ using eShopOnlineRepositories.Managers;
 using eShopOnlineRepositories.Parameters;
 using eShopOnlineUtilities.AutoMapper;
 using eShopOnlineUtilities.AutoMapper.Profiles;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NLog.Web;
+using Shared.DTOs.Inputs.FromBody.CreationDtos;
+using Shared.DTOs.Inputs.FromBody.UpdateDtos;
 
 namespace eShopOnlineApiHost.Extensions
 {
@@ -46,6 +51,7 @@ namespace eShopOnlineApiHost.Extensions
         public static void DIRegister_eShopOnlineApiRestful(this IServiceCollection services)
         {
             services.AddScoped<ControllerParams>();
+            DIRegister_FluentValidation(services);
         }
 
         #region SUB METHODS
@@ -76,6 +82,18 @@ namespace eShopOnlineApiHost.Extensions
         {
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddScoped<IMapService, AutoMapperService>();
+        }
+
+        private static void DIRegister_FluentValidation(IServiceCollection services)
+        {
+            // CreationDtos
+            services.AddScoped<IValidator<EmployeeForCreationDto>, EmployeeForCreationDtoValidator>();
+            services.AddScoped<IValidator<CustomerForCreationDto>, CustomerForCreationDtoValidator>();
+
+            // UpdateDtos
+            services.AddScoped<IValidator<CompanyForUpdateDto>, CompanyForUpdateDtoValidator>();
+            services.AddScoped<IValidator<EmployeeForUpdateDto>, EmployeeForUpdateDtoValidator>();
+            services.AddScoped<IValidator<CustomerForUpdateDto>, CustomerForUpdateDtoValidator>();
         }
 
         #endregion
