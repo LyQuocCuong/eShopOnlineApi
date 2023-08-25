@@ -30,28 +30,50 @@
 
         [HttpPost]
         [Route("employees", Name = nameof(CreateEmployeeAsync))]
-        public async Task<IActionResult> CreateEmployeeAsync([FromBody]EmployeeForCreationDto? creationDto)
+        public async Task<IActionResult> CreateEmployeeAsync(
+            [FromBody]EmployeeForCreationDto? creationDto,
+            [FromServices]IValidator<EmployeeForCreationDto> creationDtoValidator)
         {
             if (creationDto == null)
             {
                 return BadRequest("Object for creation is NULL.");
             }
+
+            ValidationResult validationResult = await creationDtoValidator.ValidateAsync(creationDto);
+            if (validationResult.IsValid == false)
+            {
+                validationResult.AddErrorsToModelStateObj(this.ModelState);
+                return UnprocessableEntity(this.ModelState);
+            }
+
             EmployeeDto employeeDto = await _services.Employee.CreateAsync(creationDto);
             return CreatedAtRoute(nameof(GetEmployeeByIdAsync), new { id = employeeDto.Id }, employeeDto);
         }
 
         [HttpPut]
         [Route("employees/{id:guid}", Name = nameof(UpdateEmployeeFullyAsync))]
-        public async Task<IActionResult> UpdateEmployeeFullyAsync([FromRoute]Guid id, [FromBody]EmployeeForUpdateDto? updateDto)
+        public async Task<IActionResult> UpdateEmployeeFullyAsync(
+            [FromRoute]Guid id, 
+            [FromBody]EmployeeForUpdateDto? updateDto,
+            [FromServices]IValidator<EmployeeForUpdateDto> updateDtoValidator)
         {
             if (updateDto == null)
             {
                 return BadRequest("updateDto object is NULL.");
             }
+
+            ValidationResult validationResult = await updateDtoValidator.ValidateAsync(updateDto);
+            if (validationResult.IsValid == false)
+            {
+                validationResult.AddErrorsToModelStateObj(this.ModelState);
+                return UnprocessableEntity(this.ModelState);
+            }
+
             if (await _services.Employee.IsValidIdAsync(id) == false)
             {
                 return NotFound("EmployeeId is non-existing.");
             }
+
             bool result = await _services.Employee.UpdateFullyAsync(id, updateDto);
             if (result == false)
             {
