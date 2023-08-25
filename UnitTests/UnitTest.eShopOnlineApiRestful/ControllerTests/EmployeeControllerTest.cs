@@ -94,8 +94,7 @@
         public async Task GetEmployeeByIdAsync_Inputs_ExistingEmployeeId_Returns_OkObjectResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var employeeController = InitController();
 
             // Act
@@ -111,8 +110,7 @@
         public async Task GetEmployeeByIdAsync_Inputs_ExistingEmployeeId_Returns_OkObjectResult_Include_Object_Is_EmployeeDto()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var employeeController = InitController();
 
             // Act
@@ -128,8 +126,7 @@
         public async Task GetEmployeeByIdAsync_Inputs_NonExistingEmployeeId_Returns_NotFoundObjectResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
             var employeeController = InitController();
 
             // Act
@@ -149,8 +146,8 @@
         public async Task UpdateEmployeeFullyAsync_Inputs_NonExistingEmployeeId_And_OtherExpectedInputs_Returns_NotFoundObjResult()
         {
             // Arrange
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            var nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
             var validUpdateDto = fakeDataForEmployee.GetValidUpdateDto();
             var employeeController = InitController();
 
@@ -167,8 +164,7 @@
         public async Task UpdateEmployeeFullyAsync_Inputs_NullUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var employeeController = InitController();
 
             // Act
@@ -184,8 +180,8 @@
         public async Task UpdateEmployeeFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
             // Arrange
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
             var invalidUpdateDto = fakeDataForEmployee.GetInvalidUpdateDto();
             var employeeController = InitController();
 
@@ -202,8 +198,8 @@
         public async Task UpdateEmployeeFullyAsync_Inputs_ExpectedData_Returns_NoContentResult()
         {
             // Arrange
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
             var validUpdateDto = fakeDataForEmployee.GetValidUpdateDto();
             var employeeController = InitController();
 
@@ -276,15 +272,14 @@
 
         [Test]
         [Category("[Action] DeleteEmployeeSoftlyAsync")]
-        public async Task DeleteEmployeeSoftlyAsync_Inputs_UnableDeletedEmployeeId_Returns_BadRequestObjResult()
+        public async Task DeleteEmployeeSoftlyAsync_Inputs_RootAdminId_Returns_BadRequestObjResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var unableDeletedEmployeeId = fakeDataForEmployee.GetUnableDeletedEmployeeId();
+            var rootAdminId = FakeDataForEmployee.GetRootAdminId();
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = await employeeController.DeleteEmployeeSoftlyAsync(unableDeletedEmployeeId) as BadRequestObjectResult;
+            var badRequestObjResult = await employeeController.DeleteEmployeeSoftlyAsync(rootAdminId) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -293,15 +288,46 @@
 
         [Test]
         [Category("[Action] DeleteEmployeeSoftlyAsync")]
-        public async Task DeleteEmployeeSoftlyAsync_Inputs_AbleDeletedEmployeeId_Returns_NoContentObjResult()
+        public async Task DeleteEmployeeSoftlyAsync_Inputs_ManagerIdOfStore_Returns_BadRequestObjResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var ableDeletedEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var managerIdOfStore = FakeDataForEmployee.GetManagerIdOfStore();
             var employeeController = InitController();
 
             // Act
-            var noContentResult = await employeeController.DeleteEmployeeSoftlyAsync(ableDeletedEmployeeId) as NoContentResult;
+            var badRequestObjResult = await employeeController.DeleteEmployeeSoftlyAsync(managerIdOfStore) as BadRequestObjectResult;
+
+            // Assert
+            Assert.That(badRequestObjResult, Is.Not.Null);
+            Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+        }
+
+        [Test]
+        [Category("[Action] DeleteEmployeeSoftlyAsync")]
+        public async Task DeleteEmployeeSoftlyAsync_Inputs_NonExistingEmployeeId_Returns_BadRequestObjResult()
+        {
+            // Arrange
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
+            var employeeController = InitController();
+
+            // Act
+            var badRequestObjResult = await employeeController.DeleteEmployeeSoftlyAsync(nonExistingEmployeeId) as BadRequestObjectResult;
+
+            // Assert
+            Assert.That(badRequestObjResult, Is.Not.Null);
+            Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+        }
+
+        [Test]
+        [Category("[Action] DeleteEmployeeSoftlyAsync")]
+        public async Task DeleteEmployeeSoftlyAsync_Inputs_NormalEmployeeId_Returns_NoContentResult()
+        {
+            // Arrange
+            var normalEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
+            var employeeController = InitController();
+
+            // Act
+            var noContentResult = await employeeController.DeleteEmployeeSoftlyAsync(normalEmployeeId) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
@@ -314,15 +340,14 @@
 
         [Test]
         [Category("[Action] DeleteEmployeeHardAsync")]
-        public async Task DeleteEmployeeHardAsync_Inputs_UnableDeletedEmployeeId_Returns_BadRequestObjResult()
+        public async Task DeleteEmployeeHardAsync_Inputs_RootAdminId_Returns_BadRequestObjResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var unableDeletedEmployeeId = fakeDataForEmployee.GetUnableDeletedEmployeeId();
+            var rootAdminId = FakeDataForEmployee.GetRootAdminId();
             var employeeController = InitController();
 
             // Act
-            var badRequestObjResult = await employeeController.DeleteEmployeeHardAsync(unableDeletedEmployeeId) as BadRequestObjectResult;
+            var badRequestObjResult = await employeeController.DeleteEmployeeHardAsync(rootAdminId) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
@@ -331,15 +356,46 @@
 
         [Test]
         [Category("[Action] DeleteEmployeeHardAsync")]
-        public async Task DeleteEmployeeHardAsync_Inputs_AbleDeletedEmployeeId_Returns_NoContentObjResult()
+        public async Task DeleteEmployeeHardAsync_Inputs_ManagerIdOfStore_Returns_BadRequestObjResult()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var ableDeletedEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var managerIdOfStore = FakeDataForEmployee.GetManagerIdOfStore();
             var employeeController = InitController();
 
             // Act
-            var noContentResult = await employeeController.DeleteEmployeeHardAsync(ableDeletedEmployeeId) as NoContentResult;
+            var badRequestObjResult = await employeeController.DeleteEmployeeHardAsync(managerIdOfStore) as BadRequestObjectResult;
+
+            // Assert
+            Assert.That(badRequestObjResult, Is.Not.Null);
+            Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+        }
+
+        [Test]
+        [Category("[Action] DeleteEmployeeHardAsync")]
+        public async Task DeleteEmployeeHardAsync_Inputs_NonExistingEmployeeId_Returns_BadRequestObjResult()
+        {
+            // Arrange
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
+            var employeeController = InitController();
+
+            // Act
+            var badRequestObjResult = await employeeController.DeleteEmployeeHardAsync(nonExistingEmployeeId) as BadRequestObjectResult;
+
+            // Assert
+            Assert.That(badRequestObjResult, Is.Not.Null);
+            Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+        }
+
+        [Test]
+        [Category("[Action] DeleteEmployeeHardAsync")]
+        public async Task DeleteEmployeeHardAsync_Inputs_NormalEmployeeId_Returns_NoContentResult()
+        {
+            // Arrange
+            var normalEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
+            var employeeController = InitController();
+
+            // Act
+            var noContentResult = await employeeController.DeleteEmployeeHardAsync(normalEmployeeId) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);

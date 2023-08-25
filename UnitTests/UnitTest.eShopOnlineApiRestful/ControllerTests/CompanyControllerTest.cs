@@ -92,8 +92,7 @@
         public async Task GetCompanyByIdAsync_Inputs_ExistingCompanyId_Returns_OkObjectResult()
         {
             // Arrange
-            var fakeDataForCompany = new FakeDataForCompany();
-            var existingCompanyId = fakeDataForCompany.GetExistingCompanyId();
+            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
             var companyController = InitController();
 
             // Act
@@ -109,8 +108,7 @@
         public async Task GetCompanyByIdAsync_Inputs_ExistingCompanyId_Returns_OkObjectResult_Include_Object_Is_CompanyDto()
         {
             // Arrange
-            var fakeDataForCompany = new FakeDataForCompany();
-            var existingCompanyId = fakeDataForCompany.GetExistingCompanyId();
+            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
             var companyController = InitController();
 
             // Act
@@ -126,8 +124,7 @@
         public async Task GetCompanyByIdAsync_Inputs_NonExistingCompanyId_Returns_NotFoundObjectResult()
         {
             // Arrange
-            var fakeDataForCompany = new FakeDataForCompany();
-            var nonExistingCompanyId = fakeDataForCompany.GetNonExistingCompanyId();
+            var nonExistingCompanyId = FakeDataForCompany.GetNonExistingCompanyId();
             var companyController = InitController();
 
             // Act
@@ -147,8 +144,8 @@
         public async Task UpdateCompanyFullyAsync_Inputs_NonExistingCompanyId_And_OtherExpectedInputs_Returns_NotFoundObjResult()
         {
             // Arrange
+            var nonExistingCompanyId = FakeDataForCompany.GetNonExistingCompanyId();
             var fakeDataForCompany = new FakeDataForCompany();
-            var nonExistingCompanyId = fakeDataForCompany.GetNonExistingCompanyId();
             var validUpdateDto = fakeDataForCompany.GetValidUpdateDto();
             var companyController = InitController();
 
@@ -165,8 +162,7 @@
         public async Task UpdateCompanyFullyAsync_Inputs_NullUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
             // Arrange
-            var fakeDataForCompany = new FakeDataForCompany();
-            var existingCompanyId = fakeDataForCompany.GetExistingCompanyId();
+            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
             var companyController = InitController();
 
             // Act
@@ -182,8 +178,8 @@
         public async Task UpdateCompanyFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
             // Arrange
+            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
             var fakeDataForCompany = new FakeDataForCompany();
-            var existingCompanyId = fakeDataForCompany.GetExistingCompanyId();
             var invalidUpdateDto = fakeDataForCompany.GetInvalidUpdateDto();
             var companyController = InitController();
 
@@ -200,8 +196,8 @@
         public async Task UpdateCompanyFullyAsync_Inputs_ExpectedData_Returns_NoContentResult()
         {
             // Arrange
+            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
             var fakeDataForCompany = new FakeDataForCompany();
-            var existingCompanyId = fakeDataForCompany.GetExistingCompanyId();
             var validUpdateDto = fakeDataForCompany.GetValidUpdateDto();
             var companyController = InitController();
 

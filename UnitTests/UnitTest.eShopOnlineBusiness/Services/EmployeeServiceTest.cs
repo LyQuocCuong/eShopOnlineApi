@@ -72,8 +72,7 @@
         public async Task GetByIdAsync_Inputs_ExistingEmployeeId_Returns_Object_Is_EmployeeDto()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var employeeService = InitService();
 
             // Act
@@ -88,8 +87,7 @@
         public async Task GetByIdAsync_Inputs_NonExistingEmployeeId_Returns_Null()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
             var employeeService = InitService();
 
             // Act
@@ -108,8 +106,7 @@
         public async Task IsValidIdAsync_Inputs_ExistingEmployeeId_Returns_True()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var employeeService = InitService();
 
             // Act
@@ -124,8 +121,7 @@
         public async Task IsValidIdAsync_Inputs_NonExistingEmployeeId_Returns_True()
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
             var employeeService = InitService();
 
             // Act
@@ -144,8 +140,8 @@
         public async Task UpdateFullyAsync_Inputs_NonExistingEmployeeId_And_OtherExpectedInputs_Returns_False()
         {
             // Arrange
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            var nonExistingEmployeeId = fakeDataForEmployee.GetNonExistingEmployeeId();
             var validUpdateDto = fakeDataForEmployee.GetValidUpdateDto();
             var employeeService = InitService();
 
@@ -162,8 +158,8 @@
         public async Task UpdateFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_False()
         {
             // Arrange
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
             var invalidUpdateDto = fakeDataForEmployee.GetInvalidUpdateDto();
             var employeeService = InitService();
 
@@ -179,8 +175,8 @@
         public async Task UpdateFullyAsync_Inputs_ExpectedData_Returns_True()
         {
             // Arrange
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
             var fakeDataForEmployee = new FakeDataForEmployee();
-            var existingEmployeeId = fakeDataForEmployee.GetExistingEmployeeId();
             var validUpdateDto = fakeDataForEmployee.GetValidUpdateDto();
             var employeeService = InitService();
 
@@ -216,20 +212,63 @@
         #region DeleteSoftlyAsync
 
         [Test]
-        [Category("[Implement Later]")]
         [Category("[Method] DeleteSoftlyAsync")]
-        public async Task DeleteSoftlyAsync_Inputs_UnableDeletedEmployeeId_Returns_BadRequestObjResult()
+        public async Task DeleteSoftlyAsync_Inputs_RootAdminId_Returns_False()
         {
-            //// Arrange
-            //var fakeDataForEmployee = new FakeDataForEmployee();
-            //var unableDeletedEmploye = fakeDataForEmployee.GetValidCreationDto();
-            //var employeeService = InitService();
+            // Arrange
+            var rootAdminId = FakeDataForEmployee.GetRootAdminId();
+            var employeeService = InitService();
 
-            //// Act
-            //var result = await employeeService.DeleteSoftlyAsync(validCreationDto) as EmployeeDto;
+            // Act
+            var result = await employeeService.DeleteSoftlyAsync(rootAdminId);
 
-            //// Assert
-            //Assert.That(result, Is.Not.Null);
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [Category("[Method] DeleteSoftlyAsync")]
+        public async Task DeleteSoftlyAsync_Inputs_ManagerIdOfStore_Returns_False()
+        {
+            // Arrange
+            var managerIdOfStore = FakeDataForEmployee.GetManagerIdOfStore();
+            var employeeService = InitService();
+
+            // Act
+            var result = await employeeService.DeleteSoftlyAsync(managerIdOfStore);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [Category("[Method] DeleteSoftlyAsync")]
+        public async Task DeleteSoftlyAsync_Inputs_NonExistingEmployeeId_Returns_False()
+        {
+            // Arrange
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
+            var employeeService = InitService();
+
+            // Act
+            var result = await employeeService.DeleteSoftlyAsync(nonExistingEmployeeId);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [Category("[Method] DeleteSoftlyAsync")]
+        public async Task DeleteSoftlyAsync_Inputs_NormalEmployeeId_Returns_True()
+        {
+            // Arrange
+            var normalEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
+            var employeeService = InitService();
+
+            // Act
+            var result = await employeeService.DeleteSoftlyAsync(normalEmployeeId);
+
+            // Assert
+            Assert.That(result, Is.True);
         }
 
         #endregion
@@ -237,20 +276,63 @@
         #region DeleteHardAsync
 
         [Test]
-        [Category("[Implement Later]")]
         [Category("[Method] DeleteHardAsync")]
-        public async Task DeleteHardAsync_Inputs_UnableDeletedEmployeeId_Returns_BadRequestObjResult()
+        public async Task DeleteHardAsync_Inputs_RootAdminId_Returns_False()
         {
-            //// Arrange
-            //var fakeDataForEmployee = new FakeDataForEmployee();
-            //var unableDeletedEmploye = fakeDataForEmployee.GetValidCreationDto();
-            //var employeeService = InitService();
+            // Arrange
+            var rootAdminId = FakeDataForEmployee.GetRootAdminId();
+            var employeeService = InitService();
 
-            //// Act
-            //var result = await employeeService.DeleteSoftlyAsync(validCreationDto) as EmployeeDto;
+            // Act
+            var result = await employeeService.DeleteHardAsync(rootAdminId);
 
-            //// Assert
-            //Assert.That(result, Is.Not.Null);
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [Category("[Method] DeleteHardAsync")]
+        public async Task DeleteHardAsync_Inputs_ManagerIdOfStore_Returns_False()
+        {
+            // Arrange
+            var managerIdOfStore = FakeDataForEmployee.GetManagerIdOfStore();
+            var employeeService = InitService();
+
+            // Act
+            var result = await employeeService.DeleteHardAsync(managerIdOfStore);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [Category("[Method] DeleteHardAsync")]
+        public async Task DeleteHardAsync_Inputs_NonExistingEmployeeId_Returns_False()
+        {
+            // Arrange
+            var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
+            var employeeService = InitService();
+
+            // Act
+            var result = await employeeService.DeleteHardAsync(nonExistingEmployeeId);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [Category("[Method] DeleteHardAsync")]
+        public async Task DeleteHardAsync_Inputs_NormalEmployeeId_Returns_True()
+        {
+            // Arrange
+            var normalEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
+            var employeeService = InitService();
+
+            // Act
+            var result = await employeeService.DeleteHardAsync(normalEmployeeId);
+
+            // Assert
+            Assert.That(result, Is.True);
         }
 
         #endregion

@@ -15,5 +15,7 @@
         public string? Address { get; set; }
 
         public string? Phone { get; set; }
+
+        public StoreDto? ManagingStore { get; set; }
     }
 }
