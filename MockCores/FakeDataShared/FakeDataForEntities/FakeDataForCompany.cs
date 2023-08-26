@@ -54,9 +54,9 @@
         {
             return new CompanyForUpdateDto()
             {
-                Name = "Valid",     // used for Mocking comparision (Valid / Invalid)
+                Name = "12345678",
                 Address = "yyy",
-                Phone = "yyy"
+                Phone = "12345678910"
             };
         }
 
@@ -64,7 +64,7 @@
         {
             return new CompanyForUpdateDto()
             {
-                Name = "Invalid",   // used for Mocking comparision (Valid / Invalid)
+                Name = "Invalid",
                 Address = "yyy",
                 Phone = "yyy"
             };

@@ -145,14 +145,18 @@
         [Category("[Action] UpdateEmployeeFullyAsync")]
         public async Task UpdateEmployeeFullyAsync_Inputs_NonExistingEmployeeId_And_OtherExpectedInputs_Returns_NotFoundObjResult()
         {
-            // Arrange
+            // NonExistingEmployeeId
             var nonExistingEmployeeId = FakeDataForEmployee.GetNonExistingEmployeeId();
+            // OtherExpectedInputs
             var fakeDataForEmployee = new FakeDataForEmployee();
             var validUpdateDto = fakeDataForEmployee.GetValidUpdateDto();
+
+            // Arrange
             var employeeController = InitController();
+            var updateDtoValidator = new EmployeeForUpdateDtoValidator();
 
             // Act
-            var notFoundObjResult = await employeeController.UpdateEmployeeFullyAsync(nonExistingEmployeeId, validUpdateDto) as NotFoundObjectResult;
+            var notFoundObjResult = await employeeController.UpdateEmployeeFullyAsync(nonExistingEmployeeId, validUpdateDto, updateDtoValidator) as NotFoundObjectResult;
 
             // Assert
             Assert.That(notFoundObjResult, Is.Not.Null);
@@ -163,48 +167,65 @@
         [Category("[Action] UpdateEmployeeFullyAsync")]
         public async Task UpdateEmployeeFullyAsync_Inputs_NullUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
-            // Arrange
+            // OtherExpectedInputs
             var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
+
+            // Arrange
             var employeeController = InitController();
+            var updateDtoValidator = new EmployeeForUpdateDtoValidator();
 
             // Act
-            var badRequestObjResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, null) as BadRequestObjectResult;
+            var badRequestObjResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, null, updateDtoValidator) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
             Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
         }
 
-        [Test]
-        [Category("[Action] UpdateEmployeeFullyAsync")]
-        public async Task UpdateEmployeeFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
+        private static IEnumerable<EmployeeForUpdateDto> GetInvalidUpdateDtoSource()
         {
-            // Arrange
-            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var invalidUpdateDto = fakeDataForEmployee.GetInvalidUpdateDto();
-            var employeeController = InitController();
-
-            // Act
-            var badRequestObjResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, invalidUpdateDto) as BadRequestObjectResult;
-
-            // Assert
-            Assert.That(badRequestObjResult, Is.Not.Null);
-            Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+            yield return new FakeDataForEmployee().GetInvalidUpdateDto();
         }
 
         [Test]
         [Category("[Action] UpdateEmployeeFullyAsync")]
-        public async Task UpdateEmployeeFullyAsync_Inputs_ExpectedData_Returns_NoContentResult()
+        [TestCaseSource(nameof(GetInvalidUpdateDtoSource))]
+        public async Task UpdateEmployeeFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_UnprocessableEntityObjResult(EmployeeForUpdateDto invalidUpdateDto)
         {
-            // Arrange
+            // OtherExpectedInputs
             var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var validUpdateDto = fakeDataForEmployee.GetValidUpdateDto();
+
+            // Arrange
             var employeeController = InitController();
+            var updateDtoValidator = new EmployeeForUpdateDtoValidator();
 
             // Act
-            var noContentResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, validUpdateDto) as NoContentResult;
+            var unprocessableEntityObjResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, invalidUpdateDto, updateDtoValidator) as UnprocessableEntityObjectResult;
+
+            // Assert
+            Assert.That(unprocessableEntityObjResult, Is.Not.Null);
+            Assert.That(unprocessableEntityObjResult.StatusCode, Is.EqualTo(StatusCodes.Status422UnprocessableEntity));
+        }
+
+        private static IEnumerable<EmployeeForUpdateDto> GetValidUpdateDtoSource()
+        {
+            yield return new FakeDataForEmployee().GetValidUpdateDto();
+        }
+
+        [Test]
+        [Category("[Action] UpdateEmployeeFullyAsync")]
+        [TestCaseSource(nameof(GetValidUpdateDtoSource))]
+        public async Task UpdateEmployeeFullyAsync_Inputs_ExpectedData_Returns_NoContentResult(EmployeeForUpdateDto validUpdateDto)
+        {
+            // ExpectedData
+            var existingEmployeeId = FakeDataForEmployee.GetNormalEmployeeId();
+
+            // Arrange
+            var employeeController = InitController();
+            var updateDtoValidator = new EmployeeForUpdateDtoValidator();
+
+            // Act
+            var noContentResult = await employeeController.UpdateEmployeeFullyAsync(existingEmployeeId, validUpdateDto, updateDtoValidator) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
@@ -217,30 +238,58 @@
 
         [Test]
         [Category("[Action] CreateEmployeeAsync")]
-        public async Task CreateEmployeeAsync_Input_NullCreateObj_Returns_BadRequestObjResult()
+        public async Task CreateEmployeeAsync_Input_NullCreationObj_Returns_BadRequestObjResult()
         {
             // Arrange
             var employeeController = InitController();
+            var creationDtoValidator = new EmployeeForCreationDtoValidator();
 
             // Act
-            var badRequestObjResult = await employeeController.CreateEmployeeAsync(null) as BadRequestObjectResult;
+            var badRequestObjResult = await employeeController.CreateEmployeeAsync(null, creationDtoValidator) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
             Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
         }
 
+        private static IEnumerable<EmployeeForCreationDto> GetInvalidCreationDtoSource()
+        {
+            yield return new FakeDataForEmployee().GetInvalidCreationDto();
+        }
+
         [Test]
         [Category("[Action] CreateEmployeeAsync")]
-        public async Task CreateEmployeeAsync_Inputs_ValidCreateObj_Returns_CreatedAtRouteResult()
+        [TestCaseSource(nameof(GetInvalidCreationDtoSource))]
+        public async Task CreateEmployeeAsync_Inputs_InvalidCreationObj_Returns_UnprocessableEntityObjResult(EmployeeForCreationDto invalidCreationDto)
         {
             // Arrange
-            var fakeDataForEmployee = new FakeDataForEmployee();
-            var validCreationDto = fakeDataForEmployee.GetValidCreationDto();
             var employeeController = InitController();
+            var creationDtoValidator = new EmployeeForCreationDtoValidator();
 
             // Act
-            var routeResult = await employeeController.CreateEmployeeAsync(validCreationDto) as CreatedAtRouteResult;
+            var unprocessableEntityObjResult = await employeeController.CreateEmployeeAsync(invalidCreationDto, creationDtoValidator) as UnprocessableEntityObjectResult;
+
+            // Assert
+            Assert.That(unprocessableEntityObjResult, Is.Not.Null);
+            Assert.That(unprocessableEntityObjResult.StatusCode, Is.EqualTo(StatusCodes.Status422UnprocessableEntity));
+        }
+
+        private static IEnumerable<EmployeeForCreationDto> GetValidCreationDtoSource()
+        {
+            yield return new FakeDataForEmployee().GetValidCreationDto();
+        }
+
+        [Test]
+        [Category("[Action] CreateEmployeeAsync")]
+        [TestCaseSource(nameof(GetValidCreationDtoSource))]
+        public async Task CreateEmployeeAsync_Inputs_ValidCreateObj_Returns_CreatedAtRouteResult(EmployeeForCreationDto validCreationDto)
+        {
+            // Arrange
+            var employeeController = InitController();
+            var creationDtoValidator = new EmployeeForCreationDtoValidator();
+
+            // Act
+            var routeResult = await employeeController.CreateEmployeeAsync(validCreationDto, creationDtoValidator) as CreatedAtRouteResult;
 
             // Assert
             Assert.That(routeResult, Is.Not.Null);
@@ -252,19 +301,21 @@
         [Category("[Action] CreateEmployeeAsync")]
         public async Task CreateEmployeeAsync_Inputs_ValidCreateObj_Returns_CreatedAtRouteResult_Include_Object_Is_EmployeeDto()
         {
-            // Arrange
+            // ValidCreateObj
             var fakeDataForEmployee = new FakeDataForEmployee();
             var validCreationDto = fakeDataForEmployee.GetValidCreationDto();
+
+            // Arrange
             var employeeController = InitController();
+            var creationDtoValidator = new EmployeeForCreationDtoValidator();
 
             // Act
-            var routeResult = await employeeController.CreateEmployeeAsync(validCreationDto) as CreatedAtRouteResult;
+            var routeResult = await employeeController.CreateEmployeeAsync(validCreationDto, creationDtoValidator) as CreatedAtRouteResult;
 
             // Assert
             Assert.That(routeResult, Is.Not.Null);
             Assert.That(routeResult.Value, Is.InstanceOf<EmployeeDto>());
         }
-
 
         #endregion
 

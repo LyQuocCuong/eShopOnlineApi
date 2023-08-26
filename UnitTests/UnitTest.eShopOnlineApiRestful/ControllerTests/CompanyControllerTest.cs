@@ -143,14 +143,18 @@
         [Category("[Action] UpdateCompanyFullyAsync")]
         public async Task UpdateCompanyFullyAsync_Inputs_NonExistingCompanyId_And_OtherExpectedInputs_Returns_NotFoundObjResult()
         {
-            // Arrange
+            // NonExistingCompanyId
             var nonExistingCompanyId = FakeDataForCompany.GetNonExistingCompanyId();
+            // OtherExpectedInputs
             var fakeDataForCompany = new FakeDataForCompany();
             var validUpdateDto = fakeDataForCompany.GetValidUpdateDto();
+            
+            // Arrange
             var companyController = InitController();
+            var updateDtoValidator = new CompanyForUpdateDtoValidator();
 
             // Act
-            var notFoundObjResult = await companyController.UpdateCompanyFullyAsync(nonExistingCompanyId, validUpdateDto) as NotFoundObjectResult;
+            var notFoundObjResult = await companyController.UpdateCompanyFullyAsync(nonExistingCompanyId, validUpdateDto, updateDtoValidator) as NotFoundObjectResult;
 
             // Assert
             Assert.That(notFoundObjResult, Is.Not.Null);
@@ -161,48 +165,65 @@
         [Category("[Action] UpdateCompanyFullyAsync")]
         public async Task UpdateCompanyFullyAsync_Inputs_NullUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
         {
-            // Arrange
+            // OtherExpectedInputs
             var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
+
+            // Arrange
             var companyController = InitController();
+            var updateDtoValidator = new CompanyForUpdateDtoValidator();
 
             // Act
-            var badRequestObjResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, null) as BadRequestObjectResult;
+            var badRequestObjResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, null, updateDtoValidator) as BadRequestObjectResult;
 
             // Assert
             Assert.That(badRequestObjResult, Is.Not.Null);
             Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
         }
 
-        [Test]
-        [Category("[Action] UpdateCompanyFullyAsync")]
-        public async Task UpdateCompanyFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_BadRequestObjResult()
+        private static IEnumerable<CompanyForUpdateDto> GetInvalidUpdateDtoSource()
         {
-            // Arrange
-            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
-            var fakeDataForCompany = new FakeDataForCompany();
-            var invalidUpdateDto = fakeDataForCompany.GetInvalidUpdateDto();
-            var companyController = InitController();
-
-            // Act
-            var badRequestObjResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, invalidUpdateDto) as BadRequestObjectResult;
-
-            // Assert
-            Assert.That(badRequestObjResult, Is.Not.Null);
-            Assert.That(badRequestObjResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+            yield return new FakeDataForCompany().GetInvalidUpdateDto();
         }
 
         [Test]
         [Category("[Action] UpdateCompanyFullyAsync")]
-        public async Task UpdateCompanyFullyAsync_Inputs_ExpectedData_Returns_NoContentResult()
+        [TestCaseSource(nameof(GetInvalidUpdateDtoSource))]
+        public async Task UpdateCompanyFullyAsync_Inputs_InvalidUpdateObj_And_OtherExpectedInputs_Returns_UnprocessableEntityObjResult(CompanyForUpdateDto invalidUpdateDto)
         {
-            // Arrange
+            // OtherExpectedInputs
             var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
-            var fakeDataForCompany = new FakeDataForCompany();
-            var validUpdateDto = fakeDataForCompany.GetValidUpdateDto();
+
+            // Arrange
             var companyController = InitController();
+            var updateDtoValidator = new CompanyForUpdateDtoValidator();
 
             // Act
-            var noContentResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, validUpdateDto) as NoContentResult;
+            var unprocessableEntityObjResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, invalidUpdateDto, updateDtoValidator) as UnprocessableEntityObjectResult;
+
+            // Assert
+            Assert.That(unprocessableEntityObjResult, Is.Not.Null);
+            Assert.That(unprocessableEntityObjResult.StatusCode, Is.EqualTo(StatusCodes.Status422UnprocessableEntity));
+        }
+
+        private static IEnumerable<CompanyForUpdateDto> GetValidUpdateDtoSource()
+        {
+            yield return new FakeDataForCompany().GetValidUpdateDto();
+        }
+
+        [Test]
+        [Category("[Action] UpdateCompanyFullyAsync")]
+        [TestCaseSource(nameof(GetValidUpdateDtoSource))]
+        public async Task UpdateCompanyFullyAsync_Inputs_AllExpectedData_Returns_NoContentResult(CompanyForUpdateDto validUpdateDto)
+        {
+            // AllExpectedData
+            var existingCompanyId = FakeDataForCompany.GetNormalCompanyId();
+
+            // Arrange
+            var companyController = InitController();
+            var updateDtoValidator = new CompanyForUpdateDtoValidator();
+
+            // Act
+            var noContentResult = await companyController.UpdateCompanyFullyAsync(existingCompanyId, validUpdateDto, updateDtoValidator) as NoContentResult;
 
             // Assert
             Assert.That(noContentResult, Is.Not.Null);
