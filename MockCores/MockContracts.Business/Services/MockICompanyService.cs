@@ -29,8 +29,7 @@
                 .Setup(s => s.UpdateFullyAsync(It.IsAny<Guid>(), It.IsAny<CompanyForUpdateDto>()))
                 .ReturnsAsync((Guid companyId, CompanyForUpdateDto updateDto) =>
                 {
-                    return (companyId != nonExistingCompanyId
-                         && updateDto.Name != invalidUpdateDto.Name);
+                    return (companyId != nonExistingCompanyId);
                 });
 
             return mockCompanyService;

@@ -100,11 +100,11 @@
         {
             return new EmployeeForUpdateDto()
             {
-                Code = "Valid",     // used for Mocking comparision (Valid / Invalid)
+                Code = "12345678",
                 FirstName = "Valid",
                 LastName = "Object",
                 Address = "yyy",
-                Phone = "yyy"
+                Phone = "12345678910"
             };
         }
 
@@ -112,10 +112,10 @@
         {
             return new EmployeeForUpdateDto()
             {
-                Code = "Invalid",   // used for Mocking comparision (Valid / Invalid)
+                Code = "Invalid",
                 FirstName = "Invalid",
                 LastName = "Object",
-                Address = "yyy",
+                Address = null,
                 Phone = "yyy"
             };
         }
@@ -124,10 +124,22 @@
         {
             return new EmployeeForCreationDto()
             {
-                Code = "Valid",     // used for Mocking comparision (Valid / Invalid)
+                Code = "12345678",
                 FirstName = "Valid",
                 LastName = "Object",
                 Address = "yyy",
+                Phone = "12345678910"
+            };
+        }
+
+        public EmployeeForCreationDto GetInvalidCreationDto()
+        {
+            return new EmployeeForCreationDto()
+            {
+                Code = "Invalid",
+                FirstName = "Valid",
+                LastName = "Object",
+                Address = null,
                 Phone = "yyy"
             };
         }

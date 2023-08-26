@@ -12,7 +12,6 @@
             Guid managerIdOfStore = FakeDataForEmployee.GetManagerIdOfStore();
             FakeDataForEmployee fakeDataForEmployee = new FakeDataForEmployee();
             IEnumerable<EmployeeDto> listOfEmployeeDtos = fakeDataForEmployee.GetListOfEmployeeDtos();
-            EmployeeForUpdateDto invalidUpdateDto = fakeDataForEmployee.GetInvalidUpdateDto();
             EmployeeDto newlyCreatedEmployeeDto = fakeDataForEmployee.GetNewlyCreatedEmployeeDto();
 
             // SetUps
@@ -32,8 +31,7 @@
                 .Setup(s => s.UpdateFullyAsync(It.IsAny<Guid>(), It.IsAny<EmployeeForUpdateDto>()))
                 .ReturnsAsync((Guid companyId, EmployeeForUpdateDto updateDto) =>
                 {
-                    return (companyId != nonExistingEmployeeId
-                         && updateDto.Code != invalidUpdateDto.Code);
+                    return (companyId != nonExistingEmployeeId);
                 });
 
             mockEmployeeService
